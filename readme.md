@@ -8,9 +8,30 @@ desire to keep UJS alive.
 
 ## Getting Started
 
-Copy the `backbone.modelbinding.js` file into your javascripts folder and include it in your page.
+It's easy to get up and running. You only need to have Backbone (including underscore.js - 
+a requirement for Backbone) and jQuery in your page before including the backbone.modelbining
+plugin.
 
-### Execute The Bindings
+### Prerequisites
+
+* Backbone.js v0.5.1 or higher
+* jQuery v1.6.2 or higher
+
+This is a plugin for Backbone.js and is built and tested against Backbone v0.5.1. It also uses jQuery
+to perform most of the bindng and manipulations, and is built and tested against v1.6.1. However, I am
+currently using this plugin in a production application with Backbone v0.3.3 and jQuery v1.5.1. 
+
+At this point, I make no guarantees of it working with any version of Backbone or jQuery, 
+other than what it has been built and tested against. It works for me, so it may work for you
+with versions other than what is stated
+
+### Get The ModelBinding Plugin
+
+Download the `backbone.modelbinding.js` file from this github repository and copy it into 
+your javascripts folder. Add the needed `<script>` tag to bring the plugin into any page
+that wishes to use it. Be sure to include the modelbinding file _after_ the backbone.js file.
+
+### Render The ModelBindings
 
 Your Backbone view must have an `el` defined and the `render` method of your view needs to 
 execute the bindings that you define
@@ -85,6 +106,9 @@ SomeView = Backbone.View.extend({
   }
 });
 ````
+
+The input element used must support the jQuery `change` event, and must be settable via
+the jQuery `val` method.
 
 Now when you type into the form input, your model's fields will be updated automatically. When your
 model's fields are changed, the form input will update automatically. And, when you render the
