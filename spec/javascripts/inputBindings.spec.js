@@ -1,4 +1,4 @@
-describe("backbone.modelbinding", function(){
+describe("inputBindings", function(){
   beforeEach(function(){
     this.model = new AModel({a_field: "initial value"});
     this.view = new AView({model: this.model});

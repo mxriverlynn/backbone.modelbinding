@@ -26,6 +26,13 @@
       // set the default value on the form, from the model
       $(selector).val(model.get(field));
     }, this);
+
+    _.each(this.htmlBindings, function(field, htmlElement){
+      // bind the model changes to the form elements
+      model.bind("change:" + field, function(changed_model, val){
+        $(htmlElement).html(val);
+      });
+    }, this);
   };
 
 }).call(Backbone);
