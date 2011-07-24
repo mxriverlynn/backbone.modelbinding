@@ -65,7 +65,7 @@ In this example, when `model.set` is called to set the name, "some name" will ap
 in the `#name` input field. Similarly, when the `#name` input field is changed, the
 value entered into that field will be sent to the model's `name` attribute.
 
-At this point, only `<input>` fields are handled. Other form field types will come
+At this point, only `<input>` and `<select>` fields are handled. Other form field types should come
 soon, though.
 
 ### Form Bindings
@@ -104,15 +104,6 @@ SomeView = Backbone.View.extend({
 
 Now when the model's `a_field` is changed, the html element `#someElement` will have it's contents
 replaced by the value that is entered into the model's `a_field` field.
-
-## Limited Use
-
-Note that this mostly works for form input fields right now. There is a little bit of support
-to write the value of a model's field to the html contents of any html element, as well.
-
-I want to make this work for any type of view, eventually. Perhaps it will re-render a view, 
-or update the html of a portion of the view. I'm not entirely sure, yet. We'll see where this
-leads - hopefully somewhere useful. :)
 
 ## Use At Your Own Risk
 

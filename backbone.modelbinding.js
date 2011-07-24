@@ -21,7 +21,7 @@
   }
 
   function handleConventionBindings(view, model){
-    this.$("input").each(function(index){
+    this.$("input, select").each(function(index){
       var element = $(this);
       var field = element.attr('id');
 
