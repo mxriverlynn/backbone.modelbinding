@@ -13,7 +13,7 @@ the same as the [Backbone view events](http://documentcloud.github.com/backbone/
 
 ````
 SomeView = Backbone.View.extend({
-  modelBindings: {
+  inputBindings: {
     "change #someInput": "a_field"
   }
 });

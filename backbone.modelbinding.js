@@ -3,13 +3,10 @@
     if (!this.model)
       return this;
 
-    if (!this.modelBindings)
-      return this;
-
     var self = this;
     var model = this.model;
 
-    _.each(this.modelBindings, function(field, selector_event){
+    _.each(this.inputBindings, function(field, selector_event){
       var selector_parts = selector_event.split(" ");
       var e = selector_parts[0];
       var selector = selector_parts[1];
