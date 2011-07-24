@@ -1,0 +1,2 @@
+describe("backbone.modelbinding", function(){
+});
