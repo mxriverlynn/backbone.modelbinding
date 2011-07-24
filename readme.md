@@ -105,6 +105,9 @@ SomeView = Backbone.View.extend({
 Now when the model's `a_field` is changed, the html element `#someElement` will have it's contents
 replaced by the value that is entered into the model's `a_field` field.
 
+*Note:* htmlBindings is experimental as I don't have an actual use for it right now. I put it in
+because it was easy and it might inspire some other ideas at some point.
+
 ## Use At Your Own Risk
 
 Note that I'm still in the early stages and has limited functionality. Although 
