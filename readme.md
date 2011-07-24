@@ -107,8 +107,8 @@ SomeView = Backbone.View.extend({
 });
 ````
 
-The input element used must support the jQuery `change` event, and must be settable via
-the jQuery `val` method.
+The input element must be settable via the jQuery `val` method. You can specify any valid jQuery
+event to monitor for a change, though. 
 
 Now when you type into the form input, your model's fields will be updated automatically. When your
 model's fields are changed, the form input will update automatically. And, when you render the
