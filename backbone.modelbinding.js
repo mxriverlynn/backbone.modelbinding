@@ -16,7 +16,7 @@
 
       // bind the model changes to the form elements
       model.bind("change:" + field, function(changed_model, val){
-        self.$(selector).val(val);
+        $(selector).val(val);
       });
 
       // bind the form changes to the model
