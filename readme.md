@@ -1,16 +1,50 @@
 # Backbone.ModelBinding
 
-Awesome model binding for Backbone.js
+Awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone)
 
 Inspired by [Brad Gone](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/)
 
-# Early Stages - Not Yet Usable
+## Getting Started
 
-Note that I'm still in the early stages of setting this up, and I don't recommend using it
-right now. Once I get some tests in place and have it working in my own apps, I'll be ready
-for others to start using it.
+Copy the `backbone.modelbinding.js` file into your javascripts folder and include it in your page.
 
-## Legal Mumbo Jumbo (MIT License)
+Add a `modelBindings` document to you view, to specify the bindings you want to use. The format is
+the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
+
+````
+SomeView = Backbone.View.extend({
+  modelBindings: {
+    "change #someInput": "a_field"
+  }
+});
+````
+
+Then after you have rendered, call `Backbone.ModelBinding.call(this);`
+
+````
+  render: function(){
+    // ... render your form here
+    Backbone.ModelBindings.call(this);
+  }
+````
+
+Now when you type into the form input, your model's fields will be updated automatically. When your
+model's fields are changed, the form input will update automatically. And, when you render the
+view, the field will be populated with the value that exists in the model at rendering time.
+
+## Limited Use
+
+Note that this only works for form input fields right now. I want to make this work for any type
+of view, eventually. Perhaps it will re-render a view, or update the html of a portion of the view.
+I'm not entirely sure, yet. We'll see where this leads
+
+## Use At Your Own Risk
+
+Note that I'm still in the early stages and has limited functionality. Although 
+functionality is being built with unit tests, in a test-first manner, there is no
+guarantee that it will work the way you want it to or expect it to. Use at your own risk.
+
+# Legal Mumbo Jumbo (MIT License)
 
 Copyright (c) 2011 Derick Bailey
 
