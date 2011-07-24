@@ -12,7 +12,7 @@ AView = Backbone.View.extend({
   },
 
   render: function(){
-    this.html = $("<input type='text' id='something'> <div id='showIt'></div>");
+    this.html = $("<input type='text' id='something'> <div id='showIt'></div> <input type='text' id='name'>");
     $("body").append(this.html);
     Backbone.ModelBinding.call(this);
   },
