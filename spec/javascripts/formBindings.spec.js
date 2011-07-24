@@ -1,4 +1,4 @@
-describe("inputBindings", function(){
+describe("formBindings", function(){
   beforeEach(function(){
     this.model = new AModel({a_field: "initial value"});
     this.view = new AView({model: this.model});

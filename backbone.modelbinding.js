@@ -1,7 +1,7 @@
 (function(){
 
-  function handleInputBindings(view, model){
-    _.each(view.inputBindings, function(field, selector_event){
+  function handleFormBindings(view, model){
+    _.each(view.formBindings, function(field, selector_event){
       var selector_parts = selector_event.split(" ");
       var e = selector_parts[0];
       var selector = selector_parts[1];
@@ -58,7 +58,7 @@
   }
 
   this.ModelBinding = function(){
-    handleInputBindings(this, this.model);
+    handleFormBindings(this, this.model);
     handleHtmlBindings(this, this.model);
     handleConventionBindings(this, this.model);
   };

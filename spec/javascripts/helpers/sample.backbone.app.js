@@ -3,7 +3,7 @@ AModel = Backbone.Model.extend({});
 AView = Backbone.View.extend({
   el: "body",
 
-  inputBindings: {
+  formBindings: {
     "change #something": "a_field"
   },
 

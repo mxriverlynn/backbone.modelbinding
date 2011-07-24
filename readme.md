@@ -66,16 +66,16 @@ value entered into that field will be sent to the model's `name` attribute.
 At this point, only `<input>` fields are handled. Other form field types will come
 soon, though.
 
-### Input Bindings
+### Form Bindings
 
-Bi-directional binding between your form input and your model.
+Non-conventional, bi-directional binding between your form input and your model.
 
-Add a `inputBindings` document to you view, to specify the bindings you want to use. The format is
+Add `formBindings` document to you view, to specify the bindings you want to use. The format is
 the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
 
 ````
 SomeView = Backbone.View.extend({
-  inputBindings: {
+  formBindings: {
     "change #someInput": "a_field"
   }
 });
