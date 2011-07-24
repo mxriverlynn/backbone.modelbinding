@@ -137,7 +137,7 @@ because it was easy and it might inspire some other ideas at some point.
 
 ## Use At Your Own Risk
 
-Note that I'm still in the early stages and has limited functionality. Although 
+backbone.modelbinding is still in the early stages and has limited functionality. Although 
 functionality is being built with unit tests, in a test-first manner, there is no
 guarantee that it will work the way you want it to or expect it to. Use at your own risk.
 
