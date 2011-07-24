@@ -1,9 +1,16 @@
+require 'jasmine'
+require 'jeweler'
 
-begin
-  require 'jasmine'
-  load 'jasmine/tasks/jasmine.rake'
-rescue LoadError
-  task :jasmine do
-    abort "Jasmine is not available. In order to run jasmine, you must: (sudo) gem install jasmine"
-  end
+load 'jasmine/tasks/jasmine.rake'
+
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.name = "backbone.modelbinding"
+  gem.summary = "Awesome model binding for Backbone.js"
+  gem.description = "Simplify your Backbone.js code with model binding and conventions"
+  gem.email = "derickbailey@gmail.com"
+  gem.homepage = "http://github.com/derickbailey/backbone.modelbinding"
+  gem.authors = ["Derick Bailey"]
 end
+
+Jeweler::RubygemsDotOrgTasks.new
