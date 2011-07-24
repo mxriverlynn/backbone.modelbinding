@@ -27,7 +27,7 @@
       });
 
       // set the default value on the form, from the model
-      this.$(selector).val(model.get(field));
+      $(selector).val(model.get(field));
     }, this);
   };
 

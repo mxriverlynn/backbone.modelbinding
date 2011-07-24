@@ -1,6 +1,6 @@
 describe("backbone.modelbinding", function(){
   beforeEach(function(){
-    this.model = new AModel();
+    this.model = new AModel({a_field: "initial value"});
     this.view = new AView({model: this.model});
     this.view.render();
   });
@@ -21,5 +21,10 @@ describe("backbone.modelbinding", function(){
     this.model.set({a_field: "another value"});
     var something = $("#something");
     expect(something.val()).toEqual("another value");
+  });
+
+  it("binds the model's value to the form field on render", function(){
+    var something = $("#something");
+    expect(something.val()).toEqual("initial value");
   });
 });
