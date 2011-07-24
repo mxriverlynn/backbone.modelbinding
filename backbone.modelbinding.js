@@ -19,7 +19,11 @@
       });
 
       // set the default value on the form, from the model
-      $(selector).val(model.get(field));
+      var attr_value = model.get(field);
+      if (attr_value) {
+        $(selector).val(attr_value);
+      }
+
     }, view);
   }
 
@@ -33,12 +37,9 @@
   }
 
   function handleConventionBindings(view, model){
-    var attrs = model.toJSON();
-    _.each(attrs, function(value, field){
-
-      var element = $("#" + field);
-      if (element.length == 0)
-        return null;
+    this.$("input").each(function(index){
+      var element = $(this);
+      var field = element.attr('id');
 
       // bind the model changes to the form elements
       model.bind("change:" + field, function(changed_model, val){
@@ -53,8 +54,12 @@
       });
 
       // set the default value on the form, from the model
-      element.val(model.get(field));
-    }, view);
+      var attr_value = model.get(field);
+      if (attr_value) {
+        element.val(attr_value);
+      }
+
+    });
   }
 
   this.ModelBinding = function(){
