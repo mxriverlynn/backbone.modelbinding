@@ -12,10 +12,13 @@ Copy the `backbone.modelbinding.js` file into your javascripts folder and includ
 
 ### Execute The Bindings
 
-The `render` method of your view needs to execute the bindings that you define
+Your Backbone view must have an `el` defined and the `render` method of your view needs to 
+execute the bindings that you define
 
 ````
 SomeView = Backbone.View.extend({
+  el: "#someElement",
+
   render: function(){
     // ... render your form here
 
