@@ -1,6 +1,6 @@
-(function(Backbone){
-  Backbone.Modelbinding = {
-    render: function(){
+(function(){
+  this.ModelBinding = {
+    bind: function(){
       if (!this.model)
         return this;
 
@@ -30,8 +30,6 @@
         // set the default value on the form, from the model
         this.$(selector).val(model.get(field));
       }, this);
-
-      Backbone.View.prototype.render();
     }
   };
 
