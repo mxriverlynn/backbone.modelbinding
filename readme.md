@@ -4,6 +4,12 @@ Awesome model binding for Backbone.js
 
 Inspired by [Brad Gone](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/)
 
+# Early Stages - Not Yet Usable
+
+Note that I'm still in the early stages of setting this up, and I don't recommend using it
+right now. Once I get some tests in place and have it working in my own apps, I'll be ready
+for others to start using it.
+
 ## Legal Mumbo Jumbo (MIT License)
 
 Copyright (c) 2011 Derick Bailey
