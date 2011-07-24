@@ -133,7 +133,7 @@
     var defaults;
     attributes || (attributes = {});
     if (defaults = this.defaults) {
-      if (_.isFunction(defaults)) defaults = defaults.call(this);
+      if (_.isFunction(defaults)) defaults = defaults();
       attributes = _.extend({}, defaults, attributes);
     }
     this.attributes = {};
@@ -342,7 +342,7 @@
 
     // A model is new if it has never been saved to the server, and lacks an id.
     isNew : function() {
-      return this[this.idAttribute] == null;
+      return this.id == null;
     },
 
     // Call this method to manually fire a `change` event for this model.
@@ -582,7 +582,7 @@
       options || (options = {});
       model = this._prepareModel(model, options);
       if (!model) return false;
-      var already = this.getByCid(model);
+      var already = this.getByCid(model) || this.get(model);
       if (already) throw new Error(["Can't add the same model to a set twice", already.id]);
       this._byId[model.id] = model;
       this._byCid[model.cid] = model;
@@ -806,8 +806,6 @@
       if (this._wantsPushState && !this._hasPushState && !atRoot) {
         this.fragment = this.getFragment(null, true);
         window.location.replace(this.options.root + '#' + this.fragment);
-        // Return immediately as browser will do redirect to new url
-        return true;
       } else if (this._wantsPushState && this._hasPushState && atRoot && loc.hash) {
         this.fragment = loc.hash.replace(hashStrip, '');
         window.history.replaceState({}, document.title, loc.protocol + '//' + loc.host + this.options.root + this.fragment);
@@ -1037,7 +1035,8 @@
     // Default JSON-request options.
     var params = _.extend({
       type:         type,
-      dataType:     'json'
+      dataType:     'json',
+      processData:  false
     }, options);
 
     // Ensure that we have a URL.
@@ -1054,6 +1053,7 @@
     // For older servers, emulate JSON by encoding the request into an HTML-form.
     if (Backbone.emulateJSON) {
       params.contentType = 'application/x-www-form-urlencoded';
+      params.processData = true;
       params.data        = params.data ? {model : params.data} : {};
     }
 
@@ -1067,11 +1067,6 @@
           xhr.setRequestHeader('X-HTTP-Method-Override', type);
         };
       }
-    }
-
-    // Don't process data on a non-GET request.
-    if (params.type !== 'GET') {
-      params.processData = false;
     }
 
     // Make the request.
@@ -1148,7 +1143,7 @@
 
   // Helper function to escape a string for HTML rendering.
   var escapeHTML = function(string) {
-    return string.replace(/&(?!\w+;|#\d+;|#x[\da-f]+;)/gi, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/\//g,'&#x2F;');
+    return string.replace(/&(?!\w+;|#\d+;|#x[\da-f]+;)/gi, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27').replace(/\//g,'&#x2F;');
   };
 
 }).call(this);

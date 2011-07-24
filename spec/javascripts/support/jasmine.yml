@@ -11,7 +11,10 @@
 #   - dist/**/*.js
 #
 src_files:
-    - ./**/*.js
+    - public/javascripts/underscore.js
+    - public/javascripts/jquery-1.6.2.js
+    - public/javascripts/backbone.js
+    - backbone.modelbinding.js
 
 # stylesheets
 #
