@@ -143,7 +143,7 @@ guarantee that it will work the way you want it to or expect it to. Use at your 
 
 # Legal Mumbo Jumbo (MIT License)
 
-Copyright (c) 2011 Derick Bailey
+Copyright (c) 2011 Derick Bailey, Muted Solutions, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

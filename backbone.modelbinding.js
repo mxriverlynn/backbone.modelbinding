@@ -1,3 +1,11 @@
+// Backbone.ModelBinding v0.1.0
+//
+// Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
+// Distributed Under MIT Liscene
+//
+// Documentation and Full Licence Availabe at:
+// http://github.com/derickbailey/backbone.modelbinding
+
 (function(){
 
   function bidirectionalBinding(field, element, model){
@@ -50,11 +58,14 @@
     });
   }
 
-  this.ModelBinding = function(){
-    handleFormBindings(this, this.model);
-    handleHtmlBindings(this, this.model);
-    handleConventionBindings(this, this.model);
-  };
+  this.ModelBinding = {
+    version: "0.1.0",
+
+    call: function(view){
+      handleFormBindings(view, view.model);
+      handleHtmlBindings(view, view.model);
+      handleConventionBindings(view, view.model);
+    }
+  }
 
 }).call(Backbone);
-
