@@ -1,8 +1,6 @@
 AModel = Backbone.Model.extend({});
 
 AView = Backbone.View.extend({
-  el: "body",
-
   formBindings: {
     "change #something": "a_field"
   },
@@ -12,7 +10,7 @@ AView = Backbone.View.extend({
   },
 
   render: function(){
-    this.html = $("\
+    var html = $("\
       <input type='text' id='something'> \
       <div id='showIt'></div>\
       <input type='text' id='name'>\
@@ -22,11 +20,7 @@ AView = Backbone.View.extend({
         <option value='graduate'>graduate</option> \
       </select> \
     ");
-    $("body").append(this.html);
+    this.$(this.el).append(html);
     Backbone.ModelBinding.call(this);
   },
-
-  close: function(){
-    this.html.remove();
-  }
 });

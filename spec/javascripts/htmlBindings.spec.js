@@ -5,13 +5,9 @@ describe("htmlBindings", function(){
     this.view.render();
   });
 
-  afterEach(function(){
-    this.view.close();
-  });
-  
   it("binds model changes to html element", function(){
     this.model.set({a_field: "some value"});
-    var showIt = $("#showIt");
+    var showIt = this.view.$("#showIt");
     expect(showIt.html()).toEqual("some value");
   });
 });

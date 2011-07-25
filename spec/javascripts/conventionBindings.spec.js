@@ -5,13 +5,9 @@ describe("conventionBindings", function(){
     this.view.render();
   });
 
-  afterEach(function(){
-    this.view.close();
-  });
-
   describe("input element binding", function(){
     it("bind view changes to the model's field, by convention of id", function(){
-      var something = $("#name");
+      var something = this.view.$("#name");
       something.val("Derick Bailey");
       something.trigger('change');
 
@@ -20,19 +16,19 @@ describe("conventionBindings", function(){
 
     it("bind model field changes to the form input, by convention of id", function(){
       this.model.set({name: "Ian Bailey"});
-      var something = $("#name");
+      var something = this.view.$("#name");
       expect(something.val()).toEqual("Ian Bailey");
     });
 
     it("binds the model's value to the form field on render", function(){
-      var something = $("#name");
+      var something = this.view.$("#name");
       expect(something.val()).toEqual("Ashelia Bailey");
     });
   });
 
   describe("select element binding", function(){
     it("bind view changes to the model's field, by convention of id", function(){
-      var something = $("#education");
+      var something = this.view.$("#education");
       something.val("college");
       something.trigger('change');
 
@@ -41,12 +37,12 @@ describe("conventionBindings", function(){
 
     it("bind model field changes to the form input, by convention of id", function(){
       this.model.set({education: "high school"});
-      var something = $("#education");
+      var something = this.view.$("#education");
       expect(something.val()).toEqual("high school");
     });
 
     it("binds the model's value to the form field on render", function(){
-      var something = $("#education");
+      var something = this.view.$("#education");
       expect(something.val()).toEqual("graduate");
     });
   });

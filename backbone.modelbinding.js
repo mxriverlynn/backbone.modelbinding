@@ -1,6 +1,8 @@
 (function(){
 
   function bidirectionalBinding(field, element, model){
+    var self = this;
+
     // bind the model changes to the form elements
     model.bind("change:" + field, function(changed_model, val){
       element.val(val);
@@ -9,7 +11,7 @@
     // bind the form changes to the model
     element.bind("change", function(ev){
       data = {};
-      data[field] = $(ev.target).val();
+      data[field] = self.$(ev.target).val();
       model.set(data);
     });
 
@@ -21,11 +23,11 @@
   }
 
   function handleConventionBindings(view, model){
-    this.$("input, select").each(function(index){
-      var element = $(this);
+    view.$("input, select").each(function(index){
+      var element = view.$(this);
       var field = element.attr('id');
 
-      bidirectionalBinding(field, element, model);
+      bidirectionalBinding.call(view, field, element, model);
     });
   }
 
@@ -34,19 +36,18 @@
       var selector_parts = selector_event.split(" ");
       var e = selector_parts[0];
       var selector = selector_parts[1];
-      var element = $(selector);
+      var element = view.$(selector);
 
-      bidirectionalBinding(field, element, model);
-    }, view);
+      bidirectionalBinding.call(view, field, element, model);
+    });
   }
 
   function handleHtmlBindings(view, model){
     _.each(view.htmlBindings, function(field, htmlElement){
-      // bind the model changes to the form elements
       model.bind("change:" + field, function(changed_model, val){
-        $(htmlElement).html(val);
+        view.$(htmlElement).html(val);
       });
-    }, view);
+    });
   }
 
   this.ModelBinding = function(){

@@ -5,12 +5,8 @@ describe("formBindings", function(){
     this.view.render();
   });
 
-  afterEach(function(){
-    this.view.close();
-  });
-  
   it("binds view changes to the model's field", function(){
-    var something = $("#something");
+    var something = this.view.$("#something");
     something.val("edited value");
     something.trigger('change');
 
@@ -19,12 +15,12 @@ describe("formBindings", function(){
 
   it("binds model changes to the view's field", function(){
     this.model.set({a_field: "another value"});
-    var something = $("#something");
+    var something = this.view.$("#something");
     expect(something.val()).toEqual("another value");
   });
 
   it("binds the model's value to the form field on render", function(){
-    var something = $("#something");
+    var something = this.view.$("#something");
     expect(something.val()).toEqual("initial value");
   });
 });
