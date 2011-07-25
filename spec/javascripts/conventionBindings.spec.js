@@ -1,6 +1,6 @@
 describe("conventionBindings", function(){
   beforeEach(function(){
-    this.model = new AModel({name: "Ashelia Bailey"});
+    this.model = new AModel({name: "Ashelia Bailey", education: "graduate"});
     this.view = new AView({model: this.model});
     this.view.render();
   });
@@ -40,14 +40,14 @@ describe("conventionBindings", function(){
     });
 
     it("bind model field changes to the form input, by convention of id", function(){
-//      this.model.set({name: "Ian Bailey"});
-//      var something = $("#name");
-//      expect(something.val()).toEqual("Ian Bailey");
+      this.model.set({education: "high school"});
+      var something = $("#education");
+      expect(something.val()).toEqual("high school");
     });
 
     it("binds the model's value to the form field on render", function(){
-//      var something = $("#name");
-//      expect(something.val()).toEqual("Ashelia Bailey");
+      var something = $("#education");
+      expect(something.val()).toEqual("graduate");
     });
   });
 });
