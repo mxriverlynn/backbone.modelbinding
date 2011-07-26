@@ -11,7 +11,7 @@
 // ----------------------------
 Backbone.ModelBinding = (function(){
   function handleConventionBindings(view, model){
-    var conventions = Backbone.ModelBinding.FormFieldConventions;
+    var conventions = Backbone.ModelBinding.Conventions;
     for (var conventionName in conventions){
       if (conventions.hasOwnProperty(conventionName)){
         var conventionElement = conventions[conventionName];
@@ -51,7 +51,7 @@ Backbone.ModelBinding = (function(){
 // ----------------------------
 // Form Field Conventions
 // ----------------------------
-Backbone.ModelBinding.FormFieldConventions = (function(){
+Backbone.ModelBinding.Conventions = (function(){
   var StandardInput = {
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
