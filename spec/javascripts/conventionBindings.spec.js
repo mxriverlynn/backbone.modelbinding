@@ -4,7 +4,7 @@ describe("conventionBindings", function(){
       name: "Ashelia Bailey", 
       education: "graduate", 
       graduated: "maybe",
-      drivers_license: "yes"
+      drivers_license: true
     });
     this.view = new AView({model: this.model});
     this.view.render();
@@ -77,23 +77,24 @@ describe("conventionBindings", function(){
   });
 
   describe("checkbox element binding", function(){
-    it("bind view changes to the model's field, by convention of id", function(){
+    it("bind view changes to the model's field", function(){
       var el = this.view.$("#drivers_license");
       el.removeAttr("checked");
       el.trigger('change');
-      expect(this.model.get('drivers_license')).toEqual("no");
+      expect(this.model.get('drivers_license')).toBeFalsy();
     });
 
-    it("bind model field changes to the form input, by convention of id", function(){
+    it("bind model field changes to the form input", function(){
       var el = this.view.$("#drivers_license");
-      var selected = el.attr("checked");
 
-      // verify it's not checked first
-      this.model.set({drivers_license: "no"});
+      // uncheck it
+      this.model.set({drivers_license: false});
+      var selected = el.attr("checked");
       expect(selected).toBeFalsy();
 
-      //then verify it's checked
-      this.model.set({drivers_license: "yes"});
+      // then check it
+      this.model.set({drivers_license: true});
+      var selected = el.attr("checked");
       expect(selected).toBeTruthy();
     });
 
@@ -101,7 +102,7 @@ describe("conventionBindings", function(){
       var el = this.view.$("#drivers_license");
       var selected = el.attr("checked");
 
-      expect(selected).toBe("yes");
+      expect(selected).toBeTruthy();
     });
   });
 

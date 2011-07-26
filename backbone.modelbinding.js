@@ -62,7 +62,7 @@ Backbone.ModelBinding.FormFieldConventions = (function(){
     }
   };
 
-  var RadioButtons = {
+  var RadioGroup = {
     bind: function(selector, view, model){
       var foundElements = [];
       view.$(selector).each(function(index){
@@ -76,10 +76,21 @@ Backbone.ModelBinding.FormFieldConventions = (function(){
     }
   };
 
+  var Checkbox = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = element.attr('id');
+        Backbone.ModelBinding.HelperMethods.bidirectionalCheckboxBinding.call(view, field, element, model);
+      });
+    }
+  };
+
   return {
     text: {selector: "input[type=text]", convention: StandardInput}, 
     password: {selector: "input[type=password]", convention: StandardInput},
-    radioGroup: {selector: "input[type=radio]", convention: RadioButtons},
+    radioGroup: {selector: "input[type=radio]", convention: RadioGroup},
+    checkbox: {selector: "input[type=checkbox]", convention: Checkbox},
     select: {selector: "select", convention: StandardInput},
   }
 })();
@@ -113,6 +124,41 @@ Backbone.ModelBinding.HelperMethods = (function(){
     }
   }
 
+  function bidirectionalCheckboxBinding(attribute_name, element, model){
+    var self = this;
+
+    // bind the model changes to the form elements
+    model.bind("change:" + attribute_name, function(changed_model, val){
+      if (val){
+        element.attr("checked", "checked");
+      }
+      else{
+        element.removeAttr("checked");
+      }
+    });
+
+    // bind the form changes to the model
+    element.bind("change", function(ev){
+      data = {};
+      var changedElement = self.$(ev.target);
+      var checked = changedElement.attr("checked")? true : false;
+      data[attribute_name] = checked;
+      model.set(data);
+    });
+
+    // set the default value on the form, from the model
+    var attr_exists = model.attributes.hasOwnProperty(attribute_name);
+    if (attr_exists) {
+      var attr_value = model.get(attribute_name);
+      if (attr_value){
+        element.attr("checked", "checked");
+      }
+      else{
+        element.removeAttr("checked");
+      }
+    }
+  }
+
   function bidirectionalRadioGroupBinding(group_name, model){
     var self = this;
 
@@ -143,6 +189,7 @@ Backbone.ModelBinding.HelperMethods = (function(){
 
   return {
     bidirectionalBinding: bidirectionalBinding,
-    bidirectionalRadioGroupBinding: bidirectionalRadioGroupBinding
+    bidirectionalRadioGroupBinding: bidirectionalRadioGroupBinding,
+    bidirectionalCheckboxBinding: bidirectionalCheckboxBinding
   }
 })();
