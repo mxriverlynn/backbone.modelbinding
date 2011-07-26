@@ -12,10 +12,12 @@
 Backbone.ModelBinding = (function(){
   function handleConventionBindings(view, model){
     var conventions = Backbone.ModelBinding.FormFieldConventions;
-    for (var conventionSelector in conventions){
-      if (conventions.hasOwnProperty(conventionSelector)){
-        convention = conventions[conventionSelector];
-        convention.bind(conventionSelector, view, model);
+    for (var conventionName in conventions){
+      if (conventions.hasOwnProperty(conventionName)){
+        var conventionElement = conventions[conventionName];
+        var conventionClass = conventionElement.convention;
+        var conventionSelector = conventionElement.selector;
+        conventionClass.bind(conventionSelector, view, model);
       }
     }
   }
@@ -75,10 +77,10 @@ Backbone.ModelBinding.FormFieldConventions = (function(){
   };
 
   return {
-    "input[type=text]": StandardInput, 
-    "input[type=password]": StandardInput,
-    "input[type=radio]": RadioButtons,
-    "select": StandardInput,
+    text: {selector: "input[type=text]", convention: StandardInput}, 
+    password: {selector: "input[type=password]", convention: StandardInput},
+    radioGroup: {selector: "input[type=radio]", convention: RadioButtons},
+    select: {selector: "select", convention: StandardInput},
   }
 })();
 
