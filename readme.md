@@ -89,8 +89,19 @@ In this example, when `model.set` is called to set the name, "some name" will ap
 in the `#name` input field. Similarly, when the `#name` input field is changed, the
 value entered into that field will be sent to the model's `name` attribute.
 
-At this point, only `<input>` and `<select>` fields are handled. Other form field types should come
-soon, though.
+#### Supported Form Inputs
+
+The following form input types are supported:
+
+* text
+* password
+* textarea
+* checkbox
+* select
+* radio button groups (grouped by the 'name' attribute)
+
+There is no support for hidden fields at the moment, because there is no 'change' event
+that jQuery can listen to on a hidden field.
 
 ### Form Bindings
 
