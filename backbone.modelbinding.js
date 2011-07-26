@@ -71,9 +71,61 @@ Backbone.ModelBinding.Conventions = (function(){
         var group_name = element.attr('name');
         if (!foundElements[group_name]) {
           foundElements[group_name] = true;
-          self.bidirectionalRadioGroupBinding.call(view, group_name, model);
+          Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model);
         }
       });
+    }
+  };
+
+  var Checkbox = {
+    bind: function(selector, view, model){
+      var self = this;
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = element.attr('id');
+        Backbone.ModelBinding.HelperMethods.bidirectionalCheckboxBinding.call(view, field, element, model);
+      });
+    }
+  };
+
+  return {
+    text: {selector: "input[type=text]", handler: StandardInput}, 
+    password: {selector: "input[type=password]", handler: StandardInput},
+    radio: {selector: "input[type=radio]", handler: RadioGroup},
+    checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
+    select: {selector: "select", handler: StandardInput},
+    textarea: {selector: "textarea", handler: StandardInput},
+  }
+})();
+
+// ----------------------------
+// Helper Methods:
+// common methods used in conventions
+// and non-conventional bindings
+// ----------------------------
+Backbone.ModelBinding.HelperMethods = (function(){
+
+  return {
+    bidirectionalBinding: function(attribute_name, element, model){
+      var self = this;
+
+      // bind the model changes to the form elements
+      model.bind("change:" + attribute_name, function(changed_model, val){
+        element.val(val);
+      });
+
+      // bind the form changes to the model
+      element.bind("change", function(ev){
+        data = {};
+        data[attribute_name] = self.$(ev.target).val();
+        model.set(data);
+      });
+
+      // set the default value on the form, from the model
+      var attr_value = model.get(attribute_name);
+      if (attr_value) {
+        element.val(attr_value);
+      }
     },
 
     bidirectionalRadioGroupBinding: function(group_name, model){
@@ -102,18 +154,6 @@ Backbone.ModelBinding.Conventions = (function(){
         var value_selector = "input[type=radio][name=" + group_name + "][value=" + attr_value + "]";
         self.$(value_selector).attr("checked", "checked");
       }
-    }
-
-  };
-
-  var Checkbox = {
-    bind: function(selector, view, model){
-      var self = this;
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = element.attr('id');
-        self.bidirectionalCheckboxBinding.call(view, field, element, model);
-      });
     },
 
     bidirectionalCheckboxBinding: function(attribute_name, element, model){
@@ -149,50 +189,8 @@ Backbone.ModelBinding.Conventions = (function(){
           element.removeAttr("checked");
         }
       }
-    }
+    },
 
-  };
-
-  return {
-    text: {selector: "input[type=text]", handler: StandardInput}, 
-    password: {selector: "input[type=password]", handler: StandardInput},
-    radio: {selector: "input[type=radio]", handler: RadioGroup},
-    checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
-    select: {selector: "select", handler: StandardInput},
-    textarea: {selector: "textarea", handler: StandardInput},
-  }
-})();
-
-// ----------------------------
-// Helper Methods:
-// common methods used in conventions
-// and non-conventional bindings
-// ----------------------------
-Backbone.ModelBinding.HelperMethods = (function(){
-
-  function bidirectionalBinding(attribute_name, element, model){
-    var self = this;
-
-    // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, function(changed_model, val){
-      element.val(val);
-    });
-
-    // bind the form changes to the model
-    element.bind("change", function(ev){
-      data = {};
-      data[attribute_name] = self.$(ev.target).val();
-      model.set(data);
-    });
-
-    // set the default value on the form, from the model
-    var attr_value = model.get(attribute_name);
-    if (attr_value) {
-      element.val(attr_value);
-    }
   }
 
-  return {
-    bidirectionalBinding: bidirectionalBinding,
-  }
 })();
