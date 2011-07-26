@@ -146,11 +146,53 @@ replaced by the value that is entered into the model's `a_field` field.
 *Note:* htmlBindings is experimental as I don't have an actual use for it right now. I put it in
 because it was easy and it might inspire some other ideas at some point.
 
-## Use At Your Own Risk
+### Pluggable Conventions
+
+The convention based bindings are pluggable. Each of the existing form input types can have it's
+convention replaced and you can add your own conventions for input types not currently handled,
+etc. 
+
+To replace a convention entirely, you need to supply a json document that has two pieces of
+information: a jQuery selector string and an object with a `bind` method. Place the convention
+in the `Backbone.ModelBinding.Conventions` and it will be picked up and executed. The `bind`
+method receives three parameters: the jQuery selector you specified, the Backbone view, and
+the model being bound.
+
+````
+var FooTextConvention = {
+  selector: "input\[type=text\]\[name=foo\]",
+  handler: {
+    bind: function(selector, view, model){
+      // bind the model and view, here.
+    }
+  }
+}
+
+Backbone.ModelBinding.Conventions.fooText = FooTextConvention;
+````
+
+You can also replace the handler of an existing convention. For example, this will set the
+value of a textbox called `#name` to some text, instead of doing any real binding.
+
+````
+var nameSettingsHandler = {
+  bind: function(selector, view, model){
+    view.$("#name").val("a custom convention supplied this name");
+  }
+};
+
+Backbone.ModelBinding.Conventions.text.handler = nameSettingsHandler;
+````
+
+For fully functional, bi-directional binding convention examples, check out the source code
+to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
+ 
+## Early Stages Of Development
 
 backbone.modelbinding is still in the early stages and has limited functionality. Although 
 functionality is being built with unit tests, in a test-first manner, there is no
-guarantee that it will work the way you want it to or expect it to. Use at your own risk.
+guarantee that it will work. At all. Use at your own risk and be sure it works the way you
+expect before deploying to any production environment.
 
 # Legal Mumbo Jumbo (MIT License)
 
