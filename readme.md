@@ -158,20 +158,7 @@ in the `Backbone.ModelBinding.Conventions` and it will be picked up and executed
 method receives three parameters: the jQuery selector you specified, the Backbone view, and
 the model being bound.
 
-````
-var FooTextConvention = {
-  selector: "input\[type=text\]\[name=foo\]",
-  handler: {
-    bind: function(selector, view, model){
-      // bind the model and view, here.
-    }
-  }
-}
-
-Backbone.ModelBinding.Conventions.fooText = FooTextConvention;
-````
-
-You can also replace the handler of an existing convention. For example, this will set the
+You can replace the handler of an existing convention. For example, this will set the
 value of a textbox called `#name` to some text, instead of doing any real binding.
 
 ````
@@ -183,6 +170,39 @@ var nameSettingsHandler = {
 
 Backbone.ModelBinding.Conventions.text.handler = nameSettingsHandler;
 ````
+
+You can also create your own conventions that do just about anything you want. Here's an example
+that modifies the contents of `<p>` tags:
+
+````
+var PConvention = {
+  selector: "p",
+  handler: {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var name = model.get("name");
+        $(this).html(name);
+      });
+    }
+  }
+};
+
+Backbone.ModelBinding.Conventions.paragraphs = PConvention;
+````
+
+This example will find all `<p>` tags in the view and render the `name` attribute from the model
+into that paragraph, replacing all other text. Note that the name of the convention is set to
+`paragraphs` when added to the conventions. This name did not exist prior to this assignment, so
+the convention was added. If you assign a convention to an existing name, you will replace that
+convention.
+
+The list of existing conventions includes:
+* text
+* password
+* radio
+* checkbox
+* select
+* textarea
 
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.

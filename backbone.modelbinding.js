@@ -156,7 +156,7 @@ Backbone.ModelBinding.Conventions = (function(){
   return {
     text: {selector: "input[type=text]", handler: StandardInput}, 
     password: {selector: "input[type=password]", handler: StandardInput},
-    radioGroup: {selector: "input[type=radio]", handler: RadioGroup},
+    radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: StandardInput},
     textarea: {selector: "textarea", handler: StandardInput},
