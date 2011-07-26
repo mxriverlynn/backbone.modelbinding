@@ -21,12 +21,8 @@ Backbone.ModelBinding = (function(){
   }
 
   function handleFormBindings(view, model){
-    _.each(view.formBindings, function(field, selector_event){
-      var selector_parts = selector_event.split(" ");
-      var e = selector_parts[0];
-      var selector = selector_parts[1];
+    _.each(view.formBindings, function(field, selector){
       var element = view.$(selector);
-
       Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
     });
   }

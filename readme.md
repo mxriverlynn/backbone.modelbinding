@@ -102,7 +102,7 @@ the same as the [Backbone view events](http://documentcloud.github.com/backbone/
 ````
 SomeView = Backbone.View.extend({
   formBindings: {
-    "change #someInput": "a_field"
+    "#someInput": "a_field"
   }
 });
 ````
