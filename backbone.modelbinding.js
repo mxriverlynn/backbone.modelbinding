@@ -7,37 +7,15 @@
 // http://github.com/derickbailey/backbone.modelbinding
 
 // ----------------------------
-// Backbone.ModelBinding plugin
+// Backbone.ModelBinding
 // ----------------------------
 Backbone.ModelBinding = (function(){
-  function bidirectionalBinding(attribute_name, element, model){
-    var self = this;
-
-    // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, function(changed_model, val){
-      element.val(val);
-    });
-
-    // bind the form changes to the model
-    element.bind("change", function(ev){
-      data = {};
-      data[attribute_name] = self.$(ev.target).val();
-      model.set(data);
-    });
-
-    // set the default value on the form, from the model
-    var attr_value = model.get(attribute_name);
-    if (attr_value) {
-      element.val(attr_value);
-    }
-  }
-
   function handleConventionBindings(view, model){
     var conventions = Backbone.ModelBinding.FormFieldConventions;
-    for (var conventionName in conventions){
-      if (conventions.hasOwnProperty(conventionName)){
-        convention = conventions[conventionName];
-        convention.bind(view, model);
+    for (var conventionSelector in conventions){
+      if (conventions.hasOwnProperty(conventionSelector)){
+        convention = conventions[conventionSelector];
+        convention.bind(conventionSelector, view, model);
       }
     }
   }
@@ -49,7 +27,7 @@ Backbone.ModelBinding = (function(){
       var selector = selector_parts[1];
       var element = view.$(selector);
 
-      bidirectionalBinding.call(view, field, element, model);
+      Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
     });
   }
 
@@ -76,6 +54,41 @@ Backbone.ModelBinding = (function(){
 // Form Field Conventions
 // ----------------------------
 Backbone.ModelBinding.FormFieldConventions = (function(){
+  var StandardInput = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = element.attr('id');
+        Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
+      });
+    }
+  };
+
+  var RadioButtons = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = element.attr('name');
+        Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
+      });
+    }
+  };
+
+  return {
+    "input[type=text]": StandardInput, 
+    "input[type=password]": StandardInput,
+    "input[type=radio]": RadioButtons,
+    "select": StandardInput,
+  }
+})();
+
+// ----------------------------
+// Helper Methods:
+// common methods used in conventions
+// and non-conventional bindings
+// ----------------------------
+Backbone.ModelBinding.HelperMethods = (function(){
+
   function bidirectionalBinding(attribute_name, element, model){
     var self = this;
 
@@ -98,28 +111,7 @@ Backbone.ModelBinding.FormFieldConventions = (function(){
     }
   }
 
-  var StandardInput = {
-    bind: function(view, model){
-      view.$("input[type=text], input[type=password], select").each(function(index){
-        var element = view.$(this);
-        var field = element.attr('id');
-        bidirectionalBinding.call(view, field, element, model);
-      });
-    }
-  };
-
-  var RadioButtons = {
-    bind: function(view, model){
-      view.$("input[type=radio]").each(function(index){
-        var element = view.$(this);
-        var field = element.attr('name');
-        bidirectionalBinding.call(view, field, element, model);
-      });
-    }
-  };
-
   return {
-    standardInput: StandardInput,
-    radioButtons: RadioButtons,
+    bidirectionalBinding: bidirectionalBinding
   }
 })();
