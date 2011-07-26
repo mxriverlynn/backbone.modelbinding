@@ -23,6 +23,7 @@ AView = Backbone.View.extend({
       <input type='radio' id='graduated_no' name='graduated' value='no'>\
       <input type='radio' id='graduated_maybe' name='graduated' value='maybe'>\
       <input type='checkbox' id='drivers_license' value='yes'>\
+      <textarea id='bio'></textarea>\
     ");
     this.$(this.el).append(html);
     Backbone.ModelBinding.call(this);

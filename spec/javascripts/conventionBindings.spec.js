@@ -4,13 +4,14 @@ describe("conventionBindings", function(){
       name: "Ashelia Bailey", 
       education: "graduate", 
       graduated: "maybe",
-      drivers_license: true
+      drivers_license: true,
+      bio: "my baby girl"
     });
     this.view = new AView({model: this.model});
     this.view.render();
   });
 
-  describe("input element binding", function(){
+  describe("text element binding", function(){
     it("bind view changes to the model's field, by convention of id", function(){
       var el = this.view.$("#name");
       el.val("Derick Bailey");
@@ -28,6 +29,27 @@ describe("conventionBindings", function(){
     it("binds the model's value to the form field on render", function(){
       var el = this.view.$("#name");
       expect(el.val()).toEqual("Ashelia Bailey");
+    });
+  });
+
+  describe("textarea element binding", function(){
+    it("bind view changes to the model's field, by convention of id", function(){
+      var el = this.view.$("#bio");
+      el.val("my sweet baby girl");
+      el.trigger('change');
+
+      expect(this.model.get('bio')).toEqual("my sweet baby girl");
+    });
+
+    it("bind model field changes to the form input, by convention of id", function(){
+      this.model.set({bio: "a grumpy baby"});
+      var el = this.view.$("#bio");
+      expect(el.val()).toEqual("a grumpy baby");
+    });
+
+    it("binds the model's value to the form field on render", function(){
+      var el = this.view.$("#bio");
+      expect(el.val()).toEqual("my baby girl");
     });
   });
 

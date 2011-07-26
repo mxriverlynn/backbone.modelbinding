@@ -92,6 +92,7 @@ Backbone.ModelBinding.FormFieldConventions = (function(){
     radioGroup: {selector: "input[type=radio]", convention: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", convention: Checkbox},
     select: {selector: "select", convention: StandardInput},
+    textarea: {selector: "textarea", convention: StandardInput},
   }
 })();
 
