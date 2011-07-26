@@ -136,10 +136,11 @@ Backbone.ModelBinding.HelperMethods = (function(){
     });
 
     // set the default value on the form, from the model
-    //var attr_value = model.get(attribute_name);
-    //if (attr_value) {
-    //  element.val(attr_value);
-    //}
+    var attr_value = model.get(group_name);
+    if (attr_value) {
+      var value_selector = "input[type=radio][name=" + group_name + "][value=" + attr_value + "]";
+      self.$(value_selector).attr("checked", "checked");
+    }
   }
 
   return {

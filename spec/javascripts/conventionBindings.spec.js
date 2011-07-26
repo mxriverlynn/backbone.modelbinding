@@ -1,6 +1,6 @@
 describe("conventionBindings", function(){
   beforeEach(function(){
-    this.model = new AModel({name: "Ashelia Bailey", education: "graduate"});
+    this.model = new AModel({name: "Ashelia Bailey", education: "graduate", graduated: "maybe"});
     this.view = new AView({model: this.model});
     this.view.render();
   });
@@ -43,6 +43,10 @@ describe("conventionBindings", function(){
     });
 
     it("binds the model's value to the form field on render", function(){
+      var el = this.view.$("input[type=radio][name=graduated]:checked");
+      var selected = el.val();
+
+      expect(selected).toBe("maybe");
     });
   });
 
