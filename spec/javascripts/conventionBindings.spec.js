@@ -39,7 +39,7 @@ describe("conventionBindings", function(){
       var el = this.view.$("#graduated_yes");
       var selected = el.attr("checked");
 
-      expect(selected).toEqual("yes");
+      expect(selected).toBeTruthy();
     });
 
     it("binds the model's value to the form field on render", function(){

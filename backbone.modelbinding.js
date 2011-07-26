@@ -119,10 +119,10 @@ Backbone.ModelBinding.HelperMethods = (function(){
     var self = this;
 
     // bind the model changes to the form elements
-    //model.bind("change:" + group_name, function(changed_model, val){
-    //  var value_selector = "input[type=radio, name=" + group_name + ", value=" + val + "]";
-    //  self.$(value_selector).attr("checked", "checked");
-    //});
+    model.bind("change:" + group_name, function(changed_model, val){
+      var value_selector = "input[type=radio][name=" + group_name + "][value=" + val + "]";
+      self.$(value_selector).attr("checked", "checked");
+    });
 
     // bind the form changes to the model
     var group_selector = "input[type=radio][name=" + group_name + "]";
