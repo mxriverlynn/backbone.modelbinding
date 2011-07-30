@@ -5,10 +5,44 @@ describe("conventionBindings", function(){
       education: "graduate", 
       graduated: "maybe",
       drivers_license: true,
+	  super_power: "mega pooping",
       bio: "my baby girl"
     });
     this.view = new AView({model: this.model});
     this.view.render();
+  });
+
+  describe("text element binding using configurable attribute", function(){
+	beforeEach(function(){
+		this.model = new AModel({
+			super_power: "mega pooping"
+		});
+		this.view = new AnotherView({model: this.model});
+		this.view.render();
+	});
+	
+	afterEach(function(){
+	  Backbone.ModelBinding.attr = 'id';
+	});
+	
+    it("bind view changes to the model's field, by configurable convention", function(){
+	  var el = this.view.$(".super_power");
+      el.val("x ray vision");
+      el.trigger('change');
+
+      expect(this.model.get('super_power')).toEqual("x ray vision");
+    });
+
+    it("bind model field changes to the form input, by convention of id", function(){
+	  this.model.set({super_power: "eating raw vegetables"});
+      var el = this.view.$(".super_power");
+      expect(el.val()).toEqual("eating raw vegetables");
+    });
+
+    it("binds the model's value to the form field on render", function(){
+	  var el = this.view.$(".super_power");
+      expect(el.val()).toEqual("mega pooping");
+    });
   });
 
   describe("text element binding", function(){

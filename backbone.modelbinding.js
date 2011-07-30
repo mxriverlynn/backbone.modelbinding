@@ -40,6 +40,9 @@ Backbone.ModelBinding = (function(){
   return {
     version: "0.1.1",
 
+	attr: "id",
+	radioAttr: "name",
+	
     call: function(view){
       handleFormBindings(view, view.model);
       handleHtmlBindings(view, view.model);
@@ -56,7 +59,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = element.attr('id');
+        var field = element.attr(Backbone.ModelBinding.attr);
         Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
       });
     }
@@ -68,7 +71,7 @@ Backbone.ModelBinding.Conventions = (function(){
       var foundElements = [];
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var group_name = element.attr('name');
+        var group_name = element.attr(Backbone.ModelBinding.radioAttr);
         if (!foundElements[group_name]) {
           foundElements[group_name] = true;
           Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model);
@@ -82,7 +85,7 @@ Backbone.ModelBinding.Conventions = (function(){
       var self = this;
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = element.attr('id');
+        var field = element.attr(Backbone.ModelBinding.attr);
         Backbone.ModelBinding.HelperMethods.bidirectionalCheckboxBinding.call(view, field, element, model);
       });
     }

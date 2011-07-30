@@ -14,6 +14,7 @@ AView = Backbone.View.extend({
       <input type='text' id='something'> \
       <div id='showIt'></div>\
       <input type='text' id='name'>\
+      <input type='text' class='super_power'>\
       <select id='education'> \
         <option value='high school'>high school</option> \
         <option value='college'>college</option> \
@@ -28,5 +29,24 @@ AView = Backbone.View.extend({
     ");
     this.$(this.el).append(html);
     Backbone.ModelBinding.call(this);
+  },
+});
+
+AnotherView = Backbone.View.extend({
+  formBindings: {
+    "#something": "a_field"
+  },
+
+  htmlBindings: {
+    "#showIt": "a_field"
+  },
+
+  render: function(){
+    var html = $("\
+      <input type='text' class='super_power'>\
+    ");
+    this.$(this.el).append(html);
+    Backbone.ModelBinding.attr = 'class';
+	Backbone.ModelBinding.call(this);
   },
 });
