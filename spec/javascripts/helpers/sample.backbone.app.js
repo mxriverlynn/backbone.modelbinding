@@ -14,7 +14,6 @@ AView = Backbone.View.extend({
       <input type='text' id='something'> \
       <div id='showIt'></div>\
       <input type='text' id='name'>\
-      <input type='text' class='super_power'>\
       <select id='education'> \
         <option value='high school'>high school</option> \
         <option value='college'>college</option> \
@@ -46,7 +45,6 @@ AnotherView = Backbone.View.extend({
       <input type='text' class='super_power'>\
     ");
     this.$(this.el).append(html);
-    Backbone.ModelBinding.attr = 'class';
-	Backbone.ModelBinding.call(this);
+	Backbone.ModelBinding.call(this, {standardAttribute: 'class'});
   },
 });

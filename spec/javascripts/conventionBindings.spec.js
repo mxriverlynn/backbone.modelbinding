@@ -5,7 +5,6 @@ describe("conventionBindings", function(){
       education: "graduate", 
       graduated: "maybe",
       drivers_license: true,
-	  super_power: "mega pooping",
       bio: "my baby girl"
     });
     this.view = new AView({model: this.model});
@@ -21,9 +20,9 @@ describe("conventionBindings", function(){
 		this.view.render();
 	});
 	
-	afterEach(function(){
-	  Backbone.ModelBinding.attr = 'id';
-	});
+	// afterEach(function(){
+	  // Backbone.ModelBinding.standardAttr = 'id';
+	// });
 	
     it("bind view changes to the model's field, by configurable convention", function(){
 	  var el = this.view.$(".super_power");
