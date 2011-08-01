@@ -97,8 +97,26 @@ The following form input types are supported:
 * password
 * textarea
 * checkbox
-* select
-* radio button groups (grouped by the 'name' attribute)
+* select 
+* radio button groups
+
+Radio buttons are group are assumed to be grouped by the `name` attribute of the 
+radio button items. 
+
+Select boxes will populate 2 separate fields into the model that they are bound to.
+The standard `#fieldid` will be populated with the selected value. An additional
+`{#fieldid}_text` will be populated with the text from the selected item. For example,
+a selected option of 
+
+````
+<select id='company'>
+  <option value="foo_bar">Foo Bar Widgets, Inc.</option>
+  ...
+</select>
+```` 
+
+will populate the `company` attribute of the model with "foo_bar", and will populate
+the `company_text` attribute of the model with "Foo Bar Widgets, Inc."
 
 There is no support for hidden fields at the moment, because there is no 'change' event
 that jQuery can listen to on a hidden field.
