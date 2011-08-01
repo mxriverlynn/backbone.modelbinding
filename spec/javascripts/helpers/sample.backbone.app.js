@@ -15,6 +15,8 @@ AView = Backbone.View.extend({
       <div id='showIt'></div>\
       <input type='text' id='name'>\
       <select id='education'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
         <option value='high school'>high school</option> \
         <option value='college'>college</option> \
         <option value='graduate'>graduate</option> \

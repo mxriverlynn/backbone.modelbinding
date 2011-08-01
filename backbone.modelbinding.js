@@ -1,4 +1,4 @@
-// Backbone.ModelBinding v0.1.1
+// Backbone.ModelBinding v0.1.2
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT Liscene
@@ -38,7 +38,7 @@ Backbone.ModelBinding = (function(){
   }
 
   return {
-    version: "0.1.1",
+    version: "0.1.2",
 
     call: function(view){
       handleFormBindings(view, view.model);
@@ -58,6 +58,16 @@ Backbone.ModelBinding.Conventions = (function(){
         var element = view.$(this);
         var field = element.attr('id');
         Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
+      });
+    }
+  };
+
+  var SelectBox = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = element.attr('id');
+        Backbone.ModelBinding.HelperMethods.bidirectionalSelectBinding.call(view, field, element, model);
       });
     }
   };
@@ -93,7 +103,7 @@ Backbone.ModelBinding.Conventions = (function(){
     password: {selector: "input[type=password]", handler: StandardInput},
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
-    select: {selector: "select", handler: StandardInput},
+    select: {selector: "select", handler: SelectBox},
     textarea: {selector: "textarea", handler: StandardInput},
   }
 })();
@@ -118,6 +128,29 @@ Backbone.ModelBinding.HelperMethods = (function(){
       element.bind("change", function(ev){
         data = {};
         data[attribute_name] = self.$(ev.target).val();
+        model.set(data);
+      });
+
+      // set the default value on the form, from the model
+      var attr_value = model.get(attribute_name);
+      if (attr_value) {
+        element.val(attr_value);
+      }
+    },
+
+    bidirectionalSelectBinding: function(attribute_name, element, model){
+      var self = this;
+
+      // bind the model changes to the form elements
+      model.bind("change:" + attribute_name, function(changed_model, val){
+        element.val(val);
+      });
+
+      // bind the form changes to the model
+      element.bind("change", function(ev){
+        data = {};
+        data[attribute_name] = self.$(ev.target).val();
+        data[attribute_name + "_text"] = self.$(":selected", ev.target).text();
         model.set(data);
       });
 
