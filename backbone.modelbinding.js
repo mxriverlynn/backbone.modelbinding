@@ -10,6 +10,13 @@
 // Backbone.ModelBinding
 // ----------------------------
 Backbone.ModelBinding = (function(){
+  var config = {
+	  standard: "id",
+	  radio: "name",
+	  checkbox: "id",
+	  select: "id"
+  };
+  
   function handleConventionBindings(view, model){
     var conventions = Backbone.ModelBinding.Conventions;
     for (var conventionName in conventions){
@@ -40,10 +47,40 @@ Backbone.ModelBinding = (function(){
   return {
     version: "0.1.2",
 
-    call: function(view){
-      handleFormBindings(view, view.model);
+	getBindingAttribute: function(type){return config[type];},
+	
+	configureCall: function(options){
+	  if (options != null) {
+		for (var type in config){
+		  if (!options[type + 'Attribute']) {
+			options[type + 'Attribute'] = config[type];
+		  }
+		}
+	    this.options = options;
+		this.is_configured = true;
+	  }
+	},
+	
+	configure: function(options){
+	  if (options != null) {
+		for (var type in config) {
+		  config[type] = options[type + 'Attribute'] ? 
+			options[type + 'Attribute'] : config[type];
+		}
+	  }
+	},
+	
+	resetCallConfiguration: function(){
+	  this.options = null;
+	  this.is_configured = false;
+	},
+	
+    call: function(view, options){
+	  this.configureCall(options);
+	  handleFormBindings(view, view.model);
       handleHtmlBindings(view, view.model);
       handleConventionBindings(view, view.model);
+	  this.resetCallConfiguration();
     }
   }
 })();
@@ -56,7 +93,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = element.attr('id');
+		var field = getBindingValue(element, 'standard');
         Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
       });
     }
@@ -66,7 +103,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = element.attr('id');
+        var field = getBindingValue(element, 'select');
         Backbone.ModelBinding.HelperMethods.bidirectionalSelectBinding.call(view, field, element, model);
       });
     }
@@ -78,10 +115,11 @@ Backbone.ModelBinding.Conventions = (function(){
       var foundElements = [];
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var group_name = element.attr('name');
+		var group_name = getBindingValue(element, 'radio');
         if (!foundElements[group_name]) {
           foundElements[group_name] = true;
-          Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model);
+		  var bindingAttr = getBindingAttr('radio');
+          Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model, bindingAttr);
         }
       });
     }
@@ -92,11 +130,21 @@ Backbone.ModelBinding.Conventions = (function(){
       var self = this;
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = element.attr('id');
+		var field = getBindingValue(element, 'checkbox');
         Backbone.ModelBinding.HelperMethods.bidirectionalCheckboxBinding.call(view, field, element, model);
       });
     }
   };
+  
+  function getBindingAttr(type){
+	return Backbone.ModelBinding.is_configured ? 
+		Backbone.ModelBinding.options[type + 'Attribute'] : Backbone.ModelBinding.getBindingAttribute(type);
+  }
+  
+  function getBindingValue(element, type){
+	var bindingAttr = getBindingAttr(type);
+	return element.attr(bindingAttr);
+  }
 
   return {
     text: {selector: "input[type=text]", handler: StandardInput}, 
@@ -160,18 +208,18 @@ Backbone.ModelBinding.HelperMethods = (function(){
         element.val(attr_value);
       }
     },
-
-    bidirectionalRadioGroupBinding: function(group_name, model){
+	
+	bidirectionalRadioGroupBinding: function(group_name, model, bindingAttr){
       var self = this;
 
       // bind the model changes to the form elements
       model.bind("change:" + group_name, function(changed_model, val){
-        var value_selector = "input[type=radio][name=" + group_name + "][value=" + val + "]";
-        self.$(value_selector).attr("checked", "checked");
+        var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + val + "]";
+		self.$(value_selector).attr("checked", "checked");
       });
 
       // bind the form changes to the model
-      var group_selector = "input[type=radio][name=" + group_name + "]";
+      var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
       self.$(group_selector).bind("change", function(ev){
         var element = self.$(ev.currentTarget);
         if (element.attr("checked")){
@@ -184,7 +232,7 @@ Backbone.ModelBinding.HelperMethods = (function(){
       // set the default value on the form, from the model
       var attr_value = model.get(group_name);
       if (attr_value) {
-        var value_selector = "input[type=radio][name=" + group_name + "][value=" + attr_value + "]";
+        var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
         self.$(value_selector).attr("checked", "checked");
       }
     },
