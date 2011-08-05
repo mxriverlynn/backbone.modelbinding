@@ -45,8 +45,24 @@ AnotherView = Backbone.View.extend({
   render: function(){
     var html = $("\
       <input type='text' class='super_power'>\
+      <select class='education'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <input type='radio' id='graduated_yes' class='graduated' value='yes'>\
+      <input type='radio' id='graduated_no' class='graduated' value='no'>\
+      <input type='radio' id='graduated_maybe' class='graduated' value='maybe'>\
+      <input type='checkbox' class='drivers_license' value='yes'>\
     ");
     this.$(this.el).append(html);
-	Backbone.ModelBinding.call(this, {standardAttribute: 'class'});
+	Backbone.ModelBinding.call(this, {
+		standardAttribute: 'class',
+		radioAttribute: 'class',
+		selectAttribute: 'class',
+		checkboxAttribute: 'class',
+	});
   },
 });
