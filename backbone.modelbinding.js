@@ -34,7 +34,7 @@ Backbone.ModelBinding = (function(){
 })();
 
 // ----------------------------
-// Binding Conventions
+// Model Binding Configuration
 // ----------------------------
 Backbone.ModelBinding.Configuration = (function(){
   var config = {
