@@ -258,7 +258,6 @@ Backbone.ModelBinding.HelperMethods = (function(){
         element.removeAttr("checked");
       }
     }
-
   }
 
   return methods;

@@ -157,6 +157,15 @@ SomeView = Backbone.View.extend({
 When this text box has it's value changed, the model's `name` attribute will be populated with
 the value instead of `the_model_name`.
 
+If the same convention needs to be used throughout an application, and not just withing a single
+view, the configuration can be set at a global level:
+
+````
+Backbone.ModelBinding.configur({text: "modelAttr"});
+````
+
+Now all text boxes will update the model attribute specified in the text box's `modelAttr`.
+
 ### Pluggable Conventions
 
 The convention based bindings are pluggable. Each of the existing form input types can have it's
