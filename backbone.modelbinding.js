@@ -38,14 +38,6 @@ Backbone.ModelBinding = (function(){
     });
   }
 
-  function handleHtmlBindings(view, model){
-    _.each(view.htmlBindings, function(field, htmlElement){
-      model.bind("change:" + field, function(changed_model, val){
-        view.$(htmlElement).html(val);
-      });
-    });
-  }
-
   function configureBinding(options){
     if (options) {
       Backbone.ModelBinding._config = _.clone(config);
@@ -72,7 +64,6 @@ Backbone.ModelBinding = (function(){
     call: function(view, options){
       configureBinding(options);
       handleFormBindings(view, view.model);
-      handleHtmlBindings(view, view.model);
       handleConventionBindings(view, view.model);
       resetConfiguration();
     }
