@@ -44,43 +44,35 @@ Backbone.ModelBinding = (function(){
     });
   }
 
+  function configureBinding(options){
+    if (options) {
+      Backbone.ModelBinding._config = _.clone(config);
+      _.extend(config, options);
+    }
+  }
+
+  function resetConfiguration(){
+    if (Backbone.ModelBinding._config) {
+      config = Backbone.ModelBinding._config;
+      delete Backbone.ModelBinding._config;
+    }
+  }
+    
   return {
     version: "0.1.3",
 
-    getBindingAttribute: function(type){ return config[type]; },
-    
-    configureCall: function(options){
-      if (options != null) {
-        for (var type in config){
-          if (!options[type + 'Attribute']) {
-          options[type + 'Attribute'] = config[type];
-          }
-        }
-        this.options = options;
-        this.is_configured = true;
-      }
-    },
-    
-    configure: function(options){
-      if (options != null) {
-        for (var type in config) {
-          config[type] = options[type + 'Attribute'] ? 
-          options[type + 'Attribute'] : config[type];
-        }
-      }
-    },
-    
-    resetCallConfiguration: function(){
-      this.options = null;
-      this.is_configured = false;
-    },
+    getBindingAttr: function(type){ return config[type]; },
+  
+//    configure: function(options){
+//      _.extend(config, options);
+//    },
     
     call: function(view, options){
-      this.configureCall(options);
+      configureBinding(options);
       handleFormBindings(view, view.model);
       handleHtmlBindings(view, view.model);
       handleConventionBindings(view, view.model);
-      this.resetCallConfiguration();
+      resetConfiguration();
     }
   }
 })();
@@ -118,7 +110,7 @@ Backbone.ModelBinding.Conventions = (function(){
         var group_name = getBindingValue(element, 'radio');
         if (!foundElements[group_name]) {
           foundElements[group_name] = true;
-          var bindingAttr = getBindingAttr('radio');
+          var bindingAttr = Backbone.ModelBinding.getBindingAttr('radio');
           Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model, bindingAttr);
         }
       });
@@ -136,23 +128,18 @@ Backbone.ModelBinding.Conventions = (function(){
     }
   };
   
-  function getBindingAttr(type){
-    return Backbone.ModelBinding.is_configured ? 
-		Backbone.ModelBinding.options[type + 'Attribute'] : Backbone.ModelBinding.getBindingAttribute(type);
-  }
-  
   function getBindingValue(element, type){
-    var bindingAttr = getBindingAttr(type);
+    var bindingAttr = Backbone.ModelBinding.getBindingAttr(type);
     return element.attr(bindingAttr);
   }
 
   return {
     text: {selector: "input[type=text]", handler: StandardInput}, 
+    textarea: {selector: "textarea", handler: StandardInput},
     password: {selector: "input[type=password]", handler: StandardInput},
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: SelectBox},
-    textarea: {selector: "textarea", handler: StandardInput},
   }
 })();
 

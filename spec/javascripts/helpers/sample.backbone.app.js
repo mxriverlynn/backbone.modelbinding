@@ -61,10 +61,10 @@ AnotherView = Backbone.View.extend({
     this.$(this.el).append(html);
 
     Backbone.ModelBinding.call(this, {
-      standardAttribute: 'class',
-      radioAttribute: 'class',
-      selectAttribute: 'class',
-      checkboxAttribute: 'class',
+      standard: 'class',
+      radio: 'class',
+      select: 'class',
+      checkbox: 'class',
     });
 
   },

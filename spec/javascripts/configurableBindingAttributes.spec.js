@@ -1,6 +1,5 @@
 describe("configurableBindingAttributes", function(){
   beforeEach(function(){
-
     this.model = new AModel({
       super_power: "mega pooping",
       education: "graduate",
