@@ -89,9 +89,67 @@ In this example, when `model.set` is called to set the name, "some name" will ap
 in the `#name` input field. Similarly, when the `#name` input field is changed, the
 value entered into that field will be sent to the model's `name` attribute.
 
-### Supported Form Inputs
+## Data-Bind Attributes
 
-The following form input types are supported:
+Backbone.ModelBinding supports Knockout-style data-bind attributes on any arbitrary
+HTML element. These bindings will populate any attribute, the text, or HTML contents
+of an HTML element based on your configurations. This is particularly useful when a
+model that is being edited is also being displayed elsewhere on the screen.
+
+To bind an element to a model's attributes, add a `data-bind` attribute to the element
+and specify what should be updated with which model attribute using a `elementAttr modelAttr`
+format. For example `<span data-bind="text name">` will update the span's text with
+the model's name attribute, when the model's name changes.
+
+````
+<form>
+  <input type="text" id="name">
+</form>
+Name: <span data-bind="text name">
+
+SomeView = Backbone.View.extend({
+  // ... 
+
+  render: function(){
+    // ... 
+    Backbone.ModelBinding.call(this);
+  }
+});
+
+someModel = new SomeModel();
+someView = new SomeView({model: someModel});
+````
+
+In this example, the model's `name` will be updated when you type into the text box
+and then tab or click away from it (to fire the change event). When the model's `name`
+attribute is updated, the `data-bind` convention will pick up the change and set
+the text of the `span` to the model's name.
+
+## Form Bindings
+
+Non-conventional, bi-directional binding between your form input and your model.
+
+Add `formBindings` document to you view, to specify the bindings you want to use. The format is
+the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
+
+````
+SomeView = Backbone.View.extend({
+  formBindings: {
+    "#someInput": "a_field"
+  }
+});
+````
+
+The input element must be settable via the jQuery `val` method. You can specify any valid jQuery
+event to monitor for a change, though. 
+
+Now when you type into the form input, your model's fields will be updated automatically. When your
+model's fields are changed, the form input will update automatically. And, when you render the
+view, the field will be populated with the value that exists in the model at rendering time.
+
+## Form Input Conventions
+
+The following form input types are supported by the form convention binder:
 
 * text
 * textarea
@@ -150,7 +208,6 @@ SomeView = Backbone.View.extend({
   }
 });
 
-
 <input type="text" id="the_model_name" modelAttr="name">
 ````
 
@@ -166,7 +223,7 @@ Backbone.ModelBinding.Configuration.configureBindingAttributes({text: "modelAttr
 
 Now all text boxes will update the model attribute specified in the text box's `modelAttr`.
 
-### Pluggable Conventions
+## Pluggable Conventions
 
 The convention based bindings are pluggable. Each of the existing form input types can have it's
 convention replaced and you can add your own conventions for input types not currently handled,
@@ -223,32 +280,12 @@ The list of existing conventions includes:
 * checkbox
 * select
 * textarea
+* formbinding
+* databind
 
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
  
-## Form Bindings
-
-Non-conventional, bi-directional binding between your form input and your model.
-
-Add `formBindings` document to you view, to specify the bindings you want to use. The format is
-the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
-
-````
-SomeView = Backbone.View.extend({
-  formBindings: {
-    "#someInput": "a_field"
-  }
-});
-````
-
-The input element must be settable via the jQuery `val` method. You can specify any valid jQuery
-event to monitor for a change, though. 
-
-Now when you type into the form input, your model's fields will be updated automatically. When your
-model's fields are changed, the form input will update automatically. And, when you render the
-view, the field will be populated with the value that exists in the model at rendering time.
-
 # Legal Mumbo Jumbo (MIT License)
 
 Copyright (c) 2011 Derick Bailey, Muted Solutions, LLC
