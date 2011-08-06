@@ -57,12 +57,15 @@ AnotherView = Backbone.View.extend({
       <input type='radio' id='graduated_maybe' class='graduated' value='maybe'>\
       <input type='checkbox' class='drivers_license' value='yes'>\
     ");
+
     this.$(this.el).append(html);
-	Backbone.ModelBinding.call(this, {
-		standardAttribute: 'class',
-		radioAttribute: 'class',
-		selectAttribute: 'class',
-		checkboxAttribute: 'class',
-	});
+
+    Backbone.ModelBinding.call(this, {
+      standardAttribute: 'class',
+      radioAttribute: 'class',
+      selectAttribute: 'class',
+      checkboxAttribute: 'class',
+    });
+
   },
 });

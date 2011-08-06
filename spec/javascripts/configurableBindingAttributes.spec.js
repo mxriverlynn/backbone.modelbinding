@@ -1,13 +1,15 @@
 describe("configurableBindingAttributes", function(){
   beforeEach(function(){
-	this.model = new AModel({
-		super_power: "mega pooping",
-		education: "graduate",
-		graduated: "maybe",
-		drivers_license: true
-	});
-	this.view = new AnotherView({model: this.model});
-	this.view.render();
+
+    this.model = new AModel({
+      super_power: "mega pooping",
+      education: "graduate",
+      graduated: "maybe",
+      drivers_license: true
+    });
+
+    this.view = new AnotherView({model: this.model});
+    this.view.render();
   });
   
   describe("text element binding using configurable attribute", function(){
