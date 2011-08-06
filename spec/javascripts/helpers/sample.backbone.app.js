@@ -11,6 +11,9 @@ AView = Backbone.View.extend({
 
   render: function(){
     var html = $("\
+      <div id='villain' data-bind='html villain'><p>test</p></div>\
+      <div id='doctor' data-bind='text doctor'>Seuss</div>\
+      <div id='pet' data-bind='someAttr pet' someAttr='Cat'></div>\
       <input type='text' id='super_hero_weakness' modelAttr='weakness'>\
       <input type='text' id='something'> \
       <div id='showIt'></div>\

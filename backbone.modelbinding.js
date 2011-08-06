@@ -129,6 +129,31 @@ Backbone.ModelBinding.Conventions = (function(){
     }
   };
 
+  var DataBind = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var databind = element.attr("data-bind").split(" ");
+        var elementAttr = databind[0];
+        var modelAttr = databind[1];
+
+        model.bind("change:" + modelAttr, function(changedModel, val){
+          switch(elementAttr){
+            case "html":
+              element.html(val);
+              break;
+            case "text":
+              element.text(val);
+              break;
+            default:
+              element.attr(elementAttr, val);
+          }
+        });
+
+      });
+    }
+  };
+
   var FormBinding = {
     bind: function(selector, view, model){
       _.each(view.formBindings, function(field, selector){
@@ -145,6 +170,7 @@ Backbone.ModelBinding.Conventions = (function(){
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: SelectBox},
+    databind: { selector: "*[data-bind]", handler: DataBind},
     form: {selector: "form", handler: FormBinding},
   }
 })();
