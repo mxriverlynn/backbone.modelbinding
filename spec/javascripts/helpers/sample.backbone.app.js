@@ -11,6 +11,7 @@ AView = Backbone.View.extend({
 
   render: function(){
     var html = $("\
+      <input type='text' id='super_hero_weakness' modelAttr='weakness'>\
       <input type='text' id='something'> \
       <div id='showIt'></div>\
       <input type='text' id='name'>\
@@ -44,7 +45,7 @@ AnotherView = Backbone.View.extend({
 
   render: function(){
     var html = $("\
-      <input type='text' class='super_power'>\
+      <input type='text' class='super_power' modelAttr='weakness'>\
       <select class='education'> \
         <option value='none'>none</option> \
         <option value='grade_school'>i dun learned at grade skool</option> \

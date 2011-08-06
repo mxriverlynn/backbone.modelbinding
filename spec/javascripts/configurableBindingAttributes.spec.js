@@ -10,10 +10,10 @@ describe("configurableBindingAttributes", function(){
     this.view = new AnotherView({model: this.model});
     this.view.render();
   });
-  
+
   describe("text element binding using configurable attribute", function(){
     it("bind view changes to the model's field, by configurable convention", function(){
-	  var el = this.view.$(".super_power");
+      var el = this.view.$(".super_power");
       el.val("x ray vision");
       el.trigger('change');
 
@@ -21,13 +21,13 @@ describe("configurableBindingAttributes", function(){
     });
 
     it("bind model field changes to the form input, by convention of id", function(){
-	  this.model.set({super_power: "eating raw vegetables"});
+      this.model.set({super_power: "eating raw vegetables"});
       var el = this.view.$(".super_power");
       expect(el.val()).toEqual("eating raw vegetables");
     });
 
     it("binds the model's value to the form field on render", function(){
-	  var el = this.view.$(".super_power");
+      var el = this.view.$(".super_power");
       expect(el.val()).toEqual("mega pooping");
     });
   });

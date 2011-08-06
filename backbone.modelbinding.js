@@ -57,9 +57,9 @@ Backbone.ModelBinding = (function(){
 
     getBindingAttr: function(type){ return config[type]; },
   
-//    configure: function(options){
-//      _.extend(config, options);
-//    },
+    configure: function(options){
+      configureBinding(options);
+    },
     
     call: function(view, options){
       configureBinding(options);
@@ -79,7 +79,6 @@ Backbone.ModelBinding.Conventions = (function(){
     if (type == "input"){
       type = element.attr("type");
     }
-    console.log(type);
     return type;
   }
 
