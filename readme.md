@@ -49,7 +49,7 @@ SomeView = Backbone.View.extend({
 });
 ````
 
-### Convention Bindings
+## Convention Bindings
 
 Automatic bi-directional binding between your form input and your model. 
 
@@ -89,13 +89,13 @@ In this example, when `model.set` is called to set the name, "some name" will ap
 in the `#name` input field. Similarly, when the `#name` input field is changed, the
 value entered into that field will be sent to the model's `name` attribute.
 
-#### Supported Form Inputs
+### Supported Form Inputs
 
 The following form input types are supported:
 
 * text
-* password
 * textarea
+* password
 * checkbox
 * select 
 * radio button groups
@@ -121,48 +121,41 @@ the `company_text` attribute of the model with "Foo Bar Widgets, Inc."
 There is no support for hidden fields at the moment, because there is no 'change' event
 that jQuery can listen to on a hidden field.
 
-### Form Bindings
+### Configuring The Bound Attributes
 
-Non-conventional, bi-directional binding between your form input and your model.
+The convention binding system allows you to specify the attribute to use for the convention, by
+the input type. The default configuration is:
 
-Add `formBindings` document to you view, to specify the bindings you want to use. The format is
-the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
+```
+{
+  text: "id",
+  textarea: "id",
+  password: "id",
+  radio: "name",
+  checkbox: "id",
+  select: "id"
+}
+````
+
+You can override this configuration and use any attribute you wish, by specifying any or all of
+these input types when you call the model binding. This is useful when you have field ids that
+do not match directly to the model attributes. For example, the following will use a `modelAttr`
+attribute value as the convention for text boxes.
 
 ````
 SomeView = Backbone.View.extend({
-  formBindings: {
-    "#someInput": "a_field"
+  render: function(){
+    // ... some rendering here
+    Backbone.ModelBinding.call(this, { text: "modelAttr" });
   }
 });
+
+
+<input type="text" id="the_model_name" modelAttr="name">
 ````
 
-The input element must be settable via the jQuery `val` method. You can specify any valid jQuery
-event to monitor for a change, though. 
-
-Now when you type into the form input, your model's fields will be updated automatically. When your
-model's fields are changed, the form input will update automatically. And, when you render the
-view, the field will be populated with the value that exists in the model at rendering time.
-
-### HTML Bindings
-
-Model -> HTML element binding for your model's field value changes.
-
-Add an 'htmlBindings' document to your view, to specify the bindings you want to use. The format is
-to list the html element selector on the left, and the model's field on the right.
-
-````
-SomeView = Backbone.View.extend({
-  htmlBindings: {
-    "#someElement": "a_field"
-  }
-});
-````
-
-Now when the model's `a_field` is changed, the html element `#someElement` will have it's contents
-replaced by the value that is entered into the model's `a_field` field.
-
-*Note:* htmlBindings is experimental as I don't have an actual use for it right now. I put it in
-because it was easy and it might inspire some other ideas at some point.
+When this text box has it's value changed, the model's `name` attribute will be populated with
+the value instead of `the_model_name`.
 
 ### Pluggable Conventions
 
@@ -225,12 +218,27 @@ The list of existing conventions includes:
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
  
-## Early Stages Of Development
+## Form Bindings
 
-backbone.modelbinding is still in the early stages and has limited functionality. Although 
-functionality is being built with unit tests, in a test-first manner, there is no
-guarantee that it will work. At all. Use at your own risk and be sure it works the way you
-expect before deploying to any production environment.
+Non-conventional, bi-directional binding between your form input and your model.
+
+Add `formBindings` document to you view, to specify the bindings you want to use. The format is
+the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
+
+````
+SomeView = Backbone.View.extend({
+  formBindings: {
+    "#someInput": "a_field"
+  }
+});
+````
+
+The input element must be settable via the jQuery `val` method. You can specify any valid jQuery
+event to monitor for a change, though. 
+
+Now when you type into the form input, your model's fields will be updated automatically. When your
+model's fields are changed, the form input will update automatically. And, when you render the
+view, the field will be populated with the value that exists in the model at rendering time.
 
 # Legal Mumbo Jumbo (MIT License)
 
