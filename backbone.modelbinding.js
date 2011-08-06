@@ -11,7 +11,9 @@
 // ----------------------------
 Backbone.ModelBinding = (function(){
   var config = {
-	  standard: "id",
+	  text: "id",
+	  textarea: "id",
+	  password: "id",
 	  radio: "name",
 	  checkbox: "id",
 	  select: "id"
@@ -81,11 +83,20 @@ Backbone.ModelBinding = (function(){
 // Form Field Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
+  function getElementType(element) {
+    var type = element[0].tagName.toLowerCase();
+    if (type == "input"){
+      type = element.attr("type");
+    }
+    console.log(type);
+    return type;
+  }
+
   var StandardInput = {
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = getBindingValue(element, 'standard');
+        var field = getBindingValue(element, getElementType(element));
         Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
       });
     }
