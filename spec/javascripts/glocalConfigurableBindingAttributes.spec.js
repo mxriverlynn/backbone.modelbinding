@@ -1,6 +1,6 @@
 describe("globalConfigurableBindingAttributes", function(){
   beforeEach(function(){
-    Backbone.ModelBinding.configure({text: "modelAttr"});
+    Backbone.ModelBinding.Configuration.configureBindingAttributes({text: "modelAttr"});
 
     this.model = new AModel({ weakness: "liver & onions" });
     this.view = new AView({model: this.model});

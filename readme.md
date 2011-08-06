@@ -161,7 +161,7 @@ If the same convention needs to be used throughout an application, and not just 
 view, the configuration can be set at a global level:
 
 ````
-Backbone.ModelBinding.configur({text: "modelAttr"});
+Backbone.ModelBinding.Configuration.configureBindingAttributes({text: "modelAttr"});
 ````
 
 Now all text boxes will update the model attribute specified in the text box's `modelAttr`.

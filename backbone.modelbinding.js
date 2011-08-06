@@ -25,10 +25,6 @@ Backbone.ModelBinding = (function(){
   return {
     version: "0.1.3",
 
-    configure: function(options){
-      Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
-    },
-    
     call: function(view, options){
       Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
       handleConventionBindings(view, view.model);
