@@ -87,7 +87,7 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, getElementType(element));
-        Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
+        Backbone.ModelBinding.Binders.bidirectionalBinding.call(view, field, element, model);
       });
     }
   };
@@ -97,7 +97,7 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
-        Backbone.ModelBinding.HelperMethods.bidirectionalSelectBinding.call(view, field, element, model);
+        Backbone.ModelBinding.Binders.bidirectionalSelectBinding.call(view, field, element, model);
       });
     }
   };
@@ -112,7 +112,7 @@ Backbone.ModelBinding.Conventions = (function(){
         if (!foundElements[group_name]) {
           foundElements[group_name] = true;
           var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
-          Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model, bindingAttr);
+          Backbone.ModelBinding.Binders.bidirectionalRadioGroupBinding.call(view, group_name, model, bindingAttr);
         }
       });
     }
@@ -124,7 +124,7 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
-        Backbone.ModelBinding.HelperMethods.bidirectionalCheckboxBinding.call(view, field, element, model);
+        Backbone.ModelBinding.Binders.bidirectionalCheckboxBinding.call(view, field, element, model);
       });
     }
   };
@@ -133,7 +133,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       _.each(view.formBindings, function(field, selector){
         var element = view.$(selector);
-        Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
+        Backbone.ModelBinding.Binders.bidirectionalBinding.call(view, field, element, model);
       });
     }
   };
@@ -150,11 +150,9 @@ Backbone.ModelBinding.Conventions = (function(){
 })();
 
 // ----------------------------
-// Helper Methods:
-// common methods used in conventions
-// and non-conventional bindings
+// Bi-Directional Binding Methods
 // ----------------------------
-Backbone.ModelBinding.HelperMethods = (function(){
+Backbone.ModelBinding.Binders = (function(){
   methods = {};
 
   methods.bidirectionalBinding = function(attribute_name, element, model){
