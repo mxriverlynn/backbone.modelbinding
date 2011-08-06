@@ -31,13 +31,6 @@ Backbone.ModelBinding = (function(){
     }
   }
 
-  function handleFormBindings(view, model){
-    _.each(view.formBindings, function(field, selector){
-      var element = view.$(selector);
-      Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
-    });
-  }
-
   function configureBinding(options){
     if (options) {
       Backbone.ModelBinding._config = _.clone(config);
@@ -63,7 +56,6 @@ Backbone.ModelBinding = (function(){
     
     call: function(view, options){
       configureBinding(options);
-      handleFormBindings(view, view.model);
       handleConventionBindings(view, view.model);
       resetConfiguration();
     }
@@ -71,7 +63,7 @@ Backbone.ModelBinding = (function(){
 })();
 
 // ----------------------------
-// Form Field Conventions
+// Binding Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
   function getElementType(element) {
@@ -128,6 +120,15 @@ Backbone.ModelBinding.Conventions = (function(){
       });
     }
   };
+
+  var FormBinding = {
+    bind: function(selector, view, model){
+      _.each(view.formBindings, function(field, selector){
+        var element = view.$(selector);
+        Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
+      });
+    }
+  };
   
   function getBindingValue(element, type){
     var bindingAttr = Backbone.ModelBinding.getBindingAttr(type);
@@ -141,6 +142,7 @@ Backbone.ModelBinding.Conventions = (function(){
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: SelectBox},
+    form: {selector: "form", handler: FormBinding},
   }
 })();
 
