@@ -10,15 +10,6 @@
 // Backbone.ModelBinding
 // ----------------------------
 Backbone.ModelBinding = (function(){
-  var config = {
-	  text: "id",
-	  textarea: "id",
-	  password: "id",
-	  radio: "name",
-	  checkbox: "id",
-	  select: "id"
-  };
-  
   function handleConventionBindings(view, model){
     var conventions = Backbone.ModelBinding.Conventions;
     for (var conventionName in conventions){
@@ -31,33 +22,54 @@ Backbone.ModelBinding = (function(){
     }
   }
 
-  function configureBinding(options){
-    if (options) {
-      Backbone.ModelBinding._config = _.clone(config);
-      _.extend(config, options);
-    }
-  }
-
-  function resetConfiguration(){
-    if (Backbone.ModelBinding._config) {
-      config = Backbone.ModelBinding._config;
-      delete Backbone.ModelBinding._config;
-    }
-  }
-    
   return {
     version: "0.1.3",
 
-    getBindingAttr: function(type){ return config[type]; },
-  
     configure: function(options){
-      configureBinding(options);
+      Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
     },
     
     call: function(view, options){
-      configureBinding(options);
+      Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
       handleConventionBindings(view, view.model);
-      resetConfiguration();
+      Backbone.ModelBinding.Configuration.resetConfiguration();
+    }
+  }
+})();
+
+// ----------------------------
+// Binding Conventions
+// ----------------------------
+Backbone.ModelBinding.Configuration = (function(){
+  var config = {
+	  text: "id",
+	  textarea: "id",
+	  password: "id",
+	  radio: "name",
+	  checkbox: "id",
+	  select: "id"
+  };
+  
+  return {
+    configureBindingAttributes: function(options){
+      if (options) {
+        Backbone.ModelBinding._config = _.clone(config);
+        _.extend(config, options);
+      }
+    },
+
+    resetConfiguration: function(){
+      if (Backbone.ModelBinding._config) {
+        config = Backbone.ModelBinding._config;
+        delete Backbone.ModelBinding._config;
+      }
+    },
+    
+    getBindingAttr: function(type){ return config[type]; },
+
+    getBindingValue: function(element, type){
+      var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr(type);
+      return element.attr(bindingAttr);
     }
   }
 })();
@@ -78,7 +90,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = getBindingValue(element, getElementType(element));
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, getElementType(element));
         Backbone.ModelBinding.HelperMethods.bidirectionalBinding.call(view, field, element, model);
       });
     }
@@ -88,7 +100,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = getBindingValue(element, 'select');
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
         Backbone.ModelBinding.HelperMethods.bidirectionalSelectBinding.call(view, field, element, model);
       });
     }
@@ -100,10 +112,10 @@ Backbone.ModelBinding.Conventions = (function(){
       var foundElements = [];
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var group_name = getBindingValue(element, 'radio');
+        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
         if (!foundElements[group_name]) {
           foundElements[group_name] = true;
-          var bindingAttr = Backbone.ModelBinding.getBindingAttr('radio');
+          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
           Backbone.ModelBinding.HelperMethods.bidirectionalRadioGroupBinding.call(view, group_name, model, bindingAttr);
         }
       });
@@ -115,7 +127,7 @@ Backbone.ModelBinding.Conventions = (function(){
       var self = this;
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = getBindingValue(element, 'checkbox');
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
         Backbone.ModelBinding.HelperMethods.bidirectionalCheckboxBinding.call(view, field, element, model);
       });
     }
@@ -130,11 +142,6 @@ Backbone.ModelBinding.Conventions = (function(){
     }
   };
   
-  function getBindingValue(element, type){
-    var bindingAttr = Backbone.ModelBinding.getBindingAttr(type);
-    return element.attr(bindingAttr);
-  }
-
   return {
     text: {selector: "input[type=text]", handler: StandardInput}, 
     textarea: {selector: "textarea", handler: StandardInput},
