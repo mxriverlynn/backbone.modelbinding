@@ -32,3 +32,21 @@ AView = Backbone.View.extend({
     Backbone.ModelBinding.call(this);
   },
 });
+
+AnotherView = Backbone.View.extend({
+  formBindings: {
+    "#something": "a_field"
+  },
+
+  htmlBindings: {
+    "#showIt": "a_field"
+  },
+
+  render: function(){
+    var html = $("\
+      <input type='text' class='super_power'>\
+    ");
+    this.$(this.el).append(html);
+	Backbone.ModelBinding.call(this, {standardAttribute: 'class'});
+  },
+});
