@@ -154,15 +154,6 @@ Backbone.ModelBinding.Conventions = (function(){
     }
   };
 
-  var FormBinding = {
-    bind: function(selector, view, model){
-      _.each(view.formBindings, function(field, selector){
-        var element = view.$(selector);
-        Backbone.ModelBinding.Binders.bidirectionalBinding.call(view, field, element, model);
-      });
-    }
-  };
-  
   return {
     text: {selector: "input[type=text]", handler: StandardInput}, 
     textarea: {selector: "textarea", handler: StandardInput},
@@ -170,7 +161,6 @@ Backbone.ModelBinding.Conventions = (function(){
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: SelectBox},
-    formbinding: {selector: "form", handler: FormBinding},
     databind: { selector: "*[data-bind]", handler: DataBind},
   }
 })();

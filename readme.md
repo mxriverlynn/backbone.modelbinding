@@ -125,29 +125,7 @@ and then tab or click away from it (to fire the change event). When the model's 
 attribute is updated, the `data-bind` convention will pick up the change and set
 the text of the `span` to the model's name.
 
-## Form Bindings
-
-Non-conventional, bi-directional binding between your form input and your model.
-
-Add `formBindings` document to you view, to specify the bindings you want to use. The format is
-the same as the [Backbone view events](http://documentcloud.github.com/backbone/#View)
-
-````
-SomeView = Backbone.View.extend({
-  formBindings: {
-    "#someInput": "a_field"
-  }
-});
-````
-
-The input element must be settable via the jQuery `val` method. You can specify any valid jQuery
-event to monitor for a change, though. 
-
-Now when you type into the form input, your model's fields will be updated automatically. When your
-model's fields are changed, the form input will update automatically. And, when you render the
-view, the field will be populated with the value that exists in the model at rendering time.
-
-## Form Input Conventions
+## Form Binding Conventions
 
 The following form input types are supported by the form convention binder:
 
