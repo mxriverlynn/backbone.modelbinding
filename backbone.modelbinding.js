@@ -74,7 +74,7 @@ Backbone.ModelBinding.Configuration = (function(){
 // Binding Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
-  function getElementType(element) {
+  function _getElementType(element) {
     var type = element[0].tagName.toLowerCase();
     if (type == "input"){
       type = element.attr("type");
@@ -86,7 +86,7 @@ Backbone.ModelBinding.Conventions = (function(){
     bind: function(selector, view, model){
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, getElementType(element));
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
         Backbone.ModelBinding.Binders.bidirectionalBinding.call(view, field, element, model);
       });
     }
