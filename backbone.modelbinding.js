@@ -161,7 +161,7 @@ Backbone.ModelBinding.Conventions = (function(){
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: SelectBox},
-    databind: { selector: "*[data-bind]", handler: DataBind},
+    databind: { selector: "*[data-bind]", handler: DataBind}
   }
 })();
 
