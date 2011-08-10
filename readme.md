@@ -175,8 +175,33 @@ the input type. The default configuration is:
 
 You can override this configuration and use any attribute you wish, by specifying any or all of
 these input types when you call the model binding. This is useful when you have field ids that
-do not match directly to the model attributes. For example, the following will use a `modelAttr`
-attribute value as the convention for text boxes.
+do not match directly to the model attributes. 
+
+#### Override All Element Binding Attributes
+
+The following will use use the `class` attribute's value as the binding for all input field:
+
+````
+SomeView = Backbone.View.extend({
+  render: function(){
+    // ... some rendering here
+    Backbone.ModelBinding.call(this, { all: "class" });
+  }
+});
+
+<input type="text" id="the_model_name" class="name">
+````
+
+If the same convention needs to be used throughout an application, and not just withing a single
+view, the configuration can be set at a global level:
+
+````
+Backbone.ModelBinding.Configuration.configureAllBindingAttributes({all: "class"});
+````
+
+#### Override Individual Element Binding Attributes
+
+The following will use a `modelAttr` attribute value as the convention for text boxes, only.
 
 ````
 SomeView = Backbone.View.extend({
