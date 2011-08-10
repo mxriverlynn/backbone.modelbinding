@@ -11,6 +11,10 @@ describe("configure all binding attributes", function(){
     this.view.render();
   });
 
+  afterEach(function(){
+    Backbone.ModelBinding.Configuration.restoreConfiguration();
+  });
+
   describe("text element binding using configurable attribute", function(){
     it("bind view changes to the model's field, by configurable convention", function(){
       var el = this.view.$("#v_name");
