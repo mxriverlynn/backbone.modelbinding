@@ -169,7 +169,7 @@ Backbone.ModelBinding.Conventions = (function(){
 // Bi-Directional Binding Methods
 // ----------------------------
 Backbone.ModelBinding.Binders = (function(){
-  methods = {};
+  var methods = {};
 
   methods.bidirectionalBinding = function(attribute_name, element, model){
     var self = this;
@@ -181,7 +181,7 @@ Backbone.ModelBinding.Binders = (function(){
 
     // bind the form changes to the model
     element.bind("change", function(ev){
-      data = {};
+      var data = {};
       data[attribute_name] = self.$(ev.target).val();
       model.set(data);
     });
