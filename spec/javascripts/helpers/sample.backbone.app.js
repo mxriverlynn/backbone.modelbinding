@@ -1,14 +1,6 @@
 AModel = Backbone.Model.extend({});
 
 AView = Backbone.View.extend({
-  formBindings: {
-    "#something": "a_field"
-  },
-
-  htmlBindings: {
-    "#showIt": "a_field"
-  },
-
   render: function(){
     var html = $("\
       <div id='villain' data-bind='html villain'><p>test</p></div>\
@@ -37,15 +29,53 @@ AView = Backbone.View.extend({
   },
 });
 
+AllBindingAttributesView = Backbone.View.extend({
+  render: function(){
+    var html = $("\
+      <input type='text' id='v_name' class='name'> \
+      <select id='v_education' class='education'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <input type='radio' id='graduated_yes' name='graduated' class='graduated' value='yes'>\
+      <input type='radio' id='graduated_no' name='graduated' class='graduated' value='no'>\
+      <input type='radio' id='graduated_maybe' name='graduated' class='graduated' value='maybe'>\
+      <input type='checkbox' id='v_drivers_license' class='drivers_license' value='yes'>\
+      <textarea id='v_bio' class='bio'></textarea>\
+    ");
+    this.$(this.el).append(html);
+
+    Backbone.ModelBinding.call(this, {all: "class"});
+  },
+});
+
+GlobalAllBindingAttributesView = Backbone.View.extend({
+  render: function(){
+    var html = $("\
+      <input type='text' id='v_name' class='name'> \
+      <select id='v_education' class='education'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <input type='radio' id='graduated_yes' name='graduated' class='graduated' value='yes'>\
+      <input type='radio' id='graduated_no' name='graduated' class='graduated' value='no'>\
+      <input type='radio' id='graduated_maybe' name='graduated' class='graduated' value='maybe'>\
+      <input type='checkbox' id='v_drivers_license' class='drivers_license' value='yes'>\
+      <textarea id='v_bio' class='bio'></textarea>\
+    ");
+    this.$(this.el).append(html);
+
+    Backbone.ModelBinding.call(this);
+  },
+});
+
 AnotherView = Backbone.View.extend({
-  formBindings: {
-    "#something": "a_field"
-  },
-
-  htmlBindings: {
-    "#showIt": "a_field"
-  },
-
   render: function(){
     var html = $("\
       <input type='text' class='super_power' modelAttr='weakness'>\

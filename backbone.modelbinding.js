@@ -50,8 +50,21 @@ Backbone.ModelBinding.Configuration = (function(){
     configureBindingAttributes: function(options){
       if (options) {
         Backbone.ModelBinding._config = _.clone(config);
+        if (options.all){
+          this.configureAllBindingAttributes(options.all);
+          delete options.all;
+        }
         _.extend(config, options);
       }
+    },
+
+    configureAllBindingAttributes: function(attribute){
+      config.text = attribute;
+      config.texarea = attribute;
+      config.password = attribute;
+      config.radio = attribute;
+      config.checkbox = attribute;
+      config.select = attribute;
     },
 
     resetConfiguration: function(){
@@ -64,7 +77,7 @@ Backbone.ModelBinding.Configuration = (function(){
     getBindingAttr: function(type){ return config[type]; },
 
     getBindingValue: function(element, type){
-      var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr(type);
+      var bindingAttr = this.getBindingAttr(type);
       return element.attr(bindingAttr);
     }
   }
