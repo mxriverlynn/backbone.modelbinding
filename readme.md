@@ -44,7 +44,7 @@ SomeView = Backbone.View.extend({
     // ... render your form here
 
     // execute the defined bindings
-    Backbone.ModelBindings.call(this);
+    Backbone.ModelBinding.call(this);
   }
 });
 ````
@@ -54,7 +54,7 @@ SomeView = Backbone.View.extend({
 Automatic bi-directional binding between your form input and your model. 
 
 The convention based binding requires no additional configuration or code in your
-view, other than calling the `Backbone.Modelbindings.call(this);` as noted above.
+view, other than calling the `Backbone.ModelBinding.call(this);` as noted above.
 With the conventions binding, your `<input>` fields will be bound to the views model
 by the id of the input. 
 
@@ -74,7 +74,7 @@ SomeView = Backbone.View.extend({
     // ... render your form here
 
     // execute the defined bindings
-    Backbone.ModelBindings.call(this);
+    Backbone.ModelBinding.call(this);
   }
 });
 
