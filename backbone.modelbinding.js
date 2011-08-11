@@ -206,7 +206,7 @@ Backbone.ModelBinding.Binders = (function(){
 
     // set the default value on the form, from the model
     var attr_value = model.get(attribute_name);
-    if (attr_value) {
+    if (typeof attr_value !== "undefined" && attr_value !== null) {
       element.val(attr_value);
     }
   },
@@ -229,7 +229,7 @@ Backbone.ModelBinding.Binders = (function(){
 
     // set the default value on the form, from the model
     var attr_value = model.get(attribute_name);
-    if (attr_value) {
+    if (typeof attr_value !== "undefined" && attr_value !== null) {
       element.val(attr_value);
     }
   },
@@ -256,7 +256,7 @@ Backbone.ModelBinding.Binders = (function(){
 
     // set the default value on the form, from the model
     var attr_value = model.get(group_name);
-    if (attr_value) {
+    if (typeof attr_value !== "undefined" && attr_value !== null) {
       var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
       self.$(value_selector).attr("checked", "checked");
     }
@@ -288,7 +288,7 @@ Backbone.ModelBinding.Binders = (function(){
     var attr_exists = model.attributes.hasOwnProperty(attribute_name);
     if (attr_exists) {
       var attr_value = model.get(attribute_name);
-      if (attr_value){
+      if (typeof attr_value !== "undefined" && attr_value !== null) {
         element.attr("checked", "checked");
       }
       else{
