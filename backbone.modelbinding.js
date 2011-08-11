@@ -223,7 +223,7 @@ Backbone.ModelBinding.Binders = (function(){
     element.bind("change", function(ev){
       var data = {};
       data[attribute_name] = self.$(ev.target).val();
-      data[attribute_name + "_text"] = self.$(":selected", ev.target).text();
+      data[attribute_name + "_text"] = $(ev.target).find(":selected").text();
       model.set(data);
     });
 
