@@ -221,7 +221,7 @@ Backbone.ModelBinding.Binders = (function(){
 
     // bind the form changes to the model
     element.bind("change", function(ev){
-      data = {};
+      var data = {};
       data[attribute_name] = self.$(ev.target).val();
       data[attribute_name + "_text"] = self.$(":selected", ev.target).text();
       model.set(data);
@@ -248,7 +248,7 @@ Backbone.ModelBinding.Binders = (function(){
     self.$(group_selector).bind("change", function(ev){
       var element = self.$(ev.currentTarget);
       if (element.attr("checked")){
-        data = {};
+        var data = {};
         data[group_name] = element.val();
         model.set(data);
       }
@@ -277,7 +277,7 @@ Backbone.ModelBinding.Binders = (function(){
 
     // bind the form changes to the model
     element.bind("change", function(ev){
-      data = {};
+      var data = {};
       var changedElement = self.$(ev.target);
       var checked = changedElement.attr("checked")? true : false;
       data[attribute_name] = checked;
