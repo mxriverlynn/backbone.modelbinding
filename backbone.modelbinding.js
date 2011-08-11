@@ -22,6 +22,18 @@ Backbone.ModelBinding = (function(){
     }
   }
 
+  function handleUnbinding(view, model){
+    var conventions = Backbone.ModelBinding.Conventions;
+    for (var conventionName in conventions){
+      if (conventions.hasOwnProperty(conventionName)){
+        //var conventionElement = conventions[conventionName];
+        //var handler = conventionElement.handler;
+        //var conventionSelector = conventionElement.selector;
+        //handler.bind(conventionSelector, view, model);
+      }
+    }
+  }
+
   return {
     version: "0.2.4",
 
@@ -29,6 +41,10 @@ Backbone.ModelBinding = (function(){
       Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
       handleConventionBindings(view, view.model);
       Backbone.ModelBinding.Configuration.restoreConfiguration();
+    },
+
+    unbind: function(view){
+      handleUnbinding(view, view.model);
     }
   }
 })();

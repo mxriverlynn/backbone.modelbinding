@@ -37,6 +37,10 @@ AView = Backbone.View.extend({
     this.$(this.el).append(html);
     Backbone.ModelBinding.call(this);
   },
+
+  close: function(){
+    Backbone.ModelBinding.unbind(this);
+  }
 });
 
 AllBindingAttributesView = Backbone.View.extend({
