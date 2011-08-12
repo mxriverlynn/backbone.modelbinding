@@ -222,8 +222,9 @@ Backbone.ModelBinding.Binders = (function(){
     // bind the form changes to the model
     element.bind("change", function(ev){
       var data = {};
-      data[attribute_name] = self.$(ev.target).val();
-      data[attribute_name + "_text"] = $(ev.target).find(":selected").text();
+      var targetEl = self.$(ev.target);
+      data[attribute_name] = targetEl.val();
+      data[attribute_name + "_text"] = targetEl.find(":selected").text();
       model.set(data);
     });
 
