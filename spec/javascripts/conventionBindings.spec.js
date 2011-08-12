@@ -3,7 +3,9 @@ describe("conventionBindings", function(){
     this.model = new AModel({
       name: "Ashelia Bailey", 
       education: "graduate", 
+      age_level: 0,
       graduated: "maybe",
+      us_citizen: false,
       drivers_license: true,
       bio: "my baby girl"
     });
@@ -69,11 +71,16 @@ describe("conventionBindings", function(){
       expect(selected).toBeTruthy();
     });
 
-    it("binds the model's value to the form field on render", function(){
+    it("binds the model's value to the form field on render (graduated)", function(){
       var el = this.view.$("input[type=radio][name=graduated]:checked");
       var selected = el.val();
 
       expect(selected).toBe("maybe");
+    });
+
+    it("binds the model's value to the form field on render (us_citizen)", function(){
+      var el = this.view.$("#us_citizen_false");
+      expect(el.is(':checked')).toBe(true);
     });
   });
 
@@ -92,9 +99,14 @@ describe("conventionBindings", function(){
       expect(el.val()).toEqual("high school");
     });
 
-    it("binds the model's value to the form field on render", function(){
+    it("binds the model's value to the form field on render (education)", function(){
       var el = this.view.$("#education");
       expect(el.val()).toEqual("graduate");
+    });
+
+    it("binds the model's value to the form field on render (age_level)", function(){
+      var el = this.view.$("#age_level");
+      expect(el.val()).toEqual("0");
     });
 
     it("applies the text of the selection to the model", function(){

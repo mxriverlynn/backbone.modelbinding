@@ -17,9 +17,17 @@ AView = Backbone.View.extend({
         <option value='college'>college</option> \
         <option value='graduate'>graduate</option> \
       </select> \
+      <select id='age_level'> \
+        <option value=''>-- select --</option> \
+        <option value='0'>under 20</option> \
+        <option value='21'>21 - 40</option> \
+        <option value='41'>over 41</option> \
+      </select> \
       <input type='radio' id='graduated_yes' name='graduated' value='yes'>\
       <input type='radio' id='graduated_no' name='graduated' value='no'>\
       <input type='radio' id='graduated_maybe' name='graduated' value='maybe'>\
+      <input type='radio' id='us_citizen_true' name='us_citizen' value='true'>\
+      <input type='radio' id='us_citizen_false' name='us_citizen' value='false'>\
       <input type='checkbox' id='drivers_license' value='yes'>\
       <textarea id='bio'></textarea>\
       <p id='aParagraph'></p>\
