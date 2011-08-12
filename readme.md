@@ -332,6 +332,32 @@ The list of existing conventions includes:
 
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
+
+## Release Notes
+
+### v0.2.3
+
+* Fixes for 'falsey' value bindings
+* Update the docs to include when and where to call the model bindings
+
+### v0.2.2
+
+* Making some global vars not global
+
+### v0.2.1
+
+* Configuration to easily set all binding attributes for all elements
+* Fix for IE
+* Making some global vars not global
+
+### v0.1.0 - v0.2.0
+
+* Added data-bind convention
+* Added configuration options
+* Conventions for all form input types
+* Removed formBinding code
+* Removed htmlBinding code
+* Significant internal code cleanup and restructuring
  
 # Legal Mumbo Jumbo (MIT License)
 
