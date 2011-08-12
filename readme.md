@@ -31,22 +31,66 @@ Download the `backbone.modelbinding.js` file from this github repository and cop
 your javascripts folder. Add the needed `<script>` tag to bring the plugin into any page
 that wishes to use it. Be sure to include the modelbinding file _after_ the backbone.js file.
 
-### Render The ModelBindings
+### Call The Model Bindings
 
-Your Backbone view must have an `el` defined and the `render` method of your view needs to 
-execute the bindings that you define
+The model binding code is executed with a call to `Backbone.ModelBinding.call(view)`. There are
+several places that it can be called from, depending on your circumstances.
+
+All of the element binding happens within the context of the view's `el`, therefore you must
+call the model binding code after your view's `el` has been populated with the elements that
+will be bound to.
+
+#### Binding After Rendering
+
+If your view modifies the html contents of the view's `el` in the `render` method, you should 
+call the model binding after the modifications are made:
 
 ````
 SomeView = Backbone.View.extend({
-  el: "#someElement",
-
   render: function(){
     // ... render your form here
+    $(this.el).html("... some html and content goes here ... ");
 
-    // execute the defined bindings
+    // execute the model bindings
     Backbone.ModelBinding.call(this);
   }
 });
+````
+
+#### Binding A View That Does Not Render
+
+If, however, your view has an `el` that represents an existing element in your html, and the
+contents of the `el` are not modified during a call to `render`, then you can make the call to
+the model binding code in the initializer or anywhere else.
+
+````
+<form id="some-form">
+  Name: <input id="name">
+</form>
+````
+
+````
+FormView = Backbone.View.extend({
+  el: "#some-form",
+
+  initialize: function(){
+    Backbone.ModelBinding.call(this);
+  }
+});
+````
+
+#### Binding From Outside A View
+
+There is no requirement for the model binding code to be called from within a view directly.
+You can bind the view from external code, like this:
+
+````
+FormView = Backbone.View.extend({
+  el: "#some-form",
+});
+
+formView = new FormView();
+Backbone.ModelBinding.call(formView);
 ````
 
 ## Convention Bindings
