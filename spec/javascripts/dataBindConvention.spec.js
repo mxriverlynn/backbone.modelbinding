@@ -57,6 +57,22 @@ describe("data-bind conventions", function(){
     });
   });
 
+  describe("when a data-bind is configured to set disabled", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#unclicker");
+    });
+
+    it("should set the element's disabled value to the model's value, immediately", function(){
+      expect(this.el.attr("disabled")).toBeFalsy();
+    });
+
+    it("should set the element's disabled value when the model's value is changed", function(){
+      this.model.set({isValid: true});
+      expect(this.el.attr("disabled")).toBeTruthy();
+    });
+  });
+
   describe("when a data-bind is configured to set an arbitrary attribute", function(){
     beforeEach(function(){
       this.view.render();

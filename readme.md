@@ -169,6 +169,70 @@ and then tab or click away from it (to fire the change event). When the model's 
 attribute is updated, the `data-bind` convention will pick up the change and set
 the text of the `span` to the model's name.
 
+### Special Cases For data-bind
+
+There are several special cases for the data-bind attribute. These allow a little more
+functionality than just setting an attribute on an element. 
+
+* html - replace the html contents of the element
+* text - replace the text contents of the element
+* enabled - enable or disable the html element
+
+#### html
+
+If you set the data-bind attribute to use `html`, it will replace the entire
+inner html of the html element, instead of just setting an element attribute.
+
+````
+<div id="someDiv" data-bind="html someProperty"></div>
+
+
+someModel.set({someProperty: "some value"});
+````
+
+#### text
+
+If you set the data-bind attribute to use `text`, it will replace the text contents of the
+html element instead of just setting an element attribute.
+
+````
+<div id="someDiv" data-bind="text someProperty"></div>
+
+
+someModel.set({someProperty: "some value"});
+````
+
+#### enabled
+
+This special case breaks the html element standard of using a `disabled` attribute, specifically
+to inver the logic used for enabling / disabling an element, to keep the data-bind attribute
+clean and easy to read.
+
+If you have a model with a property that indicates a negative state, such as `invalid`, then you
+can use a data-bind attribute of `disabled`:
+
+````
+<button id="someButton" data-bind="disabled invalid"></div>
+
+
+someModel.set({invalid: true});
+````
+
+However, some developers prefer to use positive state, such as `isValid`. In this case, setting
+the disabled attribute to the model's isValid attribute would result in the button being disabled
+when the model is valid and enabled when the model is not valid. To correct this, a special case
+has been added to enable and disable an element with `enabled`.
+
+````
+<button id="someButton" data-bind="enabled isValid"></div>
+
+
+someModel.set({isValid: false});
+````
+
+This will disable the button when the model is invalid and enable the button when the model is
+valid.
+
 ## Form Binding Conventions
 
 The following form input types are supported by the form convention binder:
