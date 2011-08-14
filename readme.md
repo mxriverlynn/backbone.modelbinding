@@ -399,6 +399,12 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.2.4
+
+* data-bind will bind the model's value immediately instead of waiting for the model's value to change
+* support `enabled` functionality for data-bind: `data-bind="enabled isValid"`
+* documented existing support for data-bind `disabled`: `data-bind="disabled invalid"`
+
 ### v0.2.3
 
 * Fixes for 'falsey' value bindings
