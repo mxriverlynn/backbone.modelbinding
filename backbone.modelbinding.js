@@ -1,4 +1,4 @@
-// Backbone.ModelBinding v0.2.3
+// Backbone.ModelBinding v0.2.4
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT Liscene
@@ -23,7 +23,7 @@ Backbone.ModelBinding = (function(){
   }
 
   return {
-    version: "0.2.3",
+    version: "0.2.4",
 
     call: function(view, options){
       Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
@@ -149,7 +149,6 @@ Backbone.ModelBinding.Conventions = (function(){
 
   var DataBind = {
     bind: function(selector, view, model){
-
       var setOnElement = function(element, attr, val){
         switch(attr){
           case "html":
@@ -175,7 +174,6 @@ Backbone.ModelBinding.Conventions = (function(){
 
         // set default on data-bind element
         setOnElement(element,elementAttr,model.get(modelAttr));
-
       });
     }
   };
