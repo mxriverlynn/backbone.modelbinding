@@ -149,6 +149,20 @@ Backbone.ModelBinding.Conventions = (function(){
 
   var DataBind = {
     bind: function(selector, view, model){
+
+      var setOnElement = function(element, attr, val){
+        switch(attr){
+          case "html":
+            element.html(val);
+            break;
+          case "text":
+            element.text(val);
+            break;
+          default:
+            element.attr(attr, val);
+        }
+      };
+
       view.$(selector).each(function(index){
         var element = view.$(this);
         var databind = element.attr("data-bind").split(" ");
@@ -156,17 +170,11 @@ Backbone.ModelBinding.Conventions = (function(){
         var modelAttr = databind[1];
 
         model.bind("change:" + modelAttr, function(changedModel, val){
-          switch(elementAttr){
-            case "html":
-              element.html(val);
-              break;
-            case "text":
-              element.text(val);
-              break;
-            default:
-              element.attr(elementAttr, val);
-          }
+          setOnElement(element,elementAttr,val);
         });
+
+        // set default on data-bind element
+        setOnElement(element,elementAttr,model.get(modelAttr));
 
       });
     }
