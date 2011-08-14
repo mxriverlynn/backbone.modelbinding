@@ -1,10 +1,10 @@
 # Backbone.ModelBinding
 
-Awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone)
+Convention-based, awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone)
 
 Inspired by [Brad Phelan](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/),
-Knockout.js' data-binding capabilities, and [Brandon Satrom](http://userinexperience.com/?p=633)'s
-desire to keep UJS alive. 
+Knockout.js' data-binding capabilities, and [Brandon Satrom](http://userinexperience.com/?p=633)'s 
+work with Knockout.
 
 ## Getting Started
 

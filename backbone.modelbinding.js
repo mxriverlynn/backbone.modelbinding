@@ -1,4 +1,4 @@
-// Backbone.ModelBinding v0.2.4
+// Backbone.ModelBinding v0.3.0
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT Liscene
@@ -26,18 +26,18 @@ Backbone.ModelBinding = (function(){
     var conventions = Backbone.ModelBinding.Conventions;
     for (var conventionName in conventions){
       if (conventions.hasOwnProperty(conventionName)){
-        //var conventionElement = conventions[conventionName];
-        //var handler = conventionElement.handler;
-        //var conventionSelector = conventionElement.selector;
-        //handler.bind(conventionSelector, view, model);
+        var conventionElement = conventions[conventionName];
+        var handler = conventionElement.handler;
+        var conventionSelector = conventionElement.selector;
+        handler.unbind(conventionSelector, view, model);
       }
     }
   }
 
   return {
-    version: "0.2.4",
+    version: "0.3.0",
 
-    call: function(view, options){
+    bind: function(view, options){
       Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
       handleConventionBindings(view, view.model);
       Backbone.ModelBinding.Configuration.restoreConfiguration();
