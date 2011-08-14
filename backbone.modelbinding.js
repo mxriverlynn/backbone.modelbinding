@@ -157,6 +157,9 @@ Backbone.ModelBinding.Conventions = (function(){
           case "text":
             element.text(val);
             break;
+          case "enabled":
+            element.attr("disabled", !val);
+            break;
           default:
             element.attr(attr, val);
         }

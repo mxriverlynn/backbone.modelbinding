@@ -3,6 +3,7 @@ AModel = Backbone.Model.extend({});
 AView = Backbone.View.extend({
   render: function(){
     var html = $("\
+      <button id='clicker' data-bind='enabled isValid'>Click Me!</button>\
       <div id='villain' data-bind='html villain'><p>test</p></div>\
       <div id='doctor' data-bind='text doctor'>Seuss</div>\
       <div id='pet' data-bind='someAttr pet' someAttr='Cat'></div>\

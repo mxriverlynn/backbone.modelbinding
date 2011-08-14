@@ -3,7 +3,8 @@ describe("data-bind conventions", function(){
     this.model = new AModel({
       villain: "mrMonster",
       doctor: "Seuss",
-      pet: "cat"
+      pet: "cat",
+      isValid: false
     });
     this.view = new AView({model: this.model});
   });
@@ -11,51 +12,64 @@ describe("data-bind conventions", function(){
   describe("when a data-bind is configured to set html", function(){
     beforeEach(function(){
       this.view.render();
+      this.el = this.view.$("#villain");
     });
 
     it("should set the element's contents to the model's property value immediately", function(){
-      var el = this.view.$("#villain");
-      expect(el.html()).toBe("mrMonster");
+      expect(this.el.html()).toBe("mrMonster");
     });
 
     it("should replace the contents of the element when the model's property changes", function(){
       this.model.set({villain: "boogerFace"});
-      var el = this.view.$("#villain");
-      expect(el.html()).toBe("boogerFace");
+      expect(this.el.html()).toBe("boogerFace");
     });
   });
 
   describe("when a data-bind is configured to set text", function(){
     beforeEach(function(){
       this.view.render();
+      this.el = this.view.$("#doctor");
     });
 
     it("should set the element's text to the model's property value immediately", function(){
-      var el = this.view.$("#doctor");
-      expect(el.text()).toBe("Seuss");
+      expect(this.el.text()).toBe("Seuss");
     });
 
     it("should set the text of the element when the model's property changes", function(){
       this.model.set({doctor: "Who"});
-      var el = this.view.$("#doctor");
-      expect(el.text()).toBe("Who");
+      expect(this.el.text()).toBe("Who");
+    });
+  });
+
+  describe("when a data-bind is configured to set enabled", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#clicker");
+    });
+
+    it("should set the element's disabled value to the model's value, immediately", function(){
+      expect(this.el.attr("disabled")).toBeTruthy();
+    });
+
+    it("should set the element's disabled value when the model's value is changed", function(){
+      this.model.set({isValid: true});
+      expect(this.el.attr("disabled")).toBeFalsy();
     });
   });
 
   describe("when a data-bind is configured to set an arbitrary attribute", function(){
     beforeEach(function(){
       this.view.render();
+      this.el = this.view.$("#pet");
     });
 
     it("should set the element's attribute to the model's property value immediately", function(){
-      var el = this.view.$("#pet");
-      expect(el.attr("someAttr")).toBe("cat");
+      expect(this.el.attr("someAttr")).toBe("cat");
     });
 
     it("should set the value of the attribute", function(){
       this.model.set({pet: "bunnies"});
-      var el = this.view.$("#pet");
-      expect(el.attr("someAttr")).toBe("bunnies");
+      expect(this.el.attr("someAttr")).toBe("bunnies");
     });
   });
 });
