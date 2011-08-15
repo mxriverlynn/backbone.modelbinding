@@ -239,31 +239,34 @@ Backbone.ModelBinding.Binders = (function(){
   methods.Bidirectional = {};
 
   methods.Bidirectional._modelChange = function(changed_model, val){
-    element.val(val);
-  };
-
-  methods.Bidirectional._formChange = function(ev){
-    var data = {};
-    data[attribute_name] = self.$(ev.target).val();
-    model.set(data);
+    console.log("model change");
+    this.element.val(val);
+    console.log("exit model change");
   };
 
   methods.Bidirectional.unbinding = function(attribute_name, element, model){
     // unbind the model changes to the form elements
     model.unbind("change:" + attribute_name, methods.Bidirectional._modelChange);
-    
-    // unbind the form changes to the model
-    element.unbind("change", methods.Bidirectional._formChange);
   };
 
   methods.Bidirectional.binding = function(attribute_name, element, model){
-    var self = this;
+    var config = {};
+    config.attribute_name = attribute_name;
+    config.element = element;
+    config.model = model;
+    config.view = this;
 
     // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, methods.Bidirectional._modelChange);
+    model.bind("change:" + attribute_name, methods.Bidirectional._modelChange, config);
     
     // bind the form changes to the model
-    element.bind("change", methods.Bidirectional._formChange);
+    var self = this;
+    element.bind("change", function(ev){
+      console.log("form change");
+      var data = {};
+      data[attribute_name] = self.$(ev.target).val();
+      model.set(data);
+    });
 
     // set the default value on the form, from the model
     var attr_value = model.get(attribute_name);
