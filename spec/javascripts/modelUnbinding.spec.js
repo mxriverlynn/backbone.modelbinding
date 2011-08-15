@@ -7,7 +7,7 @@ describe("model unbinding", function(){
 
   describe("when unbinding a view should", function(){
     it("it should unbind the text box", function(){
-      this.view.close();
+      Backbone.ModelBinding.unbind(this.view);
       this.model.set({name: "some name change"});
       var el = this.view.$("#name");
       expect(el.val()).toEqual("a name");

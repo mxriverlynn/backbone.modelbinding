@@ -29,7 +29,9 @@ Backbone.ModelBinding = (function(){
         var conventionElement = conventions[conventionName];
         var handler = conventionElement.handler;
         var conventionSelector = conventionElement.selector;
-        handler.unbind(conventionSelector, view, model);
+        if (handler.unbind){
+          handler.unbind(conventionSelector, view, model);
+        }
       }
     }
   }
@@ -121,7 +123,15 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
-        Backbone.ModelBinding.Binders.bidirectionalBinding.call(view, field, element, model);
+        Backbone.ModelBinding.Binders.Bidirectional.binding.call(view, field, element, model);
+      });
+    },
+
+    unbind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
+        Backbone.ModelBinding.Binders.Bidirectional.unbinding.call(view, field, element, model);
       });
     }
   };
@@ -133,6 +143,9 @@ Backbone.ModelBinding.Conventions = (function(){
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
         Backbone.ModelBinding.Binders.bidirectionalSelectBinding.call(view, field, element, model);
       });
+    },
+
+    unbind: function(selector, view, model){
     }
   };
 
@@ -149,6 +162,9 @@ Backbone.ModelBinding.Conventions = (function(){
           Backbone.ModelBinding.Binders.bidirectionalRadioGroupBinding.call(view, group_name, model, bindingAttr);
         }
       });
+    },
+
+    unbind: function(selector, view, model){
     }
   };
 
@@ -160,6 +176,9 @@ Backbone.ModelBinding.Conventions = (function(){
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
         Backbone.ModelBinding.Binders.bidirectionalCheckboxBinding.call(view, field, element, model);
       });
+    },
+
+    unbind: function(selector, view, model){
     }
   };
 
@@ -194,6 +213,9 @@ Backbone.ModelBinding.Conventions = (function(){
         // set default on data-bind element
         setOnElement(element,elementAttr,model.get(modelAttr));
       });
+    },
+
+    unbind: function(selector, view, model){
     }
   };
 
@@ -214,27 +236,41 @@ Backbone.ModelBinding.Conventions = (function(){
 Backbone.ModelBinding.Binders = (function(){
   var methods = {};
 
-  methods.bidirectionalBinding = function(attribute_name, element, model){
+  methods.Bidirectional = {};
+
+  methods.Bidirectional._modelChange = function(changed_model, val){
+    element.val(val);
+  };
+
+  methods.Bidirectional._formChange = function(ev){
+    var data = {};
+    data[attribute_name] = self.$(ev.target).val();
+    model.set(data);
+  };
+
+  methods.Bidirectional.unbinding = function(attribute_name, element, model){
+    // unbind the model changes to the form elements
+    model.unbind("change:" + attribute_name, methods.Bidirectional._modelChange);
+    
+    // unbind the form changes to the model
+    element.unbind("change", methods.Bidirectional._formChange);
+  };
+
+  methods.Bidirectional.binding = function(attribute_name, element, model){
     var self = this;
 
     // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, function(changed_model, val){
-      element.val(val);
-    });
-
+    model.bind("change:" + attribute_name, methods.Bidirectional._modelChange);
+    
     // bind the form changes to the model
-    element.bind("change", function(ev){
-      var data = {};
-      data[attribute_name] = self.$(ev.target).val();
-      model.set(data);
-    });
+    element.bind("change", methods.Bidirectional._formChange);
 
     // set the default value on the form, from the model
     var attr_value = model.get(attribute_name);
     if (typeof attr_value !== "undefined" && attr_value !== null) {
       element.val(attr_value);
     }
-  },
+  };
 
   methods.bidirectionalSelectBinding = function(attribute_name, element, model){
     var self = this;
@@ -258,7 +294,7 @@ Backbone.ModelBinding.Binders = (function(){
     if (typeof attr_value !== "undefined" && attr_value !== null) {
       element.val(attr_value);
     }
-  },
+  };
 
   methods.bidirectionalRadioGroupBinding = function(group_name, model, bindingAttr){
     var self = this;
@@ -286,7 +322,7 @@ Backbone.ModelBinding.Binders = (function(){
       var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
       self.$(value_selector).attr("checked", "checked");
     }
-  },
+  };
 
   methods.bidirectionalCheckboxBinding = function(attribute_name, element, model){
     var self = this;

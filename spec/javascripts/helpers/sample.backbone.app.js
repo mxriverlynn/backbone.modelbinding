@@ -35,11 +35,7 @@ AView = Backbone.View.extend({
       <p id='aParagraph'></p>\
     ");
     this.$(this.el).append(html);
-    Backbone.ModelBinding.call(this);
-  },
-
-  close: function(){
-    Backbone.ModelBinding.unbind(this);
+    Backbone.ModelBinding.bind(this);
   }
 });
 
@@ -62,8 +58,8 @@ AllBindingAttributesView = Backbone.View.extend({
     ");
     this.$(this.el).append(html);
 
-    Backbone.ModelBinding.call(this, {all: "class"});
-  },
+    Backbone.ModelBinding.bind(this, {all: "class"});
+  }
 });
 
 GlobalAllBindingAttributesView = Backbone.View.extend({
@@ -85,8 +81,8 @@ GlobalAllBindingAttributesView = Backbone.View.extend({
     ");
     this.$(this.el).append(html);
 
-    Backbone.ModelBinding.call(this);
-  },
+    Backbone.ModelBinding.bind(this);
+  }
 });
 
 AnotherView = Backbone.View.extend({
@@ -108,7 +104,7 @@ AnotherView = Backbone.View.extend({
 
     this.$(this.el).append(html);
 
-    Backbone.ModelBinding.call(this, {
+    Backbone.ModelBinding.bind(this, {
       text: 'class',
       textarea: 'class',
       password: 'class',
@@ -116,6 +112,5 @@ AnotherView = Backbone.View.extend({
       select: 'class',
       checkbox: 'class',
     });
-
-  },
+  }
 });
