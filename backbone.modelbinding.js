@@ -290,37 +290,44 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
     }
   }
 
-  methods.unbind = function(attribute_name, element, model){
-    model.unbind("change:" + attribute_name, methods._modelChange);
+  methods.unbind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
+      model.unbind("change:" + attribute_name, methods._modelChange);
+    });
   }
 
-  methods.bind = function(attribute_name, element, model){
-    var self = this;
+  methods.bind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
 
-    // bind the model changes to the form elements
-    var config = {element: element};
-    model.bind("change:" + attribute_name, methods._modelChange, config);
+      // bind the model changes to the form elements
+      var config = {element: element};
+      model.bind("change:" + attribute_name, methods._modelChange, config);
 
-    // bind the form changes to the model
-    element.bind("change", function(ev){
-      var data = {};
-      var changedElement = self.$(ev.target);
-      var checked = changedElement.attr("checked")? true : false;
-      data[attribute_name] = checked;
-      model.set(data);
+      // bind the form changes to the model
+      element.bind("change", function(ev){
+        var data = {};
+        var changedElement = view.$(ev.target);
+        var checked = changedElement.attr("checked")? true : false;
+        data[attribute_name] = checked;
+        model.set(data);
+      });
+
+      // set the default value on the form, from the model
+      var attr_exists = model.attributes.hasOwnProperty(attribute_name);
+      if (attr_exists) {
+        var attr_value = model.get(attribute_name);
+        if (typeof attr_value !== "undefined" && attr_value !== null) {
+          element.attr("checked", "checked");
+        }
+        else{
+          element.removeAttr("checked");
+        }
+      }
     });
-
-    // set the default value on the form, from the model
-    var attr_exists = model.attributes.hasOwnProperty(attribute_name);
-    if (attr_exists) {
-      var attr_value = model.get(attribute_name);
-      if (typeof attr_value !== "undefined" && attr_value !== null) {
-        element.attr("checked", "checked");
-      }
-      else{
-        element.removeAttr("checked");
-      }
-    }
   }
 
   return methods;
@@ -330,24 +337,6 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
 // Binding Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
-
-  var Checkbox = {
-    bind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
-        Backbone.ModelBinding.CheckboxBinding.bind.call(view, field, element, model);
-      });
-    },
-
-    unbind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
-        Backbone.ModelBinding.CheckboxBinding.unbind.call(view, field, element, model);
-      });
-    }
-  };
 
   var DataBind = {
     bind: function(selector, view, model){
@@ -391,7 +380,7 @@ Backbone.ModelBinding.Conventions = (function(){
     textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
     password: {selector: "input[type=password]", handler: Backbone.ModelBinding.StandardBinding},
     radio: {selector: "input[type=radio]", handler: Backbone.ModelBinding.RadioGroupBinding},
-    checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
+    checkbox: {selector: "input[type=checkbox]", handler: Backbone.ModelBinding.CheckboxBinding},
     select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
     databind: { selector: "*[data-bind]", handler: DataBind}
   }
