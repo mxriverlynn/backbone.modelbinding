@@ -123,7 +123,7 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
-        Backbone.ModelBinding.Binders.Bidirectional.binding.call(view, field, element, model);
+        Backbone.ModelBinding.StandardBinding.bind.call(view, field, element, model);
       });
     },
 
@@ -131,7 +131,7 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
-        Backbone.ModelBinding.Binders.Bidirectional.unbinding.call(view, field, element, model);
+        Backbone.ModelBinding.StandardBinding.unbind.call(view, field, element, model);
       });
     }
   };
@@ -141,11 +141,16 @@ Backbone.ModelBinding.Conventions = (function(){
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
-        Backbone.ModelBinding.Binders.bidirectionalSelectBinding.call(view, field, element, model);
+        Backbone.ModelBinding.SelectBoxBinding.bind.call(view, field, element, model);
       });
     },
 
     unbind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
+        Backbone.ModelBinding.SelectBoxBinding.unbind.call(view, field, element, model);
+      });
     }
   };
 
@@ -231,38 +236,40 @@ Backbone.ModelBinding.Conventions = (function(){
 })();
 
 // ----------------------------
-// Bi-Directional Binding Methods
+// Standard Bi-Directional Binding Methods
+// For: text, textarea, password
 // ----------------------------
-Backbone.ModelBinding.Binders = (function(){
+Backbone.ModelBinding.StandardBinding = (function(){
   var methods = {};
 
-  methods.Bidirectional = {};
-
-  methods.Bidirectional._modelChange = function(changed_model, val){
-    console.log("model change");
+  methods._modelChange = function(changed_model, val){
     this.element.val(val);
-    console.log("exit model change");
   };
 
-  methods.Bidirectional.unbinding = function(attribute_name, element, model){
+  methods.unbind = function(attribute_name, element, model){
     // unbind the model changes to the form elements
-    model.unbind("change:" + attribute_name, methods.Bidirectional._modelChange);
+    model.unbind("change:" + attribute_name, methods._modelChange);
   };
 
-  methods.Bidirectional.binding = function(attribute_name, element, model){
-    var config = {};
-    config.attribute_name = attribute_name;
-    config.element = element;
-    config.model = model;
-    config.view = this;
-
+  methods.bind = function(attribute_name, element, model){
     // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, methods.Bidirectional._modelChange, config);
+    // force "this" to be our config object, so i can
+    // get the data that i need, during the callback.
+    // i have to do it this way because the unbinding
+    // that occurs a few lines above, in the "unbind" method
+    // requires the same instance of the callback method as
+    // was passed into the bind method here. however, i need
+    // more data in the callback than i'm able to get because
+    // it's a callback, limited to the model's "change" event.
+    // by passing in "config" as "this" for the callback, i
+    // can get all the data i need. you'll see this pattern
+    // repeated through the rest of the binding objects.
+    var config = {element: element};
+    model.bind("change:" + attribute_name, methods._modelChange, config);
     
     // bind the form changes to the model
     var self = this;
     element.bind("change", function(ev){
-      console.log("form change");
       var data = {};
       data[attribute_name] = self.$(ev.target).val();
       model.set(data);
@@ -275,13 +282,26 @@ Backbone.ModelBinding.Binders = (function(){
     }
   };
 
-  methods.bidirectionalSelectBinding = function(attribute_name, element, model){
+  return methods;
+})();
+
+Backbone.ModelBinding.SelectBoxBinding = (function(){
+  var methods = {};
+
+  methods._modelChange = function(changed_model, val){
+    this.element.val(val);
+  }
+
+  methods.unbind = function(attribute_name, element, model){
+    model.unbind("change:" + attribute_name, methods._modelChange);
+  }
+
+  methods.bind = function(attribute_name, element, model){
     var self = this;
 
     // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, function(changed_model, val){
-      element.val(val);
-    });
+    var config = {element: element};
+    model.bind("change:" + attribute_name, methods._modelChange, config);
 
     // bind the form changes to the model
     element.bind("change", function(ev){
@@ -298,6 +318,12 @@ Backbone.ModelBinding.Binders = (function(){
       element.val(attr_value);
     }
   };
+
+  return methods;
+})();
+
+Backbone.ModelBinding.Binders = (function(){
+  var methods = {};
 
   methods.bidirectionalRadioGroupBinding = function(group_name, model, bindingAttr){
     var self = this;

@@ -33,6 +33,7 @@ AView = Backbone.View.extend({
       <input type='checkbox' id='drivers_license' value='yes'>\
       <textarea id='bio'></textarea>\
       <p id='aParagraph'></p>\
+      <input type='password' id='password'>\
     ");
     this.$(this.el).append(html);
     Backbone.ModelBinding.bind(this);
