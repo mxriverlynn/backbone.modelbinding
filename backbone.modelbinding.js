@@ -108,7 +108,7 @@ Backbone.ModelBinding.Configuration = (function(){
 
 // ----------------------------
 // Standard Bi-Directional Binding Methods
-// For: text, textarea, password
+// for text, textarea, password
 // ----------------------------
 Backbone.ModelBinding.StandardBinding = (function(){
   var methods = {};
@@ -171,6 +171,9 @@ Backbone.ModelBinding.StandardBinding = (function(){
   return methods;
 })();
 
+// ----------------------------
+// Select Box Bi-Directional Binding Methods
+// ----------------------------
 Backbone.ModelBinding.SelectBoxBinding = (function(){
   var methods = {};
 
@@ -215,6 +218,9 @@ Backbone.ModelBinding.SelectBoxBinding = (function(){
   return methods;
 })();
 
+// ----------------------------
+// Radio Button Group Bi-Directional Binding Methods
+// ----------------------------
 Backbone.ModelBinding.RadioGroupBinding = (function(){
   var methods = {};
 
@@ -278,6 +284,9 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
   return methods;
 })();
 
+// ----------------------------
+// Checkbox Bi-Directional Binding Methods
+// ----------------------------
 Backbone.ModelBinding.CheckboxBinding = (function(){
   var methods = {};
 
@@ -333,6 +342,9 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
   return methods;
 })();
 
+// ----------------------------
+// Data-Bind Binding Methods
+// ----------------------------
 Backbone.ModelBinding.DataBindBinding = (function(){
   var methods = {};
 
@@ -356,31 +368,36 @@ Backbone.ModelBinding.DataBindBinding = (function(){
     }
   }
 
+  methods._splitBindingAttr = function(element)
+  {
+    var databind = element.attr("data-bind").split(" ");
+    return {
+      elementAttr: databind[0],
+      modelAttr: databind[1]
+    }
+  }
+
   methods.bind = function(selector, view, model){
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var databind = element.attr("data-bind").split(" ");
-      var elementAttr = databind[0];
-      var modelAttr = databind[1];
+      var databind = methods._splitBindingAttr(element);
 
       var config = {
         element: element,
-        elementAttr: elementAttr
+        elementAttr: databind.elementAttr
       };
-      model.bind("change:" + modelAttr, methods._modelChange, config);
+      model.bind("change:" + databind.modelAttr, methods._modelChange, config);
 
       // set default on data-bind element
-      methods._setOnElement(element,elementAttr,model.get(modelAttr));
+      methods._setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
     });
   }
 
   methods.unbind = function(selector, view, model){
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var databind = element.attr("data-bind").split(" ");
-      var elementAttr = databind[0];
-      var modelAttr = databind[1];
-      model.unbind("change:" + modelAttr, methods._modelChange);
+      var databind = methods._splitBindingAttr(element);
+      model.unbind("change:" + databind.modelAttr, methods._modelChange);
     });
   }
 
