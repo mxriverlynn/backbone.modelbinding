@@ -5,7 +5,8 @@ describe("model unbinding", function(){
       bio: "a bio",
       password: "it's a secret",
       education: "college",
-      graduated: "no"
+      graduated: "no",
+      drivers_license: true
     });
     this.view = new AView({model: this.model});
     this.view.render();
@@ -51,6 +52,14 @@ describe("model unbinding", function(){
       var selected = elNo.attr("checked");
       expect(selected).toBeTruthy();
     });
+
+    it("should unbind the checkbox", function(){
+      this.model.set({drivers_license: false});
+      var el = this.view.$("#drivers_license");
+      var selected = el.attr("checked");
+      expect(selected).toBeTruthy();
+    });
+
   });
   
 });

@@ -186,15 +186,19 @@ Backbone.ModelBinding.Conventions = (function(){
 
   var Checkbox = {
     bind: function(selector, view, model){
-      var self = this;
       view.$(selector).each(function(index){
         var element = view.$(this);
         var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
-        Backbone.ModelBinding.Binders.bidirectionalCheckboxBinding.call(view, field, element, model);
+        Backbone.ModelBinding.CheckboxBinding.bind.call(view, field, element, model);
       });
     },
 
     unbind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
+        Backbone.ModelBinding.CheckboxBinding.unbind.call(view, field, element, model);
+      });
     }
   };
 
@@ -378,21 +382,28 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
   return methods;
 })();
 
-Backbone.ModelBinding.Binders = (function(){
+Backbone.ModelBinding.CheckboxBinding = (function(){
   var methods = {};
 
-  methods.bidirectionalCheckboxBinding = function(attribute_name, element, model){
+  methods._modelChange = function(model, val){
+    if (val){
+      this.element.attr("checked", "checked");
+    }
+    else{
+      this.element.removeAttr("checked");
+    }
+  }
+
+  methods.unbind = function(attribute_name, element, model){
+    model.unbind("change:" + attribute_name, methods._modelChange);
+  }
+
+  methods.bind = function(attribute_name, element, model){
     var self = this;
 
     // bind the model changes to the form elements
-    model.bind("change:" + attribute_name, function(changed_model, val){
-      if (val){
-        element.attr("checked", "checked");
-      }
-      else{
-        element.removeAttr("checked");
-      }
-    });
+    var config = {element: element};
+    model.bind("change:" + attribute_name, methods._modelChange, config);
 
     // bind the form changes to the model
     element.bind("change", function(ev){
