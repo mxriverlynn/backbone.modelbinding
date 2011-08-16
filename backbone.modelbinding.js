@@ -178,31 +178,38 @@ Backbone.ModelBinding.SelectBoxBinding = (function(){
     this.element.val(val);
   }
 
-  methods.unbind = function(attribute_name, element, model){
-    model.unbind("change:" + attribute_name, methods._modelChange);
+  methods.unbind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
+      model.unbind("change:" + attribute_name, methods._modelChange);
+    });
   }
 
-  methods.bind = function(attribute_name, element, model){
-    var self = this;
+  methods.bind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
 
-    // bind the model changes to the form elements
-    var config = {element: element};
-    model.bind("change:" + attribute_name, methods._modelChange, config);
+      // bind the model changes to the form elements
+      var config = {element: element};
+      model.bind("change:" + attribute_name, methods._modelChange, config);
 
-    // bind the form changes to the model
-    element.bind("change", function(ev){
-      var data = {};
-      var targetEl = self.$(ev.target);
-      data[attribute_name] = targetEl.val();
-      data[attribute_name + "_text"] = targetEl.find(":selected").text();
-      model.set(data);
+      // bind the form changes to the model
+      element.bind("change", function(ev){
+        var data = {};
+        var targetEl = view.$(ev.target);
+        data[attribute_name] = targetEl.val();
+        data[attribute_name + "_text"] = targetEl.find(":selected").text();
+        model.set(data);
+      });
+
+      // set the default value on the form, from the model
+      var attr_value = model.get(attribute_name);
+      if (typeof attr_value !== "undefined" && attr_value !== null) {
+        element.val(attr_value);
+      }
     });
-
-    // set the default value on the form, from the model
-    var attr_value = model.get(attribute_name);
-    if (typeof attr_value !== "undefined" && attr_value !== null) {
-      element.val(attr_value);
-    }
   };
 
   return methods;
@@ -305,24 +312,6 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
 // Binding Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
-  var SelectBox = {
-    bind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
-        Backbone.ModelBinding.SelectBoxBinding.bind.call(view, field, element, model);
-      });
-    },
-
-    unbind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
-        Backbone.ModelBinding.SelectBoxBinding.unbind.call(view, field, element, model);
-      });
-    }
-  };
-
   var RadioGroup = {
     bind: function(selector, view, model){
       var self = this;
@@ -414,7 +403,7 @@ Backbone.ModelBinding.Conventions = (function(){
     password: {selector: "input[type=password]", handler: Backbone.ModelBinding.StandardBinding},
     radio: {selector: "input[type=radio]", handler: RadioGroup},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
-    select: {selector: "select", handler: SelectBox},
+    select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
     databind: { selector: "*[data-bind]", handler: DataBind}
   }
 })();
