@@ -428,8 +428,12 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ### v0.3.0
 
-* Unbind code to prevent memory leaks and zombie forms
-* Changed the `Backbone.ModelBinding.call(view)` method signature to `Backbone.ModelBinding.bind(view)`
+* **Breaking Change:** Changed the `Backbone.ModelBinding.call(view)` method signature to `Backbone.ModelBinding.bind(view)`
+* Added ability to unbind model binding with `unbind` method, to prevent memory leaks and zombie forms
+* Updated the selectors used for the conventions. Text inputs are now found with "input:text", which should
+  select all text inputs, even without a `type='text'` attribute (though this seems to be buggy in jQuery 
+  v1.6.2)
+* Significant internal restructuring of code
 
 ### v0.2.4
 
