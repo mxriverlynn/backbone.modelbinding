@@ -426,6 +426,11 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.0
+
+* Unbind code to prevent memory leaks and zombie forms
+* Changed the `Backbone.ModelBinding.call(view)` method signature to `Backbone.ModelBinding.bind(view)`
+
 ### v0.2.4
 
 * data-bind will bind the model's value immediately instead of waiting for the model's value to change
