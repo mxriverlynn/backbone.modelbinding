@@ -430,6 +430,8 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 * **Breaking Change:** Changed the `Backbone.ModelBinding.call(view)` method signature to `Backbone.ModelBinding.bind(view)`
 * Added ability to unbind model binding with `unbind` method, to prevent memory leaks and zombie forms
+* Added backbone.modelbinding.min.js to the repository, compiled with 
+  [Google's Closure Compiler Service](http://closure-compiler.appspot.com/home "Google's Closure Compiler Service")
 * Updated the selectors used for the conventions. Text inputs are now found with "input:text", which should
   select all text inputs, even without a `type='text'` attribute (though this seems to be buggy in jQuery 
   v1.6.2)
