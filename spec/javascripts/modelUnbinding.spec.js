@@ -6,7 +6,8 @@ describe("model unbinding", function(){
       password: "it's a secret",
       education: "college",
       graduated: "no",
-      drivers_license: true
+      drivers_license: true,
+      isValid: true
     });
     this.view = new AView({model: this.model});
     this.view.render();
@@ -60,6 +61,12 @@ describe("model unbinding", function(){
       expect(selected).toBeTruthy();
     });
 
+    it("should unbind the data-bind", function(){
+      this.model.set({isValid: false});
+      var el = this.view.$("#clicker");
+      var disabled = el.attr("disabled");
+      expect(disabled).toBeFalsy();
+    });
   });
   
 });

@@ -333,48 +333,65 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
   return methods;
 })();
 
+Backbone.ModelBinding.DataBindBinding = (function(){
+  var methods = {};
+
+  methods._modelChange = function(model, val){
+    methods._setOnElement(this.element, this.elementAttr, val);
+  }
+
+  methods._setOnElement = function(element, attr, val){
+    switch(attr){
+      case "html":
+        element.html(val);
+        break;
+      case "text":
+        element.text(val);
+        break;
+      case "enabled":
+        element.attr("disabled", !val);
+        break;
+      default:
+        element.attr(attr, val);
+    }
+  }
+
+  methods.bind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var databind = element.attr("data-bind").split(" ");
+      var elementAttr = databind[0];
+      var modelAttr = databind[1];
+
+      var config = {
+        element: element,
+        elementAttr: elementAttr
+      };
+      model.bind("change:" + modelAttr, methods._modelChange, config);
+
+      // set default on data-bind element
+      methods._setOnElement(element,elementAttr,model.get(modelAttr));
+    });
+  }
+
+  methods.unbind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var databind = element.attr("data-bind").split(" ");
+      var elementAttr = databind[0];
+      var modelAttr = databind[1];
+      model.unbind("change:" + modelAttr, methods._modelChange);
+    });
+  }
+
+  return methods;
+})();
+
+
 // ----------------------------
 // Binding Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
-
-  var DataBind = {
-    bind: function(selector, view, model){
-      var setOnElement = function(element, attr, val){
-        switch(attr){
-          case "html":
-            element.html(val);
-            break;
-          case "text":
-            element.text(val);
-            break;
-          case "enabled":
-            element.attr("disabled", !val);
-            break;
-          default:
-            element.attr(attr, val);
-        }
-      };
-
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var databind = element.attr("data-bind").split(" ");
-        var elementAttr = databind[0];
-        var modelAttr = databind[1];
-
-        model.bind("change:" + modelAttr, function(changedModel, val){
-          setOnElement(element,elementAttr,val);
-        });
-
-        // set default on data-bind element
-        setOnElement(element,elementAttr,model.get(modelAttr));
-      });
-    },
-
-    unbind: function(selector, view, model){
-    }
-  };
-
   return {
     text: {selector: "input[type=text]", handler: Backbone.ModelBinding.StandardBinding}, 
     textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
@@ -382,7 +399,7 @@ Backbone.ModelBinding.Conventions = (function(){
     radio: {selector: "input[type=radio]", handler: Backbone.ModelBinding.RadioGroupBinding},
     checkbox: {selector: "input[type=checkbox]", handler: Backbone.ModelBinding.CheckboxBinding},
     select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
-    databind: { selector: "*[data-bind]", handler: DataBind}
+    databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
   }
 })();
 
