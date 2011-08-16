@@ -31,9 +31,9 @@ Download the `backbone.modelbinding.js` file from this github repository and cop
 your javascripts folder. Add the needed `<script>` tag to bring the plugin into any page
 that wishes to use it. Be sure to include the modelbinding file _after_ the backbone.js file.
 
-### Call The Model Bindings
+### Model Binding
 
-The model binding code is executed with a call to `Backbone.ModelBinding.call(view)`. There are
+The model binding code is executed with a call to `Backbone.ModelBinding.bind(view)`. There are
 several places that it can be called from, depending on your circumstances.
 
 All of the element binding happens within the context of the view's `el`, therefore you must
@@ -52,7 +52,7 @@ SomeView = Backbone.View.extend({
     $(this.el).html("... some html and content goes here ... ");
 
     // execute the model bindings
-    Backbone.ModelBinding.call(this);
+    Backbone.ModelBinding.bind(this);
   }
 });
 ````
@@ -74,7 +74,7 @@ FormView = Backbone.View.extend({
   el: "#some-form",
 
   initialize: function(){
-    Backbone.ModelBinding.call(this);
+    Backbone.ModelBinding.bind(this);
   }
 });
 ````
@@ -90,7 +90,34 @@ FormView = Backbone.View.extend({
 });
 
 formView = new FormView();
-Backbone.ModelBinding.call(formView);
+Backbone.ModelBinding.bind(formView);
+````
+
+### Model Unbinding
+
+When your view has completed its work and is ready to be removed from the DOM, you not only
+need to unbnd your view's events (handled through the view's `remove` method, typically), you
+also need to unbind the model events that are bound in the view. 
+
+Backbone.ModelBinding can unbind its own events through a simple call to 
+`Backbone.ModelBinding.unbind(view)`. If you do not call this method when your view is being
+closed / removed / cleaned up, then you may end up with memory leaks and zombie views that
+are still responding to model change events.
+
+````
+FormView = Backbone.View.extend({
+  el: "#some-form",
+
+  initialize: function(){
+    Backbone.ModelBinding.bind(this);
+  },
+
+  close: function(){
+    this.remove();
+    this.unbind();
+    Backbone.ModelBinding.unbind(this);
+  }
+});
 ````
 
 ## Convention Bindings
@@ -98,7 +125,7 @@ Backbone.ModelBinding.call(formView);
 Automatic bi-directional binding between your form input and your model. 
 
 The convention based binding requires no additional configuration or code in your
-view, other than calling the `Backbone.ModelBinding.call(this);` as noted above.
+view, other than calling the `Backbone.ModelBinding.bind(this);` as noted above.
 With the conventions binding, your `<input>` fields will be bound to the views model
 by the id of the input. 
 
@@ -118,7 +145,7 @@ SomeView = Backbone.View.extend({
     // ... render your form here
 
     // execute the defined bindings
-    Backbone.ModelBinding.call(this);
+    Backbone.ModelBinding.bind(this);
   }
 });
 
@@ -156,7 +183,7 @@ SomeView = Backbone.View.extend({
 
   render: function(){
     // ... 
-    Backbone.ModelBinding.call(this);
+    Backbone.ModelBinding.bind(this);
   }
 });
 
@@ -293,7 +320,7 @@ The following will use use the `class` attribute's value as the binding for all 
 SomeView = Backbone.View.extend({
   render: function(){
     // ... some rendering here
-    Backbone.ModelBinding.call(this, { all: "class" });
+    Backbone.ModelBinding.bind(this, { all: "class" });
   }
 });
 
@@ -315,7 +342,7 @@ The following will use a `modelAttr` attribute value as the convention for text 
 SomeView = Backbone.View.extend({
   render: function(){
     // ... some rendering here
-    Backbone.ModelBinding.call(this, { text: "modelAttr" });
+    Backbone.ModelBinding.bind(this, { text: "modelAttr" });
   }
 });
 
