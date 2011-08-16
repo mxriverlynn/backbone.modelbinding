@@ -4,7 +4,8 @@ describe("model unbinding", function(){
       name: "a name",
       bio: "a bio",
       password: "it's a secret",
-      education: "college"
+      education: "college",
+      graduated: "no"
     });
     this.view = new AView({model: this.model});
     this.view.render();
@@ -37,6 +38,18 @@ describe("model unbinding", function(){
       this.model.set({education: "none"});
       var el = this.view.$("#education");
       expect(el.val()).toEqual("college");
+    });
+
+    it("should unbind the radio group", function(){
+      this.model.set({graduated: "yes"});
+
+      var elYes = this.view.$("#graduated_yes");
+      var selected = elYes.attr("checked");
+      expect(selected).toBeFalsy();
+
+      var elNo = this.view.$("#graduated_no");
+      var selected = elNo.attr("checked");
+      expect(selected).toBeTruthy();
     });
   });
   
