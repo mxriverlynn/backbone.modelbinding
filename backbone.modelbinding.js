@@ -223,38 +223,56 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
     this.view.$(value_selector).attr("checked", "checked");
   }
 
-  methods.unbind = function(group_name, model, bindingAttr){
-    model.unbind("change:" + group_name, methods._modelChange);
-  }
-
-  methods.bind = function(group_name, model, bindingAttr){
-    var self = this;
-
-    // bind the model changes to the form elements
-    var config = {
-      bindingAttr: bindingAttr,
-      group_name: group_name,
-      view: this
-    };
-    model.bind("change:" + group_name, methods._modelChange, config);
-
-    // bind the form changes to the model
-    var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
-    self.$(group_selector).bind("change", function(ev){
-      var element = self.$(ev.currentTarget);
-      if (element.attr("checked")){
-        var data = {};
-        data[group_name] = element.val();
-        model.set(data);
+  methods.unbind = function(selector, view, model){
+    var foundElements = [];
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
+      if (!foundElements[group_name]) {
+        foundElements[group_name] = true;
+        var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
+        model.unbind("change:" + group_name, methods._modelChange);
       }
     });
+  }
 
-    // set the default value on the form, from the model
-    var attr_value = model.get(group_name);
-    if (typeof attr_value !== "undefined" && attr_value !== null) {
-      var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
-      self.$(value_selector).attr("checked", "checked");
-    }
+  methods.bind = function(selector, view, model){
+    var foundElements = [];
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+
+      var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
+      if (!foundElements[group_name]) {
+        foundElements[group_name] = true;
+        var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
+
+        // bind the model changes to the form elements
+        var config = {
+          bindingAttr: bindingAttr,
+          group_name: group_name,
+          view: view
+        };
+        model.bind("change:" + group_name, methods._modelChange, config);
+
+        // bind the form changes to the model
+        var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
+        view.$(group_selector).bind("change", function(ev){
+          var element = view.$(ev.currentTarget);
+          if (element.attr("checked")){
+            var data = {};
+            data[group_name] = element.val();
+            model.set(data);
+          }
+        });
+
+        // set the default value on the form, from the model
+        var attr_value = model.get(group_name);
+        if (typeof attr_value !== "undefined" && attr_value !== null) {
+          var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
+          view.$(value_selector).attr("checked", "checked");
+        }
+      }
+    });
   };
 
   return methods;
@@ -312,35 +330,6 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
 // Binding Conventions
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
-  var RadioGroup = {
-    bind: function(selector, view, model){
-      var self = this;
-      var foundElements = [];
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
-        if (!foundElements[group_name]) {
-          foundElements[group_name] = true;
-          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
-          Backbone.ModelBinding.RadioGroupBinding.bind.call(view, group_name, model, bindingAttr);
-        }
-      });
-    },
-
-    unbind: function(selector, view, model){
-      var self = this;
-      var foundElements = [];
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
-        if (!foundElements[group_name]) {
-          foundElements[group_name] = true;
-          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
-          Backbone.ModelBinding.RadioGroupBinding.unbind.call(view, group_name, model, bindingAttr);
-        }
-      });
-    }
-  };
 
   var Checkbox = {
     bind: function(selector, view, model){
@@ -401,7 +390,7 @@ Backbone.ModelBinding.Conventions = (function(){
     text: {selector: "input[type=text]", handler: Backbone.ModelBinding.StandardBinding}, 
     textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
     password: {selector: "input[type=password]", handler: Backbone.ModelBinding.StandardBinding},
-    radio: {selector: "input[type=radio]", handler: RadioGroup},
+    radio: {selector: "input[type=radio]", handler: Backbone.ModelBinding.RadioGroupBinding},
     checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
     select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
     databind: { selector: "*[data-bind]", handler: DataBind}
