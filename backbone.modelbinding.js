@@ -107,10 +107,13 @@ Backbone.ModelBinding.Configuration = (function(){
 })();
 
 // ----------------------------
-// Binding Conventions
+// Standard Bi-Directional Binding Methods
+// For: text, textarea, password
 // ----------------------------
-Backbone.ModelBinding.Conventions = (function(){
-  function _getElementType(element) {
+Backbone.ModelBinding.StandardBinding = (function(){
+  var methods = {};
+
+  methods._getElementType = function(element) {
     var type = element[0].tagName.toLowerCase();
     if (type == "input"){
       type = element.attr("type");
@@ -118,183 +121,51 @@ Backbone.ModelBinding.Conventions = (function(){
     return type;
   }
 
-  var StandardInput = {
-    bind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
-        Backbone.ModelBinding.StandardBinding.bind.call(view, field, element, model);
-      });
-    },
-
-    unbind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, _getElementType(element));
-        Backbone.ModelBinding.StandardBinding.unbind.call(view, field, element, model);
-      });
-    }
-  };
-
-  var SelectBox = {
-    bind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
-        Backbone.ModelBinding.SelectBoxBinding.bind.call(view, field, element, model);
-      });
-    },
-
-    unbind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
-        Backbone.ModelBinding.SelectBoxBinding.unbind.call(view, field, element, model);
-      });
-    }
-  };
-
-  var RadioGroup = {
-    bind: function(selector, view, model){
-      var self = this;
-      var foundElements = [];
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
-        if (!foundElements[group_name]) {
-          foundElements[group_name] = true;
-          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
-          Backbone.ModelBinding.RadioGroupBinding.bind.call(view, group_name, model, bindingAttr);
-        }
-      });
-    },
-
-    unbind: function(selector, view, model){
-      var self = this;
-      var foundElements = [];
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
-        if (!foundElements[group_name]) {
-          foundElements[group_name] = true;
-          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
-          Backbone.ModelBinding.RadioGroupBinding.unbind.call(view, group_name, model, bindingAttr);
-        }
-      });
-    }
-  };
-
-  var Checkbox = {
-    bind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
-        Backbone.ModelBinding.CheckboxBinding.bind.call(view, field, element, model);
-      });
-    },
-
-    unbind: function(selector, view, model){
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
-        Backbone.ModelBinding.CheckboxBinding.unbind.call(view, field, element, model);
-      });
-    }
-  };
-
-  var DataBind = {
-    bind: function(selector, view, model){
-      var setOnElement = function(element, attr, val){
-        switch(attr){
-          case "html":
-            element.html(val);
-            break;
-          case "text":
-            element.text(val);
-            break;
-          case "enabled":
-            element.attr("disabled", !val);
-            break;
-          default:
-            element.attr(attr, val);
-        }
-      };
-
-      view.$(selector).each(function(index){
-        var element = view.$(this);
-        var databind = element.attr("data-bind").split(" ");
-        var elementAttr = databind[0];
-        var modelAttr = databind[1];
-
-        model.bind("change:" + modelAttr, function(changedModel, val){
-          setOnElement(element,elementAttr,val);
-        });
-
-        // set default on data-bind element
-        setOnElement(element,elementAttr,model.get(modelAttr));
-      });
-    },
-
-    unbind: function(selector, view, model){
-    }
-  };
-
-  return {
-    text: {selector: "input[type=text]", handler: StandardInput}, 
-    textarea: {selector: "textarea", handler: StandardInput},
-    password: {selector: "input[type=password]", handler: StandardInput},
-    radio: {selector: "input[type=radio]", handler: RadioGroup},
-    checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
-    select: {selector: "select", handler: SelectBox},
-    databind: { selector: "*[data-bind]", handler: DataBind}
-  }
-})();
-
-// ----------------------------
-// Standard Bi-Directional Binding Methods
-// For: text, textarea, password
-// ----------------------------
-Backbone.ModelBinding.StandardBinding = (function(){
-  var methods = {};
-
   methods._modelChange = function(changed_model, val){
     this.element.val(val);
   };
 
-  methods.unbind = function(attribute_name, element, model){
-    // unbind the model changes to the form elements
-    model.unbind("change:" + attribute_name, methods._modelChange);
+  methods.unbind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, methods._getElementType(element));
+      // unbind the model changes to the form elements
+      model.unbind("change:" + attribute_name, methods._modelChange);
+    });
   };
 
-  methods.bind = function(attribute_name, element, model){
-    // bind the model changes to the form elements
-    // force "this" to be our config object, so i can
-    // get the data that i need, during the callback.
-    // i have to do it this way because the unbinding
-    // that occurs a few lines above, in the "unbind" method
-    // requires the same instance of the callback method as
-    // was passed into the bind method here. however, i need
-    // more data in the callback than i'm able to get because
-    // it's a callback, limited to the model's "change" event.
-    // by passing in "config" as "this" for the callback, i
-    // can get all the data i need. you'll see this pattern
-    // repeated through the rest of the binding objects.
-    var config = {element: element};
-    model.bind("change:" + attribute_name, methods._modelChange, config);
-    
-    // bind the form changes to the model
-    var self = this;
-    element.bind("change", function(ev){
-      var data = {};
-      data[attribute_name] = self.$(ev.target).val();
-      model.set(data);
-    });
+  methods.bind = function(selector, view, model){
+    view.$(selector).each(function(index){
+      var element = view.$(this);
+      var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, methods._getElementType(element));
+      // bind the model changes to the form elements
+      // force "this" to be our config object, so i can
+      // get the data that i need, during the callback.
+      // i have to do it this way because the unbinding
+      // that occurs a few lines above, in the "unbind" method
+      // requires the same instance of the callback method as
+      // was passed into the bind method here. however, i need
+      // more data in the callback than i'm able to get because
+      // it's a callback, limited to the model's "change" event.
+      // by passing in "config" as "this" for the callback, i
+      // can get all the data i need. you'll see this pattern
+      // repeated through the rest of the binding objects.
+      var config = {element: element};
+      model.bind("change:" + attribute_name, methods._modelChange, config);
+      
+      // bind the form changes to the model
+      element.bind("change", function(ev){
+        var data = {};
+        data[attribute_name] = view.$(ev.target).val();
+        model.set(data);
+      });
 
-    // set the default value on the form, from the model
-    var attr_value = model.get(attribute_name);
-    if (typeof attr_value !== "undefined" && attr_value !== null) {
-      element.val(attr_value);
-    }
+      // set the default value on the form, from the model
+      var attr_value = model.get(attribute_name);
+      if (typeof attr_value !== "undefined" && attr_value !== null) {
+        element.val(attr_value);
+      }
+    });
   };
 
   return methods;
@@ -429,3 +300,122 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
 
   return methods;
 })();
+
+// ----------------------------
+// Binding Conventions
+// ----------------------------
+Backbone.ModelBinding.Conventions = (function(){
+  var SelectBox = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
+        Backbone.ModelBinding.SelectBoxBinding.bind.call(view, field, element, model);
+      });
+    },
+
+    unbind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
+        Backbone.ModelBinding.SelectBoxBinding.unbind.call(view, field, element, model);
+      });
+    }
+  };
+
+  var RadioGroup = {
+    bind: function(selector, view, model){
+      var self = this;
+      var foundElements = [];
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
+        if (!foundElements[group_name]) {
+          foundElements[group_name] = true;
+          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
+          Backbone.ModelBinding.RadioGroupBinding.bind.call(view, group_name, model, bindingAttr);
+        }
+      });
+    },
+
+    unbind: function(selector, view, model){
+      var self = this;
+      var foundElements = [];
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var group_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'radio');
+        if (!foundElements[group_name]) {
+          foundElements[group_name] = true;
+          var bindingAttr = Backbone.ModelBinding.Configuration.getBindingAttr('radio');
+          Backbone.ModelBinding.RadioGroupBinding.unbind.call(view, group_name, model, bindingAttr);
+        }
+      });
+    }
+  };
+
+  var Checkbox = {
+    bind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
+        Backbone.ModelBinding.CheckboxBinding.bind.call(view, field, element, model);
+      });
+    },
+
+    unbind: function(selector, view, model){
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var field = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
+        Backbone.ModelBinding.CheckboxBinding.unbind.call(view, field, element, model);
+      });
+    }
+  };
+
+  var DataBind = {
+    bind: function(selector, view, model){
+      var setOnElement = function(element, attr, val){
+        switch(attr){
+          case "html":
+            element.html(val);
+            break;
+          case "text":
+            element.text(val);
+            break;
+          case "enabled":
+            element.attr("disabled", !val);
+            break;
+          default:
+            element.attr(attr, val);
+        }
+      };
+
+      view.$(selector).each(function(index){
+        var element = view.$(this);
+        var databind = element.attr("data-bind").split(" ");
+        var elementAttr = databind[0];
+        var modelAttr = databind[1];
+
+        model.bind("change:" + modelAttr, function(changedModel, val){
+          setOnElement(element,elementAttr,val);
+        });
+
+        // set default on data-bind element
+        setOnElement(element,elementAttr,model.get(modelAttr));
+      });
+    },
+
+    unbind: function(selector, view, model){
+    }
+  };
+
+  return {
+    text: {selector: "input[type=text]", handler: Backbone.ModelBinding.StandardBinding}, 
+    textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
+    password: {selector: "input[type=password]", handler: Backbone.ModelBinding.StandardBinding},
+    radio: {selector: "input[type=radio]", handler: RadioGroup},
+    checkbox: {selector: "input[type=checkbox]", handler: Checkbox},
+    select: {selector: "select", handler: SelectBox},
+    databind: { selector: "*[data-bind]", handler: DataBind}
+  }
+})();
+
