@@ -107,8 +107,7 @@ Backbone.ModelBinding.Configuration = (function(){
 })();
 
 // ----------------------------
-// Standard Bi-Directional Binding Methods
-// for text, textarea, password
+// Text, Textarea, and Password Bi-Directional Binding Methods
 // ----------------------------
 Backbone.ModelBinding.StandardBinding = (function(){
   var methods = {};
@@ -410,11 +409,11 @@ Backbone.ModelBinding.DataBindBinding = (function(){
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
   return {
-    text: {selector: "input[type=text]", handler: Backbone.ModelBinding.StandardBinding}, 
+    text: {selector: "input:text", handler: Backbone.ModelBinding.StandardBinding}, 
     textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
-    password: {selector: "input[type=password]", handler: Backbone.ModelBinding.StandardBinding},
-    radio: {selector: "input[type=radio]", handler: Backbone.ModelBinding.RadioGroupBinding},
-    checkbox: {selector: "input[type=checkbox]", handler: Backbone.ModelBinding.CheckboxBinding},
+    password: {selector: "input:password", handler: Backbone.ModelBinding.StandardBinding},
+    radio: {selector: "input:radio", handler: Backbone.ModelBinding.RadioGroupBinding},
+    checkbox: {selector: "input:checkbox", handler: Backbone.ModelBinding.CheckboxBinding},
     select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
     databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
   }
