@@ -113,16 +113,17 @@ Backbone.ModelBinding.Configuration = (function(){
       return element.attr(bindingAttr);
     },
 
+    dataBindSubst: function(config){
+      _.extend(dataBindSubstConfig, config);
+    },
+
     getDataBindSubst: function(elementType, value){
       var returnValue = value;
-      console.log("checkign for subst");
       if (dataBindSubstConfig.hasOwnProperty(elementType)){
-        console.log("has prop for " + elementType);
         var el = dataBindSubstConfig[elementType];
-        if (el.hasOwnProperty(value)){
-          console.log("... sub has prop for " + value);
-          returnValue = el[value];
-        }
+        //if (el.hasOwnProperty(value)){
+        //  returnValue = el[value];
+        //}
 
         if (value === undefined && el.hasOwnProperty("undefined")){
           returnValue = el["undefined"];
