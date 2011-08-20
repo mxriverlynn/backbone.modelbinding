@@ -426,6 +426,10 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.1
+
+* Corrected issue with `unset`ing a model attribute, in the data-bind convention
+
 ### v0.3.0
 
 * **Breaking Change:** Changed the `Backbone.ModelBinding.call(view)` method signature to `Backbone.ModelBinding.bind(view)`
