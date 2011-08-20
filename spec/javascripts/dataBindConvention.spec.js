@@ -41,18 +41,6 @@ describe("data-bind conventions", function(){
     });
   });
 
-  describe("when data-binding to text and setting the model's property to undefined", function(){
-    beforeEach(function(){
-      this.view.render();
-      this.el = this.view.$("#doctor");
-    });
-
-    it("should set the element's text to be blank", function(){
-      this.model.unset("doctor");
-      expect(this.el.text()).toBeFalsy();
-    });
-  });
-
   describe("when a data-bind is configured to set enabled", function(){
     beforeEach(function(){
       this.view.render();

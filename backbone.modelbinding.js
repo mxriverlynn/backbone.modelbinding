@@ -55,7 +55,7 @@ Backbone.ModelBinding = (function(){
 // Model Binding Configuration
 // ----------------------------
 Backbone.ModelBinding.Configuration = (function(){
-  var config = {
+  var bindingAttrConfig = {
 	  text: "id",
 	  textarea: "id",
 	  password: "id",
@@ -63,6 +63,15 @@ Backbone.ModelBinding.Configuration = (function(){
 	  checkbox: "id",
 	  select: "id"
   };
+
+  var dataBindSubstConfig = {
+    text: {
+      "undefined": ""
+    },
+    html: {
+      "undefined": ""
+    }
+  }
   
   return {
     configureBindingAttributes: function(options){
@@ -72,36 +81,54 @@ Backbone.ModelBinding.Configuration = (function(){
           this.configureAllBindingAttributes(options.all);
           delete options.all;
         }
-        _.extend(config, options);
+        _.extend(bindingAttrConfig, options);
       }
     },
 
     configureAllBindingAttributes: function(attribute){
       this.storeConfiguration();
-      config.text = attribute;
-      config.texarea = attribute;
-      config.password = attribute;
-      config.radio = attribute;
-      config.checkbox = attribute;
-      config.select = attribute;
+      bindingAttrConfig.text = attribute;
+      bindingAttrConfig.texarea = attribute;
+      bindingAttrConfig.password = attribute;
+      bindingAttrConfig.radio = attribute;
+      bindingAttrConfig.checkbox = attribute;
+      bindingAttrConfig.select = attribute;
     },
 
     storeConfiguration: function(){
-      Backbone.ModelBinding._config = _.clone(config);
+      Backbone.ModelBinding._config = _.clone(bindingAttrConfig);
     },
 
     restoreConfiguration: function(){
       if (Backbone.ModelBinding._config) {
-        config = Backbone.ModelBinding._config;
+        bindingAttrConfig = Backbone.ModelBinding._config;
         delete Backbone.ModelBinding._config;
       }
     },
     
-    getBindingAttr: function(type){ return config[type]; },
+    getBindingAttr: function(type){ return bindingAttrConfig[type]; },
 
     getBindingValue: function(element, type){
       var bindingAttr = this.getBindingAttr(type);
       return element.attr(bindingAttr);
+    },
+
+    getDataBindSubst: function(elementType, value){
+      var returnValue = value;
+      console.log("checkign for subst");
+      if (dataBindSubstConfig.hasOwnProperty(elementType)){
+        console.log("has prop for " + elementType);
+        var el = dataBindSubstConfig[elementType];
+        if (el.hasOwnProperty(value)){
+          console.log("... sub has prop for " + value);
+          returnValue = el[value];
+        }
+
+        if (value === undefined && el.hasOwnProperty("undefined")){
+          returnValue = el["undefined"];
+        }
+      }
+      return returnValue;
     }
   }
 })();
@@ -352,10 +379,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
   }
 
   methods._setOnElement = function(element, attr, val){
-    if (val === undefined){
-      val = "";
-    }
-
+    val = Backbone.ModelBinding.Configuration.getDataBindSubst(attr, val);
     switch(attr){
       case "html":
         element.html(val);
