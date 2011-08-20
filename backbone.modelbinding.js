@@ -351,20 +351,20 @@ Backbone.ModelBinding.DataBindBinding = (function(){
     text: "",
     html: ""
   }
-  
+
   Backbone.ModelBinding.Configuration.dataBindSubst = function(config){
     this.storeDataBindSubstConfig();
     _.extend(dataBindSubstConfig, config);
   }
 
   Backbone.ModelBinding.Configuration.storeDataBindSubstConfig = function(){
-    this._dataBindSubstConfig = _.clone(dataBindSubstConfig);
+    Backbone.ModelBinding.Configuration._dataBindSubstConfig = _.clone(dataBindSubstConfig);
   }
 
   Backbone.ModelBinding.Configuration.restoreDataBindSubstConfig = function(){
-    if (this._dataBindSubstConfig){
-      dataBindSubstConfig = this._dataBindSubstConfig;
-      delete this._dataBindSubstConfig;
+    if (Backbone.ModelBinding.Configuration._dataBindSubstConfig){
+      dataBindSubstConfig = Backbone.ModelBinding.Configuration._dataBindSubstConfig;
+      delete Backbone.ModelBinding.Configuration._dataBindSubstConfig;
     }
   }
 
@@ -383,6 +383,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
   }
 
   methods._setOnElement = function(element, attr, val){
+    var valBefore = val;
     val = Backbone.ModelBinding.Configuration.getDataBindSubst(attr, val);
     switch(attr){
       case "html":
