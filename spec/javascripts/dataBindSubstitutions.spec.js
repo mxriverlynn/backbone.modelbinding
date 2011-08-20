@@ -34,8 +34,8 @@ describe("default data-bind substitutions", function(){
 describe("configured data-bind substitutions", function(){
   beforeEach(function(){
     Backbone.ModelBinding.Configuration.dataBindSubst({
-      text: {"undefined": "text subst"},
-      html: {"undefined": "html subst"}
+      text: "text subst",
+      html: "html subst"
     });
     this.model = new AModel({
       doctor: "Seuss"

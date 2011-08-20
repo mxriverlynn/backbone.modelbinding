@@ -65,12 +65,8 @@ Backbone.ModelBinding.Configuration = (function(){
   };
 
   var dataBindSubstConfig = {
-    text: {
-      "undefined": ""
-    },
-    html: {
-      "undefined": ""
-    }
+    text: "",
+    html: ""
   }
   
   return {
@@ -132,13 +128,8 @@ Backbone.ModelBinding.Configuration = (function(){
     getDataBindSubst: function(elementType, value){
       var returnValue = value;
       if (dataBindSubstConfig.hasOwnProperty(elementType)){
-        var el = dataBindSubstConfig[elementType];
-        //if (el.hasOwnProperty(value)){
-        //  returnValue = el[value];
-        //}
-
-        if (value === undefined && el.hasOwnProperty("undefined")){
-          returnValue = el["undefined"];
+        if (value === undefined){
+          returnValue = dataBindSubstConfig[elementType];
         }
       }
       return returnValue;
