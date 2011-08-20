@@ -260,6 +260,37 @@ someModel.set({isValid: false});
 This will disable the button when the model is invalid and enable the button when the model is
 valid.
 
+### Data-Bind Substitutions
+
+If a model's property is `unset`, the data-bind may not update correctly when using `text` or `html`
+as the bound attribute of the element. 
+
+````
+<div data-bind="text something"></div>
+
+model.set({something: "whatever"});
+model.unset("something");
+````
+
+The result will be a div with it's text set to "". this is handled through the data-bind's 
+substitutions for undefined values. The default substitution is to replace an undefined
+value with an empty string. However, this can be configured:
+
+````
+<div data-bind="text something"></div>
+<div data-bind="html something"></div>
+
+Backbone.ModelBinding.Configuration.dataBindSubst({
+  text: "undefined. setting text to this",
+  html: "&nbsp;"
+});
+model.set({something: "whatever"});
+model.unset("something");
+````
+
+The result of this example will be a div that displays "undefined. setting the text to this" and a
+div whose contents is a single space, instead of being empty.
+
 ## Form Binding Conventions
 
 The following form input types are supported by the form convention binder:
@@ -425,6 +456,10 @@ For fully functional, bi-directional binding convention examples, check out the 
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
+
+### v0.3.2
+
+* Data-bind substitutions - lets you replace "undefined" with another, set value, when using data-bind
 
 ### v0.3.1
 
