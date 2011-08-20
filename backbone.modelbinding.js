@@ -42,7 +42,7 @@ Backbone.ModelBinding = (function(){
     bind: function(view, options){
       Backbone.ModelBinding.Configuration.configureBindingAttributes(options);
       handleConventionBindings(view, view.model);
-      Backbone.ModelBinding.Configuration.restoreConfiguration();
+      Backbone.ModelBinding.Configuration.restoreBindingAttrConfig();
     },
 
     unbind: function(view){
@@ -76,7 +76,7 @@ Backbone.ModelBinding.Configuration = (function(){
   return {
     configureBindingAttributes: function(options){
       if (options) {
-        this.storeConfiguration();
+        this.storeBindingAttrConfig();
         if (options.all){
           this.configureAllBindingAttributes(options.all);
           delete options.all;
@@ -86,7 +86,7 @@ Backbone.ModelBinding.Configuration = (function(){
     },
 
     configureAllBindingAttributes: function(attribute){
-      this.storeConfiguration();
+      this.storeBindingAttrConfig();
       bindingAttrConfig.text = attribute;
       bindingAttrConfig.texarea = attribute;
       bindingAttrConfig.password = attribute;
@@ -95,11 +95,11 @@ Backbone.ModelBinding.Configuration = (function(){
       bindingAttrConfig.select = attribute;
     },
 
-    storeConfiguration: function(){
+    storeBindingAttrConfig: function(){
       Backbone.ModelBinding._config = _.clone(bindingAttrConfig);
     },
 
-    restoreConfiguration: function(){
+    restoreBindingAttrConfig: function(){
       if (Backbone.ModelBinding._config) {
         bindingAttrConfig = Backbone.ModelBinding._config;
         delete Backbone.ModelBinding._config;

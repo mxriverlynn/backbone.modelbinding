@@ -12,7 +12,7 @@ describe("configure all binding attributes", function(){
   });
 
   afterEach(function(){
-    Backbone.ModelBinding.Configuration.restoreConfiguration();
+    Backbone.ModelBinding.Configuration.restoreBindingAttrConfig();
   });
 
   describe("text element binding using configurable attribute", function(){

@@ -8,7 +8,7 @@ describe("globalConfigurableBindingAttributes", function(){
   });
 
   afterEach(function(){
-    Backbone.ModelBinding.Configuration.restoreConfiguration();
+    Backbone.ModelBinding.Configuration.restoreBindingAttrConfig();
   });
 
   describe("text element binding with global configuration of convention attribute", function(){
