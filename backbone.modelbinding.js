@@ -64,11 +64,6 @@ Backbone.ModelBinding.Configuration = (function(){
 	  select: "id"
   };
 
-  var dataBindSubstConfig = {
-    text: "",
-    html: ""
-  }
-  
   return {
     configureBindingAttributes: function(options){
       if (options) {
@@ -107,32 +102,6 @@ Backbone.ModelBinding.Configuration = (function(){
     getBindingValue: function(element, type){
       var bindingAttr = this.getBindingAttr(type);
       return element.attr(bindingAttr);
-    },
-
-    dataBindSubst: function(config){
-      this.storeDataBindSubstConfig();
-      _.extend(dataBindSubstConfig, config);
-    },
-
-    storeDataBindSubstConfig: function(){
-      this._dataBindSubstConfig = _.clone(dataBindSubstConfig);
-    },
-
-    restoreDataBindSubstConfig: function(){
-      if (this._dataBindSubstConfig){
-        dataBindSubstConfig = this._dataBindSubstConfig;
-        delete this._dataBindSubstConfig;
-      }
-    },
-
-    getDataBindSubst: function(elementType, value){
-      var returnValue = value;
-      if (dataBindSubstConfig.hasOwnProperty(elementType)){
-        if (value === undefined){
-          returnValue = dataBindSubstConfig[elementType];
-        }
-      }
-      return returnValue;
     }
   }
 })();
@@ -377,6 +346,37 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
 // ----------------------------
 Backbone.ModelBinding.DataBindBinding = (function(){
   var methods = {};
+
+  var dataBindSubstConfig = {
+    text: "",
+    html: ""
+  }
+  
+  Backbone.ModelBinding.Configuration.dataBindSubst = function(config){
+    this.storeDataBindSubstConfig();
+    _.extend(dataBindSubstConfig, config);
+  }
+
+  Backbone.ModelBinding.Configuration.storeDataBindSubstConfig = function(){
+    this._dataBindSubstConfig = _.clone(dataBindSubstConfig);
+  }
+
+  Backbone.ModelBinding.Configuration.restoreDataBindSubstConfig = function(){
+    if (this._dataBindSubstConfig){
+      dataBindSubstConfig = this._dataBindSubstConfig;
+      delete this._dataBindSubstConfig;
+    }
+  }
+
+  Backbone.ModelBinding.Configuration.getDataBindSubst = function(elementType, value){
+    var returnValue = value;
+    if (dataBindSubstConfig.hasOwnProperty(elementType)){
+      if (value === undefined){
+        returnValue = dataBindSubstConfig[elementType];
+      }
+    }
+    return returnValue;
+  }
 
   methods._modelChange = function(model, val){
     methods._setOnElement(this.element, this.elementAttr, val);
