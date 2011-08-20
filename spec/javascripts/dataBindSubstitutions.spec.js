@@ -44,6 +44,10 @@ describe("configured data-bind substitutions", function(){
     this.view.render();
   });
 
+  afterEach(function(){
+    Backbone.ModelBinding.Configuration.restoreDataBindSubstConfig();
+  });
+
   describe("when binding to text and unsetting the model's property", function(){
     beforeEach(function(){
       this.model.unset("doctor")

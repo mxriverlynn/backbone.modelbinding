@@ -96,13 +96,13 @@ Backbone.ModelBinding.Configuration = (function(){
     },
 
     storeBindingAttrConfig: function(){
-      Backbone.ModelBinding._config = _.clone(bindingAttrConfig);
+      this._config = _.clone(bindingAttrConfig);
     },
 
     restoreBindingAttrConfig: function(){
-      if (Backbone.ModelBinding._config) {
-        bindingAttrConfig = Backbone.ModelBinding._config;
-        delete Backbone.ModelBinding._config;
+      if (this._config) {
+        bindingAttrConfig = this._config;
+        delete this._config;
       }
     },
     
@@ -114,7 +114,19 @@ Backbone.ModelBinding.Configuration = (function(){
     },
 
     dataBindSubst: function(config){
+      this.storeDataBindSubstConfig();
       _.extend(dataBindSubstConfig, config);
+    },
+
+    storeDataBindSubstConfig: function(){
+      this._dataBindSubstConfig = _.clone(dataBindSubstConfig);
+    },
+
+    restoreDataBindSubstConfig: function(){
+      if (this._dataBindSubstConfig){
+        dataBindSubstConfig = this._dataBindSubstConfig;
+        delete this._dataBindSubstConfig;
+      }
     },
 
     getDataBindSubst: function(elementType, value){
