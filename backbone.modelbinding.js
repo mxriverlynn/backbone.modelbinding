@@ -328,7 +328,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
       var attr_exists = model.attributes.hasOwnProperty(attribute_name);
       if (attr_exists) {
         var attr_value = model.get(attribute_name);
-        if (typeof attr_value !== "undefined" && attr_value !== null) {
+        if (typeof attr_value !== "undefined" && attr_value !== null && attr_value !== false) {
           element.attr("checked", "checked");
         }
         else{
@@ -394,6 +394,12 @@ Backbone.ModelBinding.DataBindBinding = (function(){
         break;
       case "enabled":
         element.attr("disabled", !val);
+        break;
+      case "displayed":
+        element.css("display", val ? 'block' : 'none' );
+        break;
+      case "hidden":
+        element.css("display", val ? 'none' : 'block' );
         break;
       default:
         element.attr(attr, val);
