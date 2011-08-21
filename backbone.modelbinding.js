@@ -395,6 +395,12 @@ Backbone.ModelBinding.DataBindBinding = (function(){
       case "enabled":
         element.attr("disabled", !val);
         break;
+      case "displayed":
+        element.css("display", val ? 'block' : 'none' );
+        break;
+      case "hidden":
+        element.css("display", val ? 'none' : 'block' );
+        break;
       default:
         element.attr(attr, val);
     }
