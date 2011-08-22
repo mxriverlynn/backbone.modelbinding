@@ -7,6 +7,7 @@ describe("conventionBindings", function(){
       graduated: "maybe",
       us_citizen: false,
       drivers_license: true,
+      motorcycle_license: false,
       bio: "my baby girl"
     });
     this.view = new AView({model: this.model});
@@ -140,11 +141,17 @@ describe("conventionBindings", function(){
       expect(selected).toBeTruthy();
     });
 
-    it("binds the model's value to the form field on render", function(){
+    it("checks the box for a truthy value, on render", function(){
       var el = this.view.$("#drivers_license");
       var selected = el.attr("checked");
 
       expect(selected).toBeTruthy();
+    });
+    it("unchecks the box for a falsy value, on render", function(){
+      var el = this.view.$("#motorcycle_license");
+      var selected = el.attr("checked");
+
+      expect(selected).toBeFalsy();
     });
   });
 
