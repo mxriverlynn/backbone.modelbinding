@@ -88,4 +88,36 @@ describe("data-bind conventions", function(){
       expect(this.el.attr("someAttr")).toBe("bunnies");
     });
   });
+
+  describe("when a data-bind is configured to set displayed", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#showHideThing");
+    });
+
+    it("should set the element's disabled value to the model's value, immediately", function(){
+      expect(this.el.css("display")).toBe("none");
+    });
+
+    it("should set the element's disabled value when the model's value is changed", function(){
+      this.model.set({isValid: true});
+      expect(this.el.css("display")).toBe("block");
+    });
+  });
+  
+  describe("when a data-bind is configured to set visible", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#showHideAnotherThing");
+    });
+
+    it("should set the element's disabled value to the model's value, immediately", function(){
+      expect(this.el.css("display")).toBe("block");
+    });
+
+    it("should set the element's disabled value when the model's value is changed", function(){
+      this.model.set({isValid: true});
+      expect(this.el.css("display")).toBe("none");
+    });
+  });
 });
