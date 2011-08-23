@@ -118,41 +118,4 @@ describe("conventionBindings", function(){
       expect(this.model.get('education_text')).toEqual("i dun learned at grade skool");
     });
   });
-
-  describe("checkbox element binding", function(){
-    it("bind view changes to the model's field", function(){
-      var el = this.view.$("#drivers_license");
-      el.removeAttr("checked");
-      el.trigger('change');
-      expect(this.model.get('drivers_license')).toBeFalsy();
-    });
-
-    it("bind model field changes to the form input", function(){
-      var el = this.view.$("#drivers_license");
-
-      // uncheck it
-      this.model.set({drivers_license: false});
-      var selected = el.attr("checked");
-      expect(selected).toBeFalsy();
-
-      // then check it
-      this.model.set({drivers_license: true});
-      var selected = el.attr("checked");
-      expect(selected).toBeTruthy();
-    });
-
-    it("checks the box for a truthy value, on render", function(){
-      var el = this.view.$("#drivers_license");
-      var selected = el.attr("checked");
-
-      expect(selected).toBeTruthy();
-    });
-    it("unchecks the box for a falsy value, on render", function(){
-      var el = this.view.$("#motorcycle_license");
-      var selected = el.attr("checked");
-
-      expect(selected).toBeFalsy();
-    });
-  });
-
 });

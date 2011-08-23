@@ -34,6 +34,7 @@ AView = Backbone.View.extend({
       <input type='radio' id='us_citizen_false' name='us_citizen' value='false'>\
       <input type='checkbox' id='drivers_license' value='yes'>\
       <input type='checkbox' id='motorcycle_license' value='yes' checked='checked'>\
+      <input type='checkbox' id='binary_checkbox' value='yes'>\
       <textarea id='bio'></textarea>\
       <p id='aParagraph'></p>\
       <input type='password' id='password'>\

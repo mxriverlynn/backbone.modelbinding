@@ -328,7 +328,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
       var attr_exists = model.attributes.hasOwnProperty(attribute_name);
       if (attr_exists) {
         var attr_value = model.get(attribute_name);
-        if (typeof attr_value !== "undefined" && attr_value !== null && attr_value !== false) {
+        if (typeof attr_value !== "undefined" && attr_value !== null && attr_value != false) {
           element.attr("checked", "checked");
         }
         else{
