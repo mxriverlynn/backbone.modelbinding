@@ -158,7 +158,7 @@ model.set({name: "some name"});
 
 In this example, when `model.set` is called to set the name, "some name" will appear
 in the `#name` input field. Similarly, when the `#name` input field is changed, the
-value entered into that field will be sent to the model's `name` attribute.
+value entered into that field will be sent to the model's `name` property.
 
 ## Data-Bind Attributes
 
@@ -167,10 +167,10 @@ HTML element. These bindings will populate any attribute, the text, or HTML cont
 of an HTML element based on your configurations. This is particularly useful when a
 model that is being edited is also being displayed elsewhere on the screen.
 
-To bind an element to a model's attributes, add a `data-bind` attribute to the element
-and specify what should be updated with which model attribute using a `elementAttr modelAttr`
+To bind an element to a model's properties, add a `data-bind` attribute to the element
+and specify what should be updated with which model property using a `elementAttr modelAttr`
 format. For example `<span data-bind="text name">` will update the span's text with
-the model's name attribute, when the model's name changes.
+the model's name property, when the model's name changes.
 
 ````
 <form>
@@ -193,7 +193,7 @@ someView = new SomeView({model: someModel});
 
 In this example, the model's `name` will be updated when you type into the text box
 and then tab or click away from it (to fire the change event). When the model's `name`
-attribute is updated, the `data-bind` convention will pick up the change and set
+property is updated, the `data-bind` convention will pick up the change and set
 the text of the `span` to the model's name.
 
 ### Special Cases For data-bind
@@ -201,21 +201,21 @@ the text of the `span` to the model's name.
 There are several special cases for the data-bind attribute. These allow a little more
 functionality than just setting an attribute on an element. 
 
-* html - replace the html contents of the element
+* (default) - if you only specify the model property, defaults to the text of the html element
 * text - replace the text contents of the element
+* html - replace the html contents of the element
 * enabled - enable or disable the html element
 
-#### html
+#### (default)
 
-If you set the data-bind attribute to use `html`, it will replace the entire
-inner html of the html element, instead of just setting an element attribute.
+If you only specify the model's property in the data-bind attribute, then the data-bind
+will bind the value of that model property to the `text` of the html element.
 
 ````
-<div id="someDiv" data-bind="html someProperty"></div>
-
-
-someModel.set({someProperty: "some value"});
+<div data-bind="name"/>
 ````
+
+See the document for data-bind text, below.
 
 #### text
 
@@ -224,6 +224,18 @@ html element instead of just setting an element attribute.
 
 ````
 <div id="someDiv" data-bind="text someProperty"></div>
+
+
+someModel.set({someProperty: "some value"});
+````
+
+#### html
+
+If you set the data-bind attribute to use `html`, it will replace the entire
+inner html of the html element, instead of just setting an element attribute.
+
+````
+<div id="someDiv" data-bind="html someProperty"></div>
 
 
 someModel.set({someProperty: "some value"});
@@ -246,7 +258,7 @@ someModel.set({invalid: true});
 ````
 
 However, some developers prefer to use positive state, such as `isValid`. In this case, setting
-the disabled attribute to the model's isValid attribute would result in the button being disabled
+the disabled attribute to the model's isValid property would result in the button being disabled
 when the model is valid and enabled when the model is not valid. To correct this, a special case
 has been added to enable and disable an element with `enabled`.
 
@@ -263,7 +275,7 @@ valid.
 #### display
 
 This allows you to specify that an element should be shown or hidden by setting the css
-of the element according to the value of the model attribute specified.
+of the element according to the value of the model properties specified.
 
 ````
 <div data-bind="display isValid" />
@@ -346,8 +358,8 @@ a selected option of
 </select>
 ```` 
 
-will populate the `company` attribute of the model with "foo_bar", and will populate
-the `company_text` attribute of the model with "Foo Bar Widgets, Inc."
+will populate the `company` property of the model with "foo_bar", and will populate
+the `company_text` property of the model with "Foo Bar Widgets, Inc."
 
 There is no support for hidden fields at the moment, because there is no 'change' event
 that jQuery can listen to on a hidden field.
@@ -370,7 +382,7 @@ the input type. The default configuration is:
 
 You can override this configuration and use any attribute you wish, by specifying any or all of
 these input types when you call the model binding. This is useful when you have field ids that
-do not match directly to the model attributes. 
+do not match directly to the model properties. 
 
 #### Override All Element Binding Attributes
 
@@ -409,7 +421,7 @@ SomeView = Backbone.View.extend({
 <input type="text" id="the_model_name" modelAttr="name">
 ````
 
-When this text box has it's value changed, the model's `name` attribute will be populated with
+When this text box has it's value changed, the model's `name` property will be populated with
 the value instead of `the_model_name`.
 
 If the same convention needs to be used throughout an application, and not just withing a single
@@ -419,7 +431,7 @@ view, the configuration can be set at a global level:
 Backbone.ModelBinding.Configuration.configureBindingAttributes({text: "modelAttr"});
 ````
 
-Now all text boxes will update the model attribute specified in the text box's `modelAttr`.
+Now all text boxes will update the model property specified in the text box's `modelAttr`.
 
 ## Pluggable Conventions
 
@@ -465,7 +477,7 @@ var PConvention = {
 Backbone.ModelBinding.Conventions.paragraphs = PConvention;
 ````
 
-This example will find all `<p>` tags in the view and render the `name` attribute from the model
+This example will find all `<p>` tags in the view and render the `name` property from the model
 into that paragraph, replacing all other text. Note that the name of the convention is set to
 `paragraphs` when added to the conventions. This name did not exist prior to this assignment, so
 the convention was added. If you assign a convention to an existing name, you will replace that
@@ -486,6 +498,11 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.4
+
+* Data-bind defaults to the html element's `text` if you only specify the model property: `data-bind="name"`
+* Fixed issue with binding 1 / 0 to checkboxes (truthy / falsy values)
+
 ### v0.3.3
 
 * Added data-bind attribute for setting an HTML element's `display` css
@@ -498,7 +515,7 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ### v0.3.1
 
-* Corrected issue with `unset`ing a model attribute, in the data-bind convention
+* Corrected issue with `unset`ing a model property, in the data-bind convention
 
 ### v0.3.0
 

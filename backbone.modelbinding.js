@@ -409,6 +409,8 @@ Backbone.ModelBinding.DataBindBinding = (function(){
   methods._splitBindingAttr = function(element)
   {
     var databind = element.attr("data-bind").split(" ");
+    // make the default special case "text" if none specified
+    if( databind.length == 1 ) databind.unshift("text");
     return {
       elementAttr: databind[0],
       modelAttr: databind[1]

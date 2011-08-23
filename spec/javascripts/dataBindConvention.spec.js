@@ -9,19 +9,19 @@ describe("data-bind conventions", function(){
     this.view = new AView({model: this.model});
   });
 
-  describe("when a data-bind is configured to set html", function(){
+  describe("when a data-bind is configured with no html element attribute specified", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#villain");
+      this.el = this.view.$("#doctor_no_elem");
     });
 
-    it("should set the element's contents to the model's property value immediately", function(){
-      expect(this.el.html()).toBe("mrMonster");
+    it("should set the element's text to the model's property value immediately", function(){
+      expect(this.el.text()).toBe("Seuss");
     });
 
-    it("should replace the contents of the element when the model's property changes", function(){
-      this.model.set({villain: "boogerFace"});
-      expect(this.el.html()).toBe("boogerFace");
+    it("should set the text of the element when the model's property changes", function(){
+      this.model.set({doctor: "Who"});
+      expect(this.el.text()).toBe("Who");
     });
   });
 
@@ -38,6 +38,22 @@ describe("data-bind conventions", function(){
     it("should set the text of the element when the model's property changes", function(){
       this.model.set({doctor: "Who"});
       expect(this.el.text()).toBe("Who");
+    });
+  });
+
+  describe("when a data-bind is configured to set html", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#villain");
+    });
+
+    it("should set the element's contents to the model's property value immediately", function(){
+      expect(this.el.html()).toBe("mrMonster");
+    });
+
+    it("should replace the contents of the element when the model's property changes", function(){
+      this.model.set({villain: "boogerFace"});
+      expect(this.el.html()).toBe("boogerFace");
     });
   });
 
