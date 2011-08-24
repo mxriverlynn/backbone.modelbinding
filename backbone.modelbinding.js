@@ -79,7 +79,7 @@ Backbone.ModelBinding.Configuration = (function(){
     configureAllBindingAttributes: function(attribute){
       this.storeBindingAttrConfig();
       bindingAttrConfig.text = attribute;
-      bindingAttrConfig.texarea = attribute;
+      bindingAttrConfig.textarea = attribute;
       bindingAttrConfig.password = attribute;
       bindingAttrConfig.radio = attribute;
       bindingAttrConfig.checkbox = attribute;
