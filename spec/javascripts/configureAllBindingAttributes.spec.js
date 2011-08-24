@@ -2,6 +2,7 @@ describe("configure all binding attributes", function(){
   beforeEach(function(){
     this.model = new AModel({
       name: "some dude",
+      bio: "not much",
       education: "graduate",
       graduated: "maybe",
       drivers_license: true
@@ -33,6 +34,27 @@ describe("configure all binding attributes", function(){
     it("binds the model's value to the form field on render", function(){
       var el = this.view.$("#v_name");
       expect(el.val()).toEqual("some dude");
+    });
+  });
+  
+  describe("textarea element binding using configurable attribute", function(){
+    it("bind view changes to the model's field, by configurable convention", function(){
+      var el = this.view.$("#v_bio");
+      el.val("biography");
+      el.trigger('change');
+
+      expect(this.model.get('bio')).toEqual("biography");
+    });
+
+    it("bind model field changes to the form input, by convention of id", function(){
+      this.model.set({bio: "biography, schmiography"});
+      var el = this.view.$("#v_bio");
+      expect(el.val()).toEqual("biography, schmiography");
+    });
+
+    it("binds the model's value to the form field on render", function(){
+      var el = this.view.$("#v_bio");
+      expect(el.val()).toEqual("not much");
     });
   });
   
