@@ -484,6 +484,7 @@ the convention was added. If you assign a convention to an existing name, you wi
 convention.
 
 The list of existing conventions includes:
+
 * text
 * password
 * radio
@@ -497,6 +498,10 @@ For fully functional, bi-directional binding convention examples, check out the 
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
+
+### v0.3.5
+
+* Fixed a bug in configuring the binding attribute for textarea elements
 
 ### v0.3.4
 
