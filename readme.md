@@ -499,6 +499,10 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.6
+
+* Fixed a bug that prevented `<input>` elements with no `type` attribute from being bound
+
 ### v0.3.5
 
 * Fixed a bug in configuring the binding attribute for textarea elements
