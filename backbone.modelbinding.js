@@ -116,6 +116,9 @@ Backbone.ModelBinding.StandardBinding = (function(){
     var type = element[0].tagName.toLowerCase();
     if (type == "input"){
       type = element.attr("type");
+      if (type == undefined || type == ''){
+        type = 'text'
+      }
     }
     return type;
   }
