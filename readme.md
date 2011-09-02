@@ -331,7 +331,7 @@ will be set to `none`.
 ### Data-Bind Substitutions
 
 If a model's property is `unset`, the data-bind may not update correctly when using `text` or `html`
-as the bound attribute of the element. 
+as the bound attribute of the element.
 
 ````
 <div data-bind="text something"></div>
@@ -342,7 +342,7 @@ model.unset("something");
 
 The result will be a div with it's text set to "". this is handled through the data-bind's 
 substitutions for undefined values. The default substitution is to replace an undefined
-value with an empty string. However, this can be configured:
+value with an empty string. However, this can be per attribute:
 
 ````
 <div data-bind="text something"></div>
@@ -529,6 +529,7 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 ### v0.3.7
 
 * Data-bind multiple attributes for a single element
+* Default data-bind substitutaion to '' for all attributes
 
 ### v0.3.6
 
