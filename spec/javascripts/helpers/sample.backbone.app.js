@@ -3,6 +3,7 @@ AModel = Backbone.Model.extend({});
 AView = Backbone.View.extend({
   render: function(){
     var html = $("\
+      <img id='avatar' data-bind='src url; class name'>\
       <input id='noType'>\
       <div id='showHideThing' data-bind='displayed isValid' />\
       <div id='showHideAnotherThing' data-bind='hidden isValid' />\

@@ -411,36 +411,47 @@ Backbone.ModelBinding.DataBindBinding = (function(){
 
   methods._splitBindingAttr = function(element)
   {
-    var databind = element.attr("data-bind").split(" ");
-    // make the default special case "text" if none specified
-    if( databind.length == 1 ) databind.unshift("text");
-    return {
-      elementAttr: databind[0],
-      modelAttr: databind[1]
-    }
+    var dataBindConfigList = [];
+    var databindList = element.attr("data-bind").split(";");
+    _.each(databindList, function(attrbind){
+      var databind = attrbind.trim().split(" ");
+
+      // make the default special case "text" if none specified
+      if( databind.length == 1 ) databind.unshift("text");
+
+      dataBindConfigList.push({
+        elementAttr: databind[0],
+        modelAttr: databind[1]
+      });
+    });
+    return dataBindConfigList;
   }
 
   methods.bind = function(selector, view, model){
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var databind = methods._splitBindingAttr(element);
+      var databindList = methods._splitBindingAttr(element);
 
-      var config = {
-        element: element,
-        elementAttr: databind.elementAttr
-      };
-      model.bind("change:" + databind.modelAttr, methods._modelChange, config);
+      _.each(databindList, function(databind){
+        var config = {
+          element: element,
+          elementAttr: databind.elementAttr
+        };
+        model.bind("change:" + databind.modelAttr, methods._modelChange, config);
 
-      // set default on data-bind element
-      methods._setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
+        // set default on data-bind element
+        methods._setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
+      });
     });
   }
 
   methods.unbind = function(selector, view, model){
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var databind = methods._splitBindingAttr(element);
-      model.unbind("change:" + databind.modelAttr, methods._modelChange);
+      var databindList = methods._splitBindingAttr(element);
+      _.each(databindList, function(databind){
+        model.unbind("change:" + databind.modelAttr, methods._modelChange);
+      });
     });
   }
 
