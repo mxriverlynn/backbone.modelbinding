@@ -351,8 +351,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
   var methods = {};
 
   var dataBindSubstConfig = {
-    text: "",
-    html: ""
+    default: ""
   }
 
   Backbone.ModelBinding.Configuration.dataBindSubst = function(config){
@@ -373,9 +372,11 @@ Backbone.ModelBinding.DataBindBinding = (function(){
 
   Backbone.ModelBinding.Configuration.getDataBindSubst = function(elementType, value){
     var returnValue = value;
-    if (dataBindSubstConfig.hasOwnProperty(elementType)){
-      if (value === undefined){
+    if (value === undefined){
+      if (dataBindSubstConfig.hasOwnProperty(elementType)){
         returnValue = dataBindSubstConfig[elementType];
+      } else {
+        returnValue = dataBindSubstConfig["default"];
       }
     }
     return returnValue;

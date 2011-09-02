@@ -1,10 +1,22 @@
 describe("default data-bind substitutions", function(){
   beforeEach(function(){
     this.model = new AModel({
-      doctor: "Seuss"
+      doctor: "Seuss",
+      name: "foo"
     });
     this.view = new AView({model: this.model});
     this.view.render();
+  });
+
+  describe("when binding unsetting the model's property that is bound to an unconfigured attribute", function(){
+    beforeEach(function(){
+      this.model.unset("name");
+      this.el = this.view.$("#avatar");
+    });
+
+    it("should use the 'default' substitution setting", function(){
+      expect(this.el.attr("class")).toBe("");
+    });
   });
 
   describe("when binding to text and unsetting the model's property", function(){
