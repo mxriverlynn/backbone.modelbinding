@@ -351,7 +351,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
   var methods = {};
 
   var dataBindSubstConfig = {
-    default: ""
+    "default": ""
   }
 
   Backbone.ModelBinding.Configuration.dataBindSubst = function(config){
