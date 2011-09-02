@@ -196,6 +196,33 @@ and then tab or click away from it (to fire the change event). When the model's 
 property is updated, the `data-bind` convention will pick up the change and set
 the text of the `span` to the model's name.
 
+### Data-Bind Multiple Attributes
+
+Multiple attributes can be specified for a single element's `data-bind` by separating
+each with a `;` (semi-colon). For example:
+
+````
+<form>
+  <input type="text" id="name">
+</form>
+Name: <span data-bind="text name; class name">
+
+SomeView = Backbone.View.extend({
+  // ... 
+
+  render: function(){
+    // ... 
+    Backbone.ModelBinding.bind(this);
+  }
+});
+
+someModel = new SomeModel();
+someView = new SomeView({model: someModel});
+````
+
+In this example, both the text and the css class will be updated when you change
+the name input. You can data-bind as many attributes as you need, in this manner.
+
 ### Special Cases For data-bind
 
 There are several special cases for the data-bind attribute. These allow a little more
@@ -498,6 +525,10 @@ For fully functional, bi-directional binding convention examples, check out the 
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
+
+### v0.3.7
+
+* Data-bind multiple attributes for a single element
 
 ### v0.3.6
 
