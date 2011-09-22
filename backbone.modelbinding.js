@@ -415,7 +415,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
     var dataBindConfigList = [];
     var databindList = element.attr("data-bind").split(";");
     _.each(databindList, function(attrbind){
-      var databind = attrbind.trim().split(" ");
+      var databind = $.trim(attrbind).split(" ");
 
       // make the default special case "text" if none specified
       if( databind.length == 1 ) databind.unshift("text");
