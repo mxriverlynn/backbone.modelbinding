@@ -526,6 +526,10 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.8
+
+* Fix for Internet Explorer not having a `trim` method on strings
+
 ### v0.3.7
 
 * Data-bind multiple attributes for a single element
