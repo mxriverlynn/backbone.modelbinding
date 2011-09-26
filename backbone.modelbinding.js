@@ -96,7 +96,7 @@ Backbone.ModelBinding.Configuration = (function(){
         delete this._config;
       }
     },
-    
+
     getBindingAttr: function(type){ return bindingAttrConfig[type]; },
 
     getBindingValue: function(element, type){
@@ -121,7 +121,7 @@ Backbone.ModelBinding.StandardBinding = (function(){
       }
     }
     return type;
-  }
+  };
 
   methods._modelChange = function(changed_model, val){
     this.element.val(val);
@@ -154,7 +154,7 @@ Backbone.ModelBinding.StandardBinding = (function(){
       // repeated through the rest of the binding objects.
       var config = {element: element};
       model.bind("change:" + attribute_name, methods._modelChange, config);
-      
+
       // bind the form changes to the model
       element.bind("change", function(ev){
         var data = {};
@@ -181,7 +181,7 @@ Backbone.ModelBinding.SelectBoxBinding = (function(){
 
   methods._modelChange = function(changed_model, val){
     this.element.val(val);
-  }
+  };
 
   methods.unbind = function(selector, view, model){
     view.$(selector).each(function(index){
@@ -189,7 +189,7 @@ Backbone.ModelBinding.SelectBoxBinding = (function(){
       var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'select');
       model.unbind("change:" + attribute_name, methods._modelChange);
     });
-  }
+  };
 
   methods.bind = function(selector, view, model){
     view.$(selector).each(function(index){
@@ -229,7 +229,7 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
   methods._modelChange = function(model, val){
     var value_selector = "input[type=radio][" + this.bindingAttr + "=" + this.group_name + "][value=" + val + "]";
     this.view.$(value_selector).attr("checked", "checked");
-  }
+  };
 
   methods.unbind = function(selector, view, model){
     var foundElements = [];
@@ -242,7 +242,7 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
         model.unbind("change:" + group_name, methods._modelChange);
       }
     });
-  }
+  };
 
   methods.bind = function(selector, view, model){
     var foundElements = [];
@@ -299,7 +299,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
     else{
       this.element.removeAttr("checked");
     }
-  }
+  };
 
   methods.unbind = function(selector, view, model){
     view.$(selector).each(function(index){
@@ -307,7 +307,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
       var attribute_name = Backbone.ModelBinding.Configuration.getBindingValue(element, 'checkbox');
       model.unbind("change:" + attribute_name, methods._modelChange);
     });
-  }
+  };
 
   methods.bind = function(selector, view, model){
     view.$(selector).each(function(index){
@@ -339,7 +339,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
         }
       }
     });
-  }
+  };
 
   return methods;
 })();
@@ -352,23 +352,23 @@ Backbone.ModelBinding.DataBindBinding = (function(){
 
   var dataBindSubstConfig = {
     "default": ""
-  }
+  };
 
   Backbone.ModelBinding.Configuration.dataBindSubst = function(config){
     this.storeDataBindSubstConfig();
     _.extend(dataBindSubstConfig, config);
-  }
+  };
 
   Backbone.ModelBinding.Configuration.storeDataBindSubstConfig = function(){
     Backbone.ModelBinding.Configuration._dataBindSubstConfig = _.clone(dataBindSubstConfig);
-  }
+  };
 
   Backbone.ModelBinding.Configuration.restoreDataBindSubstConfig = function(){
     if (Backbone.ModelBinding.Configuration._dataBindSubstConfig){
       dataBindSubstConfig = Backbone.ModelBinding.Configuration._dataBindSubstConfig;
       delete Backbone.ModelBinding.Configuration._dataBindSubstConfig;
     }
-  }
+  };
 
   Backbone.ModelBinding.Configuration.getDataBindSubst = function(elementType, value){
     var returnValue = value;
@@ -380,11 +380,11 @@ Backbone.ModelBinding.DataBindBinding = (function(){
       }
     }
     return returnValue;
-  }
+  };
 
   methods._modelChange = function(model, val){
     methods._setOnElement(this.element, this.elementAttr, val);
-  }
+  };
 
   methods._setOnElement = function(element, attr, val){
     var valBefore = val;
@@ -408,7 +408,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
       default:
         element.attr(attr, val);
     }
-  }
+  };
 
   methods._splitBindingAttr = function(element)
   {
@@ -426,7 +426,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
       });
     });
     return dataBindConfigList;
-  }
+  };
 
   methods.bind = function(selector, view, model){
     view.$(selector).each(function(index){
@@ -444,7 +444,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
         methods._setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
       });
     });
-  }
+  };
 
   methods.unbind = function(selector, view, model){
     view.$(selector).each(function(index){
@@ -454,7 +454,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
         model.unbind("change:" + databind.modelAttr, methods._modelChange);
       });
     });
-  }
+  };
 
   return methods;
 })();
@@ -465,7 +465,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
 // ----------------------------
 Backbone.ModelBinding.Conventions = (function(){
   return {
-    text: {selector: "input:text", handler: Backbone.ModelBinding.StandardBinding}, 
+    text: {selector: "input:text", handler: Backbone.ModelBinding.StandardBinding},
     textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
     password: {selector: "input:password", handler: Backbone.ModelBinding.StandardBinding},
     radio: {selector: "input:radio", handler: Backbone.ModelBinding.RadioGroupBinding},
@@ -474,4 +474,3 @@ Backbone.ModelBinding.Conventions = (function(){
     databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
   }
 })();
-
