@@ -463,14 +463,12 @@ Backbone.ModelBinding.DataBindBinding = (function(){
 // ----------------------------
 // Binding Conventions
 // ----------------------------
-Backbone.ModelBinding.Conventions = (function(){
-  return {
-    text: {selector: "input:text", handler: Backbone.ModelBinding.StandardBinding},
-    textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
-    password: {selector: "input:password", handler: Backbone.ModelBinding.StandardBinding},
-    radio: {selector: "input:radio", handler: Backbone.ModelBinding.RadioGroupBinding},
-    checkbox: {selector: "input:checkbox", handler: Backbone.ModelBinding.CheckboxBinding},
-    select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
-    databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
-  }
-})();
+Backbone.ModelBinding.Conventions = {
+  text: {selector: "input:text", handler: Backbone.ModelBinding.StandardBinding},
+  textarea: {selector: "textarea", handler: Backbone.ModelBinding.StandardBinding},
+  password: {selector: "input:password", handler: Backbone.ModelBinding.StandardBinding},
+  radio: {selector: "input:radio", handler: Backbone.ModelBinding.RadioGroupBinding},
+  checkbox: {selector: "input:checkbox", handler: Backbone.ModelBinding.CheckboxBinding},
+  select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
+  databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
+};
