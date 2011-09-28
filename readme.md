@@ -526,6 +526,11 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.9
+
+* fixed an issue with jQuery 1.6.4 determining if check boxes are checked or not
+* minor internal clean up
+
 ### v0.3.8
 
 * Fix for Internet Explorer not having a `trim` method on strings
