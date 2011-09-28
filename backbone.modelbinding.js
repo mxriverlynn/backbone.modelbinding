@@ -266,7 +266,7 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
         var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
         view.$(group_selector).bind("change", function(ev){
           var element = view.$(ev.currentTarget);
-          if (element.attr("checked")){
+          if (element.is(":checked")){
             var data = {};
             data[group_name] = element.val();
             model.set(data);
@@ -322,7 +322,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
       element.bind("change", function(ev){
         var data = {};
         var changedElement = view.$(ev.target);
-        var checked = changedElement.attr("checked")? true : false;
+        var checked = changedElement.is(":checked")? true : false;
         data[attribute_name] = checked;
         model.set(data);
       });
