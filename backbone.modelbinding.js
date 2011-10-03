@@ -9,7 +9,7 @@
 // ----------------------------
 // Backbone.ModelBinding
 // ----------------------------
-Backbone.ModelBinding = (function(){
+Backbone.ModelBinding = (function(Backbone){
   function handleConventionBindings(view, model){
     var conventions = Backbone.ModelBinding.Conventions;
     for (var conventionName in conventions){
@@ -48,13 +48,13 @@ Backbone.ModelBinding = (function(){
     unbind: function(view){
       handleUnbinding(view, view.model);
     }
-  }
-})();
+  };
+})(Backbone);
 
 // ----------------------------
 // Model Binding Configuration
 // ----------------------------
-Backbone.ModelBinding.Configuration = (function(){
+Backbone.ModelBinding.Configuration = (function(_){
   var bindingAttrConfig = {
 	  text: "id",
 	  textarea: "id",
@@ -103,13 +103,13 @@ Backbone.ModelBinding.Configuration = (function(){
       var bindingAttr = this.getBindingAttr(type);
       return element.attr(bindingAttr);
     }
-  }
-})();
+  };
+})(_);
 
 // ----------------------------
 // Text, Textarea, and Password Bi-Directional Binding Methods
 // ----------------------------
-Backbone.ModelBinding.StandardBinding = (function(){
+Backbone.ModelBinding.StandardBinding = (function(Backbone){
   var methods = {};
 
   methods._getElementType = function(element) {
@@ -117,7 +117,7 @@ Backbone.ModelBinding.StandardBinding = (function(){
     if (type == "input"){
       type = element.attr("type");
       if (type == undefined || type == ''){
-        type = 'text'
+        type = 'text';
       }
     }
     return type;
@@ -171,12 +171,12 @@ Backbone.ModelBinding.StandardBinding = (function(){
   };
 
   return methods;
-})();
+})(Backbone);
 
 // ----------------------------
 // Select Box Bi-Directional Binding Methods
 // ----------------------------
-Backbone.ModelBinding.SelectBoxBinding = (function(){
+Backbone.ModelBinding.SelectBoxBinding = (function(Backbone){
   var methods = {};
 
   methods._modelChange = function(changed_model, val){
@@ -224,12 +224,12 @@ Backbone.ModelBinding.SelectBoxBinding = (function(){
   };
 
   return methods;
-})();
+})(Backbone);
 
 // ----------------------------
 // Radio Button Group Bi-Directional Binding Methods
 // ----------------------------
-Backbone.ModelBinding.RadioGroupBinding = (function(){
+Backbone.ModelBinding.RadioGroupBinding = (function(Backbone){
   var methods = {};
 
   methods._modelChange = function(model, val){
@@ -290,12 +290,12 @@ Backbone.ModelBinding.RadioGroupBinding = (function(){
   };
 
   return methods;
-})();
+})(Backbone);
 
 // ----------------------------
 // Checkbox Bi-Directional Binding Methods
 // ----------------------------
-Backbone.ModelBinding.CheckboxBinding = (function(){
+Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
   var methods = {};
 
   methods._modelChange = function(model, val){
@@ -348,12 +348,12 @@ Backbone.ModelBinding.CheckboxBinding = (function(){
   };
 
   return methods;
-})();
+})(Backbone);
 
 // ----------------------------
 // Data-Bind Binding Methods
 // ----------------------------
-Backbone.ModelBinding.DataBindBinding = (function(){
+Backbone.ModelBinding.DataBindBinding = (function(Backbone, _, $){
   var methods = {};
 
   var dataBindSubstConfig = {
@@ -463,7 +463,7 @@ Backbone.ModelBinding.DataBindBinding = (function(){
   };
 
   return methods;
-})();
+})(Backbone, _, $);
 
 
 // ----------------------------
