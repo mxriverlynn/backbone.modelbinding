@@ -213,6 +213,12 @@ Backbone.ModelBinding.SelectBoxBinding = (function(){
       var attr_value = model.get(attribute_name);
       if (typeof attr_value !== "undefined" && attr_value !== null) {
         element.val(attr_value);
+
+        if (element.val() != attr_value) {
+          var data = {};
+          data[attribute_name] = element.val();
+          model.set(data);
+        }
       }
     });
   };
