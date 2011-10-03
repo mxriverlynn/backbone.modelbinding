@@ -526,6 +526,13 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.3.10
+
+* When binding to a select box and the model has a value not present in the box, reset the model's value to the box's
+* Fix for using Backbone.noConflict(), Backbone was either wrong version or undefined when it was used inside ModelBinding. 
+* Added some missing ;
+* Fix some documentation issues
+
 ### v0.3.9
 
 * fixed an issue with jQuery 1.6.4 determining if check boxes are checked or not
