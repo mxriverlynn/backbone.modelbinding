@@ -17,6 +17,11 @@ AView = Backbone.View.extend({
       <input type='text' id='something'> \
       <div id='showIt'></div>\
       <input type='text' id='name'>\
+      <select id='operating_system'> \
+        <option value='osx'>osx</option> \
+        <option value='windows'>windows</option> \
+        <option value='linux'>linux</option> \
+      </select> \
       <select id='education'> \
         <option value='none'>none</option> \
         <option value='grade_school'>i dun learned at grade skool</option> \
