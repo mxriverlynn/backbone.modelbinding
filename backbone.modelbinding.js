@@ -48,7 +48,7 @@ Backbone.ModelBinding = (function(Backbone){
     unbind: function(view){
       handleUnbinding(view, view.model);
     }
-  }
+  };
 })(Backbone);
 
 // ----------------------------
@@ -103,7 +103,7 @@ Backbone.ModelBinding.Configuration = (function(_){
       var bindingAttr = this.getBindingAttr(type);
       return element.attr(bindingAttr);
     }
-  }
+  };
 })(_);
 
 // ----------------------------
@@ -117,7 +117,7 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
     if (type == "input"){
       type = element.attr("type");
       if (type == undefined || type == ''){
-        type = 'text'
+        type = 'text';
       }
     }
     return type;
