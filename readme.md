@@ -460,6 +460,17 @@ Backbone.ModelBinding.Configuration.configureBindingAttributes({text: "modelAttr
 
 Now all text boxes will update the model property specified in the text box's `modelAttr`.
 
+### Remove Prefix on All Element Binding Attributes
+
+The following will remove `prefixAttr` on all attribute's values:
+
+````
+Backbone.ModelBinding.Configuration.configureBindingAttributesNamePrefix("prefixAttr");
+````
+
+This is usefull when your HTML form elements use your model attribute's names plus a prefix.
+Useful if you will have multiple forms on the same page.
+
 ## Pluggable Conventions
 
 The convention based bindings are pluggable. Each of the existing form input types can have it's
