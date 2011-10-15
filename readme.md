@@ -430,7 +430,7 @@ If the same convention needs to be used throughout an application, and not just 
 view, the configuration can be set at a global level:
 
 ````
-Backbone.ModelBinding.Configuration.configureAllBindingAttributes({all: "class"});
+Backbone.ModelBinding.Configuration.configureAllBindingAttributes("class");
 ````
 
 #### Override Individual Element Binding Attributes
