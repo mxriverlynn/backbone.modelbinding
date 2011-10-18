@@ -64,6 +64,8 @@ Backbone.ModelBinding.Configuration = (function(_){
 	  select: "id"
   };
 
+  var bindingAttrsNamePrefix = "";
+
   return {
     configureBindingAttributes: function(options){
       if (options) {
@@ -86,6 +88,11 @@ Backbone.ModelBinding.Configuration = (function(_){
       bindingAttrConfig.select = attribute;
     },
 
+    configureBindingAttributesNamePrefix: function(prefix){
+      this.storeBindingAttrConfig();
+      bindingAttrsNamePrefix = prefix;
+    },
+
     storeBindingAttrConfig: function(){
       this._config = _.clone(bindingAttrConfig);
     },
@@ -101,7 +108,9 @@ Backbone.ModelBinding.Configuration = (function(_){
 
     getBindingValue: function(element, type){
       var bindingAttr = this.getBindingAttr(type);
-      return element.attr(bindingAttr);
+        var attrValue = element.attr(bindingAttr);
+        attrValue = attrValue.substring(bindingAttrsNamePrefix.length, attrValue.length);
+        return attrValue;
     }
   };
 })(_);
