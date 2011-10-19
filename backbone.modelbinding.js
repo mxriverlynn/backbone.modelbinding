@@ -60,10 +60,22 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
 // Model Binding Configuration
 // ----------------------------
 Backbone.ModelBinding.Configuration = function(options){
-  this.bindingAttrConfig = _.extend({}, 
-    Backbone.ModelBinding.Configuration.bindindAttrConfig, 
+  this.bindingAttrConfig = {};
+
+  _.extend(this.bindingAttrConfig, 
+    Backbone.ModelBinding.Configuration.bindindAttrConfig,
     options
   );
+
+  if (this.bindingAttrConfig.all){
+    var attr = this.bindingAttrConfig.all;
+    delete this.bindingAttrConfig.all;
+    for (var configAttr in this.bindingAttrConfig){
+      if (this.bindingAttrConfig.hasOwnProperty(configAttr)){
+        this.bindingAttrConfig[configAttr] = attr;
+      }
+    }
+  }
 
   this.getBindingAttr = function(type){ 
     return this.bindingAttrConfig[type]; 
