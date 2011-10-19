@@ -101,16 +101,17 @@ Backbone.ModelBinding.Configuration.configureBindingAttributes = function(option
     this.configureAllBindingAttributes(options.all);
     delete options.all;
   }
-  _.extend(this.bindingAttrConfig, options);
+  _.extend(Backbone.ModelBinding.Configuration.bindindAttrConfig, options);
 };
 
 Backbone.ModelBinding.Configuration.configureAllBindingAttributes = function(attribute){
-  this.bindingAttrConfig.text = attribute;
-  this.bindingAttrConfig.textarea = attribute;
-  this.bindingAttrConfig.password = attribute;
-  this.bindingAttrConfig.radio = attribute;
-  this.bindingAttrConfig.checkbox = attribute;
-  this.bindingAttrConfig.select = attribute;
+  var config = Backbone.ModelBinding.Configuration.bindindAttrConfig;
+  config.text = attribute;
+  config.textarea = attribute;
+  config.password = attribute;
+  config.radio = attribute;
+  config.checkbox = attribute;
+  config.select = attribute;
 };
 
 // ----------------------------
@@ -311,7 +312,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
     view.$(selector).each(function(index){
       var element = view.$(this);
       var attribute_name = config.getBindingValue(element, 'checkbox');
-      model.unbind("change:" + attribute_name, modelBindier.checkboxModelChange);
+      model.unbind("change:" + attribute_name, modelBinder.checkboxModelChange);
     });
   };
 

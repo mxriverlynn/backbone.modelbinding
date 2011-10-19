@@ -33,8 +33,4 @@ describe("Backbone.noConflict", function(){
   it("should use local copy of backbone when binding", function(){
     this.localBackbone.ModelBinding.bind(this.view);
   });
-  
-  it("should use local copy of _ when configuring", function(){
-    this.localBackbone.ModelBinding.Configuration.storeBindingAttrConfig();
-  });
 });
