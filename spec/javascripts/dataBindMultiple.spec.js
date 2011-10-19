@@ -1,4 +1,4 @@
-xdescribe("data-bind multiple attributes", function(){
+describe("data-bind multiple attributes", function(){
   beforeEach(function(){
     this.model = new AModel({
       url: "/foo/bar.gif",
