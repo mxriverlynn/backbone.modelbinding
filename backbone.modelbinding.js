@@ -15,8 +15,7 @@ Backbone.ModelBinding = (function(_){
     version: "0.4.0",
 
     bind: function(view, options){
-      var config = new Backbone.ModelBinding.Configuration(options);
-      view.modelBinder = new Backbone.ModelBinding.ModelBinder(view, config);
+      view.modelBinder = new Backbone.ModelBinding.ModelBinder(view, options);
       view.modelBinder.bind();
     },
 
@@ -28,7 +27,8 @@ Backbone.ModelBinding = (function(_){
   };
 })(_);
 
-Backbone.ModelBinding.ModelBinder = function(view, config){
+Backbone.ModelBinding.ModelBinder = function(view, options){
+  this.config = new Backbone.ModelBinding.Configuration(options);
   this.modelBindings = [];
   this.elementBindings = [];
 
@@ -39,7 +39,7 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
         var conventionElement = conventions[conventionName];
         var handler = conventionElement.handler;
         var conventionSelector = conventionElement.selector;
-        handler.bind.call(this, conventionSelector, view, view.model, config);
+        handler.bind.call(this, conventionSelector, view, view.model, this.config);
       }
     }
   }
