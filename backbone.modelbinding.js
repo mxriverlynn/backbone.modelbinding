@@ -449,5 +449,5 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   };
 
   return modelBinding;
-})(Backbone, _, $);
+})(Backbone, _, jQuery);
 
