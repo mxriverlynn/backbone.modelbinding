@@ -548,6 +548,9 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 * Major internal rewrite to facilitate maintenance, new features, etc
 * No public API changes (at least, I hope not!)
+* Correctly unbind HTML element / jQuery events, when calling `unbind`
+* Corrected the `data-bind` method for showing / hiding an element when using the `displayed` and `hidden` settings
+* Corrected the global configuration so that it does not get reset after you call `bind` the first time
 * Now uses an internal object call `ModelBinder`, which is attached to the view that binding occurs on
 * The `ModelBinder` instance stores all of the binding configuration and callbacks for that view, allowing much faster / easier / better unbinding
 
