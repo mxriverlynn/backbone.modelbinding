@@ -70,9 +70,9 @@ Backbone.ModelBinding.Configuration = function(options){
   if (this.bindingAttrConfig.all){
     var attr = this.bindingAttrConfig.all;
     delete this.bindingAttrConfig.all;
-    for (var configAttr in this.bindingAttrConfig){
-      if (this.bindingAttrConfig.hasOwnProperty(configAttr)){
-        this.bindingAttrConfig[configAttr] = attr;
+    for (var inputType in this.bindingAttrConfig){
+      if (this.bindingAttrConfig.hasOwnProperty(inputType)){
+        this.bindingAttrConfig[inputType] = attr;
       }
     }
   }
@@ -120,7 +120,7 @@ Backbone.ModelBinding.Configuration.configureAllBindingAttributes = function(att
 Backbone.ModelBinding.StandardBinding = (function(Backbone){
   var methods = {};
 
-  methods._getElementType = function(element) {
+  var _getElementType = function(element) {
     var type = element[0].tagName.toLowerCase();
     if (type == "input"){
       type = element.attr("type");
@@ -131,37 +131,32 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
     return type;
   };
 
-  methods._modelChange = function(changed_model, val){
-    this.element.val(val);
-  };
-
   methods.unbind = function(selector, view, model, config){
+    var modelBinder = this;
+
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var attribute_name = config.getBindingValue(element, methods._getElementType(element));
+      var attribute_name = config.getBindingValue(element, _getElementType(element));
       // unbind the model changes to the form elements
-      model.unbind("change:" + attribute_name, methods._modelChange);
+      model.unbind("change:" + attribute_name, modelBinder.standardModelChange);
     });
   };
 
   methods.bind = function(selector, view, model, config){
+    var modelBinder = this;
+
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var attribute_name = config.getBindingValue(element, methods._getElementType(element));
-      // bind the model changes to the form elements
-      // force "this" to be our config object, so i can
-      // get the data that i need, during the callback.
-      // i have to do it this way because the unbinding
-      // that occurs a few lines above, in the "unbind" method
-      // requires the same instance of the callback method as
-      // was passed into the bind method here. however, i need
-      // more data in the callback than i'm able to get because
-      // it's a callback, limited to the model's "change" event.
-      // by passing in "config" as "this" for the callback, i
-      // can get all the data i need. you'll see this pattern
-      // repeated through the rest of the binding objects.
-      var context = {element: element};
-      model.bind("change:" + attribute_name, methods._modelChange, context);
+      var elementType = _getElementType(element);
+      var attribute_name = config.getBindingValue(element, elementType);
+
+      if (!modelBinder.standardModelChange){
+        modelBinder.standardModelChange = function(changed_model, val){
+          element.val(val);
+        };
+      }
+
+      model.bind("change:" + attribute_name, modelBinder.standardModelChange);
 
       // bind the form changes to the model
       element.bind("change", function(ev){
