@@ -29,6 +29,9 @@ Backbone.ModelBinding = (function(_){
 })(_);
 
 Backbone.ModelBinding.ModelBinder = function(view, config){
+  this.modelBindings = [];
+  this.elementBindings = [];
+
   this.bind = function(){
     var conventions = Backbone.ModelBinding.Conventions;
     for (var conventionName in conventions){
@@ -42,17 +45,15 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
   }
 
   this.unbind = function(){
-    var conventions = Backbone.ModelBinding.Conventions;
-    for (var conventionName in conventions){
-      if (conventions.hasOwnProperty(conventionName)){
-        var conventionElement = conventions[conventionName];
-        var handler = conventionElement.handler;
-        var conventionSelector = conventionElement.selector;
-        if (handler.unbind){
-          handler.unbind.call(this, conventionSelector, view, view.model, config);
-        }
-      }
-    }
+    // unbind the model bindings
+    _.each(this.modelBindings, function(binding){
+      binding.model.unbind(binding.eventName, binding.callback);
+    });
+
+    // unbind the html element bindings
+    _.each(this.elementBindings, function(binding){
+      binding.element.unbind(binding.eventName, binding.callback);
+    });
   }
 }
 
@@ -132,14 +133,6 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
   };
 
   methods.unbind = function(selector, view, model, config){
-    var modelBinder = this;
-
-    view.$(selector).each(function(index){
-      var element = view.$(this);
-      var attribute_name = config.getBindingValue(element, _getElementType(element));
-      // unbind the model changes to the form elements
-      model.unbind("change:" + attribute_name, modelBinder.standardModelChange);
-    });
   };
 
   methods.bind = function(selector, view, model, config){
@@ -150,20 +143,20 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
       var elementType = _getElementType(element);
       var attribute_name = config.getBindingValue(element, elementType);
 
-      if (!modelBinder.standardModelChange){
-        modelBinder.standardModelChange = function(changed_model, val){
-          element.val(val);
-        };
-      }
-
-      model.bind("change:" + attribute_name, modelBinder.standardModelChange);
+      // bind the model change event for this attribute
+      var eventName = "change:" + attribute_name;
+      var standardModelChange = function(changed_model, val){ element.val(val); };
+      model.bind(eventName, standardModelChange);
+      modelBinder.modelBindings.push({model: model, eventName: eventName, callback: standardModelChange});
 
       // bind the form changes to the model
-      element.bind("change", function(ev){
+      var inputChange = function(ev){
         var data = {};
         data[attribute_name] = view.$(ev.target).val();
         model.set(data);
-      });
+      };
+      element.bind("change", inputChange);
+      modelBinder.elementBindings.push({element: element, eventName: "change", callback: inputChange});
 
       // set the default value on the form, from the model
       var attr_value = model.get(attribute_name);
