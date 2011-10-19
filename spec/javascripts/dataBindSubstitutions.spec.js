@@ -1,4 +1,4 @@
-describe("default data-bind substitutions", function(){
+xdescribe("default data-bind substitutions", function(){
   beforeEach(function(){
     this.model = new AModel({
       doctor: "Seuss",
@@ -43,7 +43,7 @@ describe("default data-bind substitutions", function(){
 
 });
 
-describe("configured data-bind substitutions", function(){
+xdescribe("configured data-bind substitutions", function(){
   beforeEach(function(){
     Backbone.ModelBinding.Configuration.dataBindSubst({
       text: "text subst",
@@ -84,7 +84,7 @@ describe("configured data-bind substitutions", function(){
 
 });
 
-describe("resetting the data bind substitutions", function(){
+xdescribe("resetting the data bind substitutions", function(){
   beforeEach(function(){
     Backbone.ModelBinding.Configuration.dataBindSubst({
       text: "text subst",

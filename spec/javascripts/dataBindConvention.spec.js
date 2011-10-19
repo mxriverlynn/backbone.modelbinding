@@ -1,4 +1,4 @@
-describe("data-bind conventions", function(){
+xdescribe("data-bind conventions", function(){
   beforeEach(function(){
     this.model = new AModel({
       villain: "mrMonster",
