@@ -335,8 +335,6 @@ Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
 // Data-Bind Binding Methods
 // ----------------------------
 Backbone.ModelBinding.DataBindBinding = (function(Backbone, _, $){
-  var methods = {};
-
   var dataBindSubstConfig = {
     "default": ""
   };
@@ -369,11 +367,7 @@ Backbone.ModelBinding.DataBindBinding = (function(Backbone, _, $){
     return returnValue;
   };
 
-  methods._modelChange = function(model, val){
-    methods._setOnElement(this.element, this.elementAttr, val);
-  };
-
-  methods._setOnElement = function(element, attr, val){
+  setOnElement = function(element, attr, val){
     var valBefore = val;
     val = Backbone.ModelBinding.Configuration.getDataBindSubst(attr, val);
     switch(attr){
@@ -397,7 +391,7 @@ Backbone.ModelBinding.DataBindBinding = (function(Backbone, _, $){
     }
   };
 
-  methods._splitBindingAttr = function(element)
+  splitBindingAttr = function(element)
   {
     var dataBindConfigList = [];
     var databindList = element.attr("data-bind").split(";");
@@ -415,31 +409,26 @@ Backbone.ModelBinding.DataBindBinding = (function(Backbone, _, $){
     return dataBindConfigList;
   };
 
-  methods.bind = function(selector, view, model){
+  var methods = {};
+
+  methods.bind = function(selector, view, model, config){
+    var modelBinder = this;
+
     view.$(selector).each(function(index){
       var element = view.$(this);
-      var databindList = methods._splitBindingAttr(element);
+      var databindList = splitBindingAttr(element);
 
       _.each(databindList, function(databind){
-        var context = {
-          element: element,
-          elementAttr: databind.elementAttr
+        var modelChange = function(model, val){
+          setOnElement(element, databind.elementAttr, val);
         };
-        model.bind("change:" + databind.modelAttr, methods._modelChange, context);
+
+        modelBinder.registerModelBinding(model, databind.modelAttr, modelChange);
 
         // set default on data-bind element
-        methods._setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
+        setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
       });
-    });
-  };
 
-  methods.unbind = function(selector, view, model){
-    view.$(selector).each(function(index){
-      var element = view.$(this);
-      var databindList = methods._splitBindingAttr(element);
-      _.each(databindList, function(databind){
-        model.unbind("change:" + databind.modelAttr, methods._modelChange);
-      });
     });
   };
 
@@ -457,5 +446,5 @@ Backbone.ModelBinding.Conventions = {
   radio: {selector: "input:radio", handler: Backbone.ModelBinding.RadioGroupBinding},
   checkbox: {selector: "input:checkbox", handler: Backbone.ModelBinding.CheckboxBinding},
   select: {selector: "select", handler: Backbone.ModelBinding.SelectBoxBinding},
-  //databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
+  databind: { selector: "*[data-bind]", handler: Backbone.ModelBinding.DataBindBinding}
 };
