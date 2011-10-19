@@ -61,16 +61,18 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
 // ----------------------------
 Backbone.ModelBinding.Configuration = function(options){
   this.bindingAttrConfig = _.extend({}, 
-    Backbone.ModelBinding.Configuration.bindingAttrconfig, 
+    Backbone.ModelBinding.Configuration.bindindAttrConfig, 
     options
   );
 
-  this.getBindingAttr = function(type){ return this.bindingAttrConfig[type]; },
+  this.getBindingAttr = function(type){ 
+    return this.bindingAttrConfig[type]; 
+  };
 
   this.getBindingValue = function(element, type){
     var bindingAttr = this.getBindingAttr(type);
     return element.attr(bindingAttr);
-  }
+  };
 };
 
 Backbone.ModelBinding.Configuration.bindindAttrConfig = {
@@ -306,6 +308,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
 
     view.$(selector).each(function(index){
       var element = view.$(this);
+      var bindingAttr = config.getBindingAttr('checkbox');
       var attribute_name = config.getBindingValue(element, 'checkbox');
 
       // bind the model changes to the form elements
