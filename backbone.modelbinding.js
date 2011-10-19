@@ -380,10 +380,10 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           element.attr("disabled", !val);
           break;
         case "displayed":
-          element.css("display", val ? 'block' : 'none' );
+          element[val? "show" : "hide"]();
           break;
         case "hidden":
-          element.css("display", val ? 'none' : 'block' );
+          element[val? "hide" : "show"]();
           break;
         default:
           element.attr(attr, val);

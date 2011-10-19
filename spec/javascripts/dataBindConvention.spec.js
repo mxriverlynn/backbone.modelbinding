@@ -117,7 +117,7 @@ describe("data-bind conventions", function(){
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el.css("display")).toBe("block");
+      expect(this.el).toBeHidden();
     });
   });
   
@@ -128,12 +128,12 @@ describe("data-bind conventions", function(){
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
-      expect(this.el.css("display")).toBe("block");
+      expect(this.el.css("display")).not.toBe("none");
     });
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el.css("display")).toBe("none");
+      expect(this.el).toBeHidden();
     });
   });
 });
