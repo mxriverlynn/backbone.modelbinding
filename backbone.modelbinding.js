@@ -36,7 +36,7 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
         var conventionElement = conventions[conventionName];
         var handler = conventionElement.handler;
         var conventionSelector = conventionElement.selector;
-        handler.bind(conventionSelector, view, view.model, config);
+        handler.bind.call(this, conventionSelector, view, view.model, config);
       }
     }
   }
@@ -49,7 +49,7 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
         var handler = conventionElement.handler;
         var conventionSelector = conventionElement.selector;
         if (handler.unbind){
-          handler.unbind(conventionSelector, view, view.model, config);
+          handler.unbind.call(this, conventionSelector, view, view.model, config);
         }
       }
     }
@@ -64,17 +64,6 @@ Backbone.ModelBinding.Configuration = function(options){
     Backbone.ModelBinding.Configuration.bindingAttrconfig, 
     options
   );
-
-  this.configureBindingAttributes = function(options){
-    if (options) {
-      this.storeBindingAttrConfig();
-      if (options.all){
-        this.configureAllBindingAttributes(options.all);
-        delete options.all;
-      }
-      _.extend(this.bindingAttrConfig, options);
-    }
-  },
 
   this.getBindingAttr = function(type){ return this.bindingAttrConfig[type]; },
 
@@ -93,7 +82,15 @@ Backbone.ModelBinding.Configuration.bindindAttrConfig = {
   select: "id"
 };
 
-Backbone.ModelBinding.configureAllBindingAttributes = function(attribute){
+Backbone.ModelBinding.Configuration.configureBindingAttributes = function(options){
+  if (options.all){
+    this.configureAllBindingAttributes(options.all);
+    delete options.all;
+  }
+  _.extend(this.bindingAttrConfig, options);
+};
+
+Backbone.ModelBinding.Configuration.configureAllBindingAttributes = function(attribute){
   this.bindingAttrConfig.text = attribute;
   this.bindingAttrConfig.textarea = attribute;
   this.bindingAttrConfig.password = attribute;
@@ -294,31 +291,34 @@ Backbone.ModelBinding.RadioGroupBinding = (function(Backbone){
 Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
   var methods = {};
 
-  methods._modelChange = function(model, val){
-    if (val){
-      this.element.attr("checked", "checked");
-    }
-    else{
-      this.element.removeAttr("checked");
-    }
-  };
-
   methods.unbind = function(selector, view, model, config){
+    var modelBinder = this;
+
     view.$(selector).each(function(index){
       var element = view.$(this);
       var attribute_name = config.getBindingValue(element, 'checkbox');
-      model.unbind("change:" + attribute_name, methods._modelChange);
+      model.unbind("change:" + attribute_name, modelBindier.checkboxModelChange);
     });
   };
 
   methods.bind = function(selector, view, model, config){
+    var modelBinder = this;
+
     view.$(selector).each(function(index){
       var element = view.$(this);
       var attribute_name = config.getBindingValue(element, 'checkbox');
 
       // bind the model changes to the form elements
-      var context = {element: element};
-      model.bind("change:" + attribute_name, methods._modelChange, context);
+      modelBinder.checkboxModelChange = function(model, val){
+        if (val){
+          element.attr("checked", "checked");
+        }
+        else{
+          element.removeAttr("checked");
+        }
+      };
+
+      model.bind("change:" + attribute_name, modelBinder.checkboxModelChange);
 
       // bind the form changes to the model
       element.bind("change", function(ev){
