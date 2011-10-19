@@ -55,6 +55,19 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
       binding.element.unbind(binding.eventName, binding.callback);
     });
   }
+
+  this.registerModelBinding = function(model, attribute_name, callback){
+    // bind the model changes to the form elements
+    var eventName = "change:" + attribute_name;
+    model.bind(eventName, callback);
+    this.modelBindings.push({model: model, eventName: eventName, callback: callback});
+  }
+
+  this.registerElementBinding = function(element, callback){
+    // bind the form changes to the model
+    element.bind("change", callback);
+    this.elementBindings.push({element: element, eventName: "change", callback: callback});
+  }
 }
 
 // ----------------------------
@@ -132,9 +145,6 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
     return type;
   };
 
-  methods.unbind = function(selector, view, model, config){
-  };
-
   methods.bind = function(selector, view, model, config){
     var modelBinder = this;
 
@@ -143,20 +153,16 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
       var elementType = _getElementType(element);
       var attribute_name = config.getBindingValue(element, elementType);
 
-      // bind the model change event for this attribute
-      var eventName = "change:" + attribute_name;
-      var standardModelChange = function(changed_model, val){ element.val(val); };
-      model.bind(eventName, standardModelChange);
-      modelBinder.modelBindings.push({model: model, eventName: eventName, callback: standardModelChange});
+      var modelChange = function(changed_model, val){ element.val(val); };
 
-      // bind the form changes to the model
-      var inputChange = function(ev){
+      var elementChange = function(ev){
         var data = {};
         data[attribute_name] = view.$(ev.target).val();
         model.set(data);
       };
-      element.bind("change", inputChange);
-      modelBinder.elementBindings.push({element: element, eventName: "change", callback: inputChange});
+
+      modelBinder.registerModelBinding(model, attribute_name, modelChange);
+      modelBinder.registerElementBinding(element, elementChange);
 
       // set the default value on the form, from the model
       var attr_value = model.get(attribute_name);
@@ -175,35 +181,25 @@ Backbone.ModelBinding.StandardBinding = (function(Backbone){
 Backbone.ModelBinding.SelectBoxBinding = (function(Backbone){
   var methods = {};
 
-  methods._modelChange = function(changed_model, val){
-    this.element.val(val);
-  };
-
-  methods.unbind = function(selector, view, model, config){
-    view.$(selector).each(function(index){
-      var element = view.$(this);
-      var attribute_name = config.getBindingValue(element, 'select');
-      model.unbind("change:" + attribute_name, methods._modelChange);
-    });
-  };
-
   methods.bind = function(selector, view, model, config){
+    var modelBinder = this;
+
     view.$(selector).each(function(index){
       var element = view.$(this);
       var attribute_name = config.getBindingValue(element, 'select');
 
-      // bind the model changes to the form elements
-      var context = {element: element};
-      model.bind("change:" + attribute_name, methods._modelChange, context);
+      var modelChange = function(changed_model, val){ element.val(val); };
 
-      // bind the form changes to the model
-      element.bind("change", function(ev){
+      var elementChange = function(ev){
         var data = {};
         var targetEl = view.$(ev.target);
         data[attribute_name] = targetEl.val();
         data[attribute_name + "_text"] = targetEl.find(":selected").text();
         model.set(data);
-      });
+      }
+
+      modelBinder.registerModelBinding(model, attribute_name, modelChange);
+      modelBinder.registerElementBinding(element, elementChange);
 
       // set the default value on the form, from the model
       var attr_value = model.get(attribute_name);
@@ -228,25 +224,9 @@ Backbone.ModelBinding.SelectBoxBinding = (function(Backbone){
 Backbone.ModelBinding.RadioGroupBinding = (function(Backbone){
   var methods = {};
 
-  methods._modelChange = function(model, val){
-    var value_selector = "input[type=radio][" + this.bindingAttr + "=" + this.group_name + "][value=" + val + "]";
-    this.view.$(value_selector).attr("checked", "checked");
-  };
-
-  methods.unbind = function(selector, view, model, config){
-    var foundElements = [];
-    view.$(selector).each(function(index){
-      var element = view.$(this);
-      var group_name = config.getBindingValue(element, 'radio');
-      if (!foundElements[group_name]) {
-        foundElements[group_name] = true;
-        var bindingAttr = config.getBindingAttr('radio');
-        model.unbind("change:" + group_name, methods._modelChange);
-      }
-    });
-  };
-
   methods.bind = function(selector, view, model, config){
+    var modelBinder = this;
+
     var foundElements = [];
     view.$(selector).each(function(index){
       var element = view.$(this);
@@ -256,23 +236,26 @@ Backbone.ModelBinding.RadioGroupBinding = (function(Backbone){
         foundElements[group_name] = true;
         var bindingAttr = config.getBindingAttr('radio');
 
-        // bind the model changes to the form elements
-        var context = {
-          bindingAttr: bindingAttr,
-          group_name: group_name,
-          view: view
+        var modelChange = function(model, val){
+          var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + val + "]";
+          view.$(value_selector).attr("checked", "checked");
         };
-        model.bind("change:" + group_name, methods._modelChange, context);
+        modelBinder.registerModelBinding(model, group_name, modelChange);
 
         // bind the form changes to the model
-        var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
-        view.$(group_selector).bind("change", function(ev){
+        var elementChange = function(ev){
           var element = view.$(ev.currentTarget);
           if (element.is(":checked")){
             var data = {};
             data[group_name] = element.val();
             model.set(data);
           }
+        };
+
+        var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
+        view.$(group_selector).each(function(){
+          var groupEl = $(this);
+          modelBinder.registerElementBinding(groupEl, elementChange);
         });
 
         // set the default value on the form, from the model
@@ -294,16 +277,6 @@ Backbone.ModelBinding.RadioGroupBinding = (function(Backbone){
 Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
   var methods = {};
 
-  methods.unbind = function(selector, view, model, config){
-    var modelBinder = this;
-
-    view.$(selector).each(function(index){
-      var element = view.$(this);
-      var attribute_name = config.getBindingValue(element, 'checkbox');
-      model.unbind("change:" + attribute_name, modelBinder.checkboxModelChange);
-    });
-  };
-
   methods.bind = function(selector, view, model, config){
     var modelBinder = this;
 
@@ -312,8 +285,7 @@ Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
       var bindingAttr = config.getBindingAttr('checkbox');
       var attribute_name = config.getBindingValue(element, 'checkbox');
 
-      // bind the model changes to the form elements
-      modelBinder.checkboxModelChange = function(model, val){
+      var modelChange = function(model, val){
         if (val){
           element.attr("checked", "checked");
         }
@@ -322,16 +294,16 @@ Backbone.ModelBinding.CheckboxBinding = (function(Backbone){
         }
       };
 
-      model.bind("change:" + attribute_name, modelBinder.checkboxModelChange);
-
-      // bind the form changes to the model
-      element.bind("change", function(ev){
+      var elementChange = function(ev){
         var data = {};
         var changedElement = view.$(ev.target);
         var checked = changedElement.is(":checked")? true : false;
         data[attribute_name] = checked;
         model.set(data);
-      });
+      };
+
+      modelBinder.registerModelBinding(model, attribute_name, modelChange);
+      modelBinder.registerElementBinding(element, elementChange);
 
       // set the default value on the form, from the model
       var attr_exists = model.attributes.hasOwnProperty(attribute_name);
