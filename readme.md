@@ -1,10 +1,28 @@
-# Backbone.ModelBinding
+# About Backbone.ModelBinding
 
-Convention-based, awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone)
+Convention-based, awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone),
+inspired by [Brad Phelan](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/),
+[Knockout.js](http://knockoutjs.com/) ' data-binding capabilities, 
+and [Brandon Satrom](http://userinexperience.com/?p=633)'s work with Knockout.
 
-Inspired by [Brad Phelan](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/),
-Knockout.js' data-binding capabilities, and [Brandon Satrom](http://userinexperience.com/?p=633)'s 
-work with Knockout.
+This plugin provides a simple, convention based mechanism to create bi-directional
+binding between your HTML form input elements and your Backbone models. 
+
+Instead of writing the same boiler plate code to read from your form inputs and
+populate the model attributes, for every input on your form, you can make a 
+single call to `Backbone.ModelBinding.bind(myView)` and have all of your inputs
+automatically wired up. Any change you make to a forn input will populate a
+corresponding model attribute for you. The binding is bi-directional, as well.
+This means that changes to your underlying model will be propagated to your
+form inputs without having to manually bind to your model's `change` events.
+
+If you're looking for Knockout.js-style `data-bind` attributes, for Backbone,
+then this is the plugin for you. Backbone.ModelBinding provides some very basic
+support for `data-bind` attributes, allowing your Backbone model `change` events
+to modify nearly any HTML element on your page. Whether it's updating the text
+of a `<div>`, or changing the css class of an `<img>` tag, the `data-bind` 
+support provides a very powerful and flexible means of creating a very rich
+user experience.
 
 ## Getting Started
 
@@ -526,6 +544,13 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
 
+### v0.4.0
+
+* Major internal rewrite to facilitate maintenance, new features, etc
+* No public API changes (at least, I hope not!)
+* Now uses an internal object call `ModelBinder`, which is attached to the view that binding occurs on
+* The `ModelBinder` instance stores all of the binding configuration and callbacks for that view, allowing much faster / easier / better unbinding
+
 ### v0.3.10
 
 * When binding to a select box and the model has a value not present in the box, reset the model's value to the box's
@@ -535,8 +560,8 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ### v0.3.9
 
-* fixed an issue with jQuery 1.6.4 determining if check boxes are checked or not
-* minor internal clean up
+* Fixed an issue with jQuery 1.6.4 determining if check boxes are checked or not
+* Minor internal clean up
 
 ### v0.3.8
 
@@ -587,9 +612,9 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ### v0.2.4
 
-* data-bind will bind the model's value immediately instead of waiting for the model's value to change
-* support `enabled` functionality for data-bind: `data-bind="enabled isValid"`
-* documented existing support for data-bind `disabled`: `data-bind="disabled invalid"`
+* Data-bind will bind the model's value immediately instead of waiting for the model's value to change
+* Support `enabled` functionality for data-bind: `data-bind="enabled isValid"`
+* Documented existing support for data-bind `disabled`: `data-bind="disabled invalid"`
 
 ### v0.2.3
 
