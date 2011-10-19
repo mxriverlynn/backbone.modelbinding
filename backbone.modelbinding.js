@@ -60,14 +60,10 @@ Backbone.ModelBinding.ModelBinder = function(view, config){
 // Model Binding Configuration
 // ----------------------------
 Backbone.ModelBinding.Configuration = function(options){
-  this.bindingAttrConfig = _.extend({}, {
-	  text: "id",
-	  textarea: "id",
-	  password: "id",
-	  radio: "name",
-	  checkbox: "id",
-	  select: "id"
-  }, options);
+  this.bindingAttrConfig = _.extend({}, 
+    Backbone.ModelBinding.Configuration.bindingAttrconfig, 
+    options
+  );
 
   this.configureBindingAttributes = function(options){
     if (options) {
@@ -80,33 +76,30 @@ Backbone.ModelBinding.Configuration = function(options){
     }
   },
 
-  this.configureAllBindingAttributes = function(attribute){
-    this.storeBindingAttrConfig();
-    this.bindingAttrConfig.text = attribute;
-    this.bindingAttrConfig.textarea = attribute;
-    this.bindingAttrConfig.password = attribute;
-    this.bindingAttrConfig.radio = attribute;
-    this.bindingAttrConfig.checkbox = attribute;
-    this.bindingAttrConfig.select = attribute;
-  },
-
-  this.storeBindingAttrConfig = function(){
-    this._config = _.clone(this.bindingAttrConfig);
-  },
-
-  this.restoreBindingAttrConfig = function(){
-    if (this._config) {
-      this.bindingAttrConfig = this._config;
-      delete this._config;
-    }
-  },
-
   this.getBindingAttr = function(type){ return this.bindingAttrConfig[type]; },
 
   this.getBindingValue = function(element, type){
     var bindingAttr = this.getBindingAttr(type);
     return element.attr(bindingAttr);
   }
+};
+
+Backbone.ModelBinding.Configuration.bindindAttrConfig = {
+  text: "id",
+  textarea: "id",
+  password: "id",
+  radio: "name",
+  checkbox: "id",
+  select: "id"
+};
+
+Backbone.ModelBinding.configureAllBindingAttributes = function(attribute){
+  this.bindingAttrConfig.text = attribute;
+  this.bindingAttrConfig.textarea = attribute;
+  this.bindingAttrConfig.password = attribute;
+  this.bindingAttrConfig.radio = attribute;
+  this.bindingAttrConfig.checkbox = attribute;
+  this.bindingAttrConfig.select = attribute;
 };
 
 // ----------------------------
