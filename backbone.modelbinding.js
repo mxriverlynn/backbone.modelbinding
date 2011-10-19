@@ -45,14 +45,14 @@ Backbone.ModelBinding.ModelBinder = function(view, options){
   }
 
   this.unbind = function(){
-    // unbind the model bindings
-    _.each(this.modelBindings, function(binding){
-      binding.model.unbind(binding.eventName, binding.callback);
-    });
-
     // unbind the html element bindings
     _.each(this.elementBindings, function(binding){
       binding.element.unbind(binding.eventName, binding.callback);
+    });
+
+    // unbind the model bindings
+    _.each(this.modelBindings, function(binding){
+      binding.model.unbind(binding.eventName, binding.callback);
     });
   }
 
@@ -99,6 +99,7 @@ Backbone.ModelBinding.Configuration = function(options){
     var bindingAttr = this.getBindingAttr(type);
     return element.attr(bindingAttr);
   };
+
 };
 
 Backbone.ModelBinding.Configuration.bindindAttrConfig = {
@@ -108,6 +109,14 @@ Backbone.ModelBinding.Configuration.bindindAttrConfig = {
   radio: "name",
   checkbox: "id",
   select: "id"
+};
+
+Backbone.ModelBinding.Configuration.store = function(){
+  Backbone.ModelBinding.Configuration.originalConfig = _.clone(Backbone.ModelBinding.Configuration.bindindAttrConfig);
+};
+
+Backbone.ModelBinding.Configuration.restore = function(){
+  Backbone.ModelBinding.Configuration.bindindAttrConfig = Backbone.ModelBinding.Configuration.originalConfig;
 };
 
 Backbone.ModelBinding.Configuration.configureBindingAttributes = function(options){

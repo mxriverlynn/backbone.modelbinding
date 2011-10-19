@@ -1,5 +1,7 @@
 describe("global configure all binding attributes", function(){
   beforeEach(function(){
+    Backbone.ModelBinding.Configuration.store();
+
     this.model = new AModel({
       name: "some dude",
       education: "graduate",
@@ -10,6 +12,10 @@ describe("global configure all binding attributes", function(){
     Backbone.ModelBinding.Configuration.configureAllBindingAttributes("class");
     this.view = new GlobalAllBindingAttributesView({model: this.model});
     this.view.render();
+  });
+
+  afterEach(function(){
+    Backbone.ModelBinding.Configuration.restore();
   });
 
   describe("text element binding using configurable attribute", function(){
