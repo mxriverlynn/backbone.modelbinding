@@ -388,6 +388,14 @@ The following form input types are supported by the form convention binder:
 * select 
 * radio button groups
 
+HTML5
+* number
+* range
+* email
+* url
+* tel
+* search
+
 Radio buttons are group are assumed to be grouped by the `name` attribute of the 
 radio button items. 
 
