@@ -107,7 +107,14 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     password: "id",
     radio: "name",
     checkbox: "id",
-    select: "id"
+    select: "id",
+    number: "id",
+    range: "id",
+    tel: "id",
+    search: "id",
+    url: "id",
+    email: "id"
+
   };
 
   modelBinding.Configuration.store = function(){
@@ -134,6 +141,12 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     config.radio = attribute;
     config.checkbox = attribute;
     config.select = attribute;
+    config.number = attribute;
+    config.range = attribute;
+    config.tel = attribute;
+    config.search = attribute;
+    config.url = attribute;
+    config.email = attribute;
   };
 
   // ----------------------------
@@ -445,7 +458,14 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     radio: {selector: "input:radio", handler: RadioGroupBinding},
     checkbox: {selector: "input:checkbox", handler: CheckboxBinding},
     select: {selector: "select", handler: SelectBoxBinding},
-    databind: { selector: "*[data-bind]", handler: DataBindBinding}
+    databind: { selector: "*[data-bind]", handler: DataBindBinding},
+    // HTML5 input
+    number: {selector: "input[type=number]", handler: StandardBinding},
+    range: {selector: "input[type=range]", handler: StandardBinding},
+    tel: {selector: "input[type=tel]", handler: StandardBinding},
+    search: {selector: "input[type=search]", handler: StandardBinding},
+    url: {selector: "input[type=url]", handler: StandardBinding},
+    email: {selector: "input[type=email]", handler: StandardBinding}
   };
 
   return modelBinding;
