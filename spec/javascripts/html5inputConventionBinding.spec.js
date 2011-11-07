@@ -36,10 +36,10 @@ describe("textbox convention bindings", function(){
   describe("range element binding", function(){
     it("bind view changes to the model's field, by convention of id", function(){
       var el = this.view.$("#range");
-      el.val("09876");
+      el.val("9876");
       el.trigger('change');
 
-      expect(this.model.get('range')).toEqual("09876");
+      expect(this.model.get('range')).toEqual("9876");
     });
 
     it("bind model field changes to the form input, by convention of id", function(){
@@ -50,7 +50,7 @@ describe("textbox convention bindings", function(){
 
     it("binds the model's value to the form field on render", function(){
       var el = this.view.$("#range");
-      expect(el.val()).toEqual("1234");
+      expect(el.val()).toEqual("65");
     });
   });
 
@@ -74,7 +74,7 @@ describe("textbox convention bindings", function(){
       expect(el.val()).toEqual("321-123-1222");
     });
   });
-
+    
    describe("search element binding", function(){
     it("bind view changes to the model's field, by convention of id", function(){
       var el = this.view.$("#search");

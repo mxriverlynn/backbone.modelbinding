@@ -463,7 +463,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     number: {selector: "input[type=number]", handler: StandardBinding},
     range: {selector: "input[type=range]", handler: StandardBinding},
     tel: {selector: "input[type=tel]", handler: StandardBinding},
-    search: {selector: "input[type=seacrh]", handler: StandardBinding},
+    search: {selector: "input[type=search]", handler: StandardBinding},
     url: {selector: "input[type=url]", handler: StandardBinding},
     email: {selector: "input[type=email]", handler: StandardBinding}
   };

@@ -46,7 +46,13 @@ AView = Backbone.View.extend({
       <textarea id='bio'></textarea>\
       <p id='aParagraph'></p>\
       <input type='password' id='password'>\
-    ");
+      <input type='number' id='number'>\
+      <input type='range' id='range' min='0' max='98765'>\
+      <input type='email' id='email'>\
+      <input type='url' id='url'>\
+      <input type='tel' id='tel'>\
+      <input type='search' id='search'>\
+      ");
     this.$(this.el).append(html);
     Backbone.ModelBinding.bind(this);
   }
