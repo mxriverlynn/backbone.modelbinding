@@ -5,32 +5,45 @@ describe("textbox convention bindings", function(){
       noType: 'there is no type'
     });
     this.view = new AView({model: this.model});
-    this.view.render();
   });
 
   describe("text element binding", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#name");
+    });
+
     it("bind view changes to the model's field, by convention of id", function(){
-      var el = this.view.$("#name");
-      el.val("Derick Bailey");
-      el.trigger('change');
+      this.el.val("Derick Bailey");
+      this.el.trigger('change');
 
       expect(this.model.get('name')).toEqual("Derick Bailey");
     });
 
     it("bind model field changes to the form input, by convention of id", function(){
       this.model.set({name: "Ian Bailey"});
-      var el = this.view.$("#name");
-      expect(el.val()).toEqual("Ian Bailey");
+      expect(this.el.val()).toEqual("Ian Bailey");
     });
 
     it("binds the model's value to the form field on render", function(){
-      var el = this.view.$("#name");
-      expect(el.val()).toEqual("Ashelia Bailey");
+      expect(this.el.val()).toEqual("Ashelia Bailey");
+    });
+  });
+
+  describe("when the form field has a value but the model does not", function(){
+    beforeEach(function(){
+      this.view.render();
+      var el = this.view.$("#prefilled_name");
+    });
+
+    it("binds the form field's value to the model, on render", function(){
+      expect(this.model.get("prefilled_name")).toBe("a name");
     });
   });
 
   describe("input with no type specified, binding", function(){
     beforeEach(function(){
+      this.view.render();
       this.el = this.view.$("#noType");
     });
 

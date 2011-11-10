@@ -91,4 +91,20 @@ describe("checkbox convention bindings", function(){
     });
   });
 
+  describe("when there is no value in the model", function(){
+    beforeEach(function(){
+      this.model = new AModel();
+      this.view = new AView({model: this.model});
+      this.view.render();
+    });
+
+    it("bind an unchecked checkbox value to the model, on render", function(){
+      expect(this.model.get('drivers_license')).toBeFalsy();
+    });
+
+    it("bind a checked checkbox value to the model, on render", function(){
+      expect(this.model.get('motorcycle_license')).toBeTruthy();
+    });
+  });
+
 });

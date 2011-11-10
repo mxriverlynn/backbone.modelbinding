@@ -16,6 +16,7 @@ AView = Backbone.View.extend({
       <input type='text' id='super_hero_weakness' modelAttr='weakness'>\
       <input type='text' id='something'> \
       <div id='showIt'></div>\
+      <input type='text' id='prefilled_name' value='a name'>\
       <input type='text' id='name'>\
       <select id='operating_system'> \
         <option value='osx'>osx</option> \

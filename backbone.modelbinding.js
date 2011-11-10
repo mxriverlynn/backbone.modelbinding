@@ -163,10 +163,14 @@ Backbone.ModelBinding = (function(Backbone, _, $){
 
         var modelChange = function(changed_model, val){ element.val(val); };
 
-        var elementChange = function(ev){
+        var setModelValue = function(attr_name, value){
           var data = {};
-          data[attribute_name] = view.$(ev.target).val();
+          data[attr_name] = value;
           model.set(data);
+        };
+
+        var elementChange = function(ev){
+          setModelValue(attribute_name, view.$(ev.target).val());
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
@@ -176,6 +180,14 @@ Backbone.ModelBinding = (function(Backbone, _, $){
         var attr_value = model.get(attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
+        } else {
+          var elVal = element.val();
+          console.log(elVal);
+          console.log(".");
+          if (elVal){
+            console.log("found a value!");
+            setModelValue(attribute_name, elVal);
+          }
         }
       });
     };
@@ -302,20 +314,24 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           }
         };
 
-        var elementChange = function(ev){
+        var setModelValue = function(attr_name, value){
           var data = {};
+          data[attr_name] = value;
+          model.set(data);
+        };
+
+        var elementChange = function(ev){
           var changedElement = view.$(ev.target);
           var checked = changedElement.is(":checked")? true : false;
-          data[attribute_name] = checked;
-          model.set(data);
+          setModelValue(attribute_name, checked);
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
         modelBinder.registerElementBinding(element, elementChange);
 
-        // set the default value on the form, from the model
         var attr_exists = model.attributes.hasOwnProperty(attribute_name);
         if (attr_exists) {
+          // set the default value on the form, from the model
           var attr_value = model.get(attribute_name);
           if (typeof attr_value !== "undefined" && attr_value !== null && attr_value != false) {
             element.attr("checked", "checked");
@@ -323,6 +339,10 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           else{
             element.removeAttr("checked");
           }
+        } else {
+          // bind the form's value to the model
+          var checked = element.is(":checked")? true : false;
+          setModelValue(attribute_name, checked);
         }
       });
     };
