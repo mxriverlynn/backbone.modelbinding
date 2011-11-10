@@ -1,4 +1,4 @@
-describe("textbox convention bindings", function(){
+describe("HTML5 input convention bindings", function(){
   beforeEach(function(){
     this.model = new AModel({
         number: "1234",
