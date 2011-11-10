@@ -544,13 +544,23 @@ The list of existing conventions includes:
 * checkbox
 * select
 * textarea
-* formbinding
+* number
+* range
+* tel
+* search
+* url
+* email
 * databind
 
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
+
+### v0.4.1
+
+* Bind the existing value from an input element to the model on render, if no model value exists
+* Added HTML5 input types to the form binding conventions: number, range, tel, search, url, email
 
 ### v0.4.0
 
