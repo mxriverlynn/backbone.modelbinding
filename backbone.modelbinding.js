@@ -207,13 +207,19 @@ Backbone.ModelBinding = (function(Backbone, _, $){
 
         var modelChange = function(changed_model, val){ element.val(val); };
 
-        var elementChange = function(ev){
+        var setModelValue = function(attr, val, text){
           var data = {};
-          var targetEl = view.$(ev.target);
-          data[attribute_name] = targetEl.val();
-          data[attribute_name + "_text"] = targetEl.find(":selected").text();
+          data[attr] = val;
+          data[attr + "_text"] = text;
           model.set(data);
-        }
+        };
+
+        var elementChange = function(ev){
+          var targetEl = view.$(ev.target);
+          var value = targetEl.val();
+          var text = targetEl.find(":selected").text();
+          setModelValue(attribute_name, value, text);
+        };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
         modelBinder.registerElementBinding(element, elementChange);
@@ -222,12 +228,13 @@ Backbone.ModelBinding = (function(Backbone, _, $){
         var attr_value = model.get(attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
+        } 
 
-          if (element.val() != attr_value) {
-            var data = {};
-            data[attribute_name] = element.val();
-            model.set(data);
-          }
+        // set the model to the form's value if there is no model value
+        if (element.val() != attr_value) {
+          var value = element.val();
+          var text = element.find(":selected").text();
+          setModelValue(attribute_name, value, text);
         }
       });
     };

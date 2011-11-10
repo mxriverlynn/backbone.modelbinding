@@ -53,4 +53,8 @@ describe("select element convention binding", function(){
 
     expect(this.model.get('operating_system')).toEqual(elVal);
   });
+
+  it("binds the select box value to the model, when there is no model value, on render", function(){
+    expect(this.model.get("another_select")).toEqual("pre_selected");
+  });
 });
