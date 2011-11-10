@@ -182,10 +182,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           element.val(attr_value);
         } else {
           var elVal = element.val();
-          console.log(elVal);
-          console.log(".");
           if (elVal){
-            console.log("found a value!");
             setModelValue(attribute_name, elVal);
           }
         }
@@ -262,13 +259,17 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           };
           modelBinder.registerModelBinding(model, group_name, modelChange);
 
+          var setModelValue = function(attr, val){
+            var data = {};
+            data[attr] = val;
+            model.set(data);
+          };
+
           // bind the form changes to the model
           var elementChange = function(ev){
             var element = view.$(ev.currentTarget);
             if (element.is(":checked")){
-              var data = {};
-              data[group_name] = element.val();
-              model.set(data);
+              setModelValue(group_name, element.val());
             }
           };
 
@@ -278,11 +279,16 @@ Backbone.ModelBinding = (function(Backbone, _, $){
             modelBinder.registerElementBinding(groupEl, elementChange);
           });
 
-          // set the default value on the form, from the model
           var attr_value = model.get(group_name);
           if (typeof attr_value !== "undefined" && attr_value !== null) {
+            // set the default value on the form, from the model
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
             view.$(value_selector).attr("checked", "checked");
+          } else {
+            // set the model to the currently selected radio button
+            var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]:checked";
+            var value = view.$(value_selector).val();
+            setModelValue(group_name, value);
           }
         }
       });

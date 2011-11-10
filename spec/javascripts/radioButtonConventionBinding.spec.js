@@ -35,4 +35,7 @@ describe("radio button convention binding", function(){
     expect(el.is(':checked')).toBe(true);
   });
 
+  it("binds the view's value to the model, when there is no value in the model", function(){
+    expect(this.model.get("another_radio")).toBeTruthy();
+  });
 });
