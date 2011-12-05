@@ -274,7 +274,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           var bindingAttr = config.getBindingAttr('radio');
 
           var modelChange = function(model, val){
-            var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + val + "]";
+            var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value='" + val + "']";
             view.$(value_selector).attr("checked", "checked");
           };
           modelBinder.registerModelBinding(model, group_name, modelChange);
