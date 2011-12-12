@@ -10,7 +10,7 @@
 // Backbone.ModelBinding
 // ----------------------------
 
-Backbone.ModelBinding = (function(Backbone, _, $){
+var modelbinding = (function(Backbone, _, $){
   modelBinding = {
     version: "0.4.1",
 
@@ -502,5 +502,23 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   };
 
   return modelBinding;
-})(Backbone, _, jQuery);
+});
+
+// Backbone.Modelbinding AMD wrapper with namespace fallback
+;(function (require, undefined){
+  if (require===undefined) {
+    // No AMD, use Backbone namespace
+    Backbone = Backbone || {};
+    Backbone.ModelBinding = modelbinding(Backbone, _, jQuery);
+  } else {
+    // AMD support
+    require([
+      'backbone',    // e.g. Backbone 0.5.3-optamd3 branch (https://github.com/jrburke/backbone/tree/optamd3)
+      'underscore',  // AMD supported
+      'jquery'       // AMD supported
+      ], function ( Backbone, _, jQuery ) {
+        return modelbinding( Backbone, _, jQuery );
+      });
+  }
+})(require);
 
