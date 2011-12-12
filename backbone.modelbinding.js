@@ -11,7 +11,7 @@
 // ----------------------------
 
 Backbone.ModelBinding = (function(Backbone, _, $){
-  modelBinding = {
+  var modelBinding = {
     version: "0.4.1",
 
     bind: function(view, options){
@@ -26,7 +26,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     }
   };
 
-  ModelBinder = function(view, options){
+  var ModelBinder = function(view, options){
     this.config = new modelBinding.Configuration(options);
     this.modelBindings = [];
     this.elementBindings = [];
@@ -152,7 +152,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   // ----------------------------
   // Text, Textarea, and Password Bi-Directional Binding Methods
   // ----------------------------
-  StandardBinding = (function(Backbone){
+  var StandardBinding = (function(Backbone){
     var methods = {};
 
     var _getElementType = function(element) {
@@ -208,7 +208,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   // ----------------------------
   // Select Box Bi-Directional Binding Methods
   // ----------------------------
-  SelectBoxBinding = (function(Backbone){
+  var SelectBoxBinding = (function(Backbone){
     var methods = {};
 
     methods.bind = function(selector, view, model, config){
@@ -258,7 +258,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   // ----------------------------
   // Radio Button Group Bi-Directional Binding Methods
   // ----------------------------
-  RadioGroupBinding = (function(Backbone){
+  var RadioGroupBinding = (function(Backbone){
     var methods = {};
 
     methods.bind = function(selector, view, model, config){
@@ -320,7 +320,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   // ----------------------------
   // Checkbox Bi-Directional Binding Methods
   // ----------------------------
-  CheckboxBinding = (function(Backbone){
+  var CheckboxBinding = (function(Backbone){
     var methods = {};
 
     methods.bind = function(selector, view, model, config){
@@ -379,7 +379,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   // ----------------------------
   // Data-Bind Binding Methods
   // ----------------------------
-  DataBindBinding = (function(Backbone, _, $){
+  var DataBindBinding = (function(Backbone, _, $){
     var dataBindSubstConfig = {
       "default": ""
     };
@@ -503,4 +503,3 @@ Backbone.ModelBinding = (function(Backbone, _, $){
 
   return modelBinding;
 })(Backbone, _, jQuery);
-
