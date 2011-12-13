@@ -114,7 +114,6 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     search: "id",
     url: "id",
     email: "id"
-
   };
 
   modelBinding.Configuration.store = function(){
