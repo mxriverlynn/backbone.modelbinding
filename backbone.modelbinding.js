@@ -10,7 +10,9 @@
 // Backbone.ModelBinding
 // ----------------------------
 
-var modelbinding = (function(Backbone, _, $){
+;(function(root){
+
+var modelbinding = (function(Backbone, _, $) {
   modelBinding = {
     version: "0.4.1",
 
@@ -41,7 +43,7 @@ var modelbinding = (function(Backbone, _, $){
           handler.bind.call(this, conventionSelector, view, view.model, this.config);
         }
       }
-    }
+    };
 
     this.unbind = function(){
       // unbind the html element bindings
@@ -53,21 +55,21 @@ var modelbinding = (function(Backbone, _, $){
       _.each(this.modelBindings, function(binding){
         binding.model.unbind(binding.eventName, binding.callback);
       });
-    }
+    };
 
     this.registerModelBinding = function(model, attribute_name, callback){
       // bind the model changes to the form elements
       var eventName = "change:" + attribute_name;
       model.bind(eventName, callback);
       this.modelBindings.push({model: model, eventName: eventName, callback: callback});
-    }
+    };
 
     this.registerElementBinding = function(element, callback){
       // bind the form changes to the model
       element.bind("change", callback);
       this.elementBindings.push({element: element, eventName: "change", callback: callback});
-    }
-  }
+    };
+  };
 
   // ----------------------------
   // Model Binding Configuration
@@ -505,20 +507,19 @@ var modelbinding = (function(Backbone, _, $){
 });
 
 // Backbone.Modelbinding AMD wrapper with namespace fallback
-;(function (require, undefined){
-  if (require===undefined) {
-    // No AMD, use Backbone namespace
-    Backbone = Backbone || {};
-    Backbone.ModelBinding = modelbinding(Backbone, _, jQuery);
-  } else {
+if (typeof define === 'function' && define.amd) {
     // AMD support
-    require([
-      'backbone',    // e.g. Backbone 0.5.3-optamd3 branch (https://github.com/jrburke/backbone/tree/optamd3)
+    define([
+      'backbone',    // use Backbone 0.5.3-optamd3 branch (https://github.com/jrburke/backbone/tree/optamd3)
       'underscore',  // AMD supported
       'jquery'       // AMD supported
-      ], function ( Backbone, _, jQuery ) {
-        return modelbinding( Backbone, _, jQuery );
+      ], function (Backbone, _, jQuery) {
+        return modelbinding(Backbone, _, jQuery);
       });
-  }
-})(require);
+} else {
+    // No AMD, use Backbone namespace
+    root.Backbone = Backbone || {};
+    root.Backbone.ModelBinding = modelbinding(Backbone, _, jQuery);
+}
 
+})(this);
