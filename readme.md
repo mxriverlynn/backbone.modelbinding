@@ -27,7 +27,7 @@ user experience.
 ## Getting Started
 
 It's easy to get up and running. You only need to have Backbone (including underscore.js - 
-a requirement for Backbone) and jQuery in your page before including the backbone.modelbining
+a requirement for Backbone) and jQuery in your page before including the backbone.modelbinding
 plugin.
 
 ### Prerequisites
@@ -389,6 +389,7 @@ The following form input types are supported by the form convention binder:
 * radio button groups
 
 HTML5
+
 * number
 * range
 * email
