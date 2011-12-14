@@ -289,7 +289,7 @@ someModel.set({someProperty: "some value"});
 #### enabled
 
 This special case breaks the html element standard of using a `disabled` attribute, specifically
-to inver the logic used for enabling / disabling an element, to keep the data-bind attribute
+to inverse the logic used for enabling / disabling an element, to keep the data-bind attribute
 clean and easy to read.
 
 If you have a model with a property that indicates a negative state, such as `invalid`, then you
