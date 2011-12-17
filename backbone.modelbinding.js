@@ -301,7 +301,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           var attr_value = model.get(group_name);
           if (typeof attr_value !== "undefined" && attr_value !== null) {
             // set the default value on the form, from the model
-            var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value=" + attr_value + "]";
+            var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value='" + attr_value + "']";
             view.$(value_selector).attr("checked", "checked");
           } else {
             // set the model to the currently selected radio button
