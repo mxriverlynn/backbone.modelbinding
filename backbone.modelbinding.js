@@ -438,7 +438,8 @@ Backbone.ModelBinding = (function(Backbone, _, $){
     splitBindingAttr = function(element)
     {
       var dataBindConfigList = [];
-      var databindList = element.attr("data-bind").split(";");
+      var dataBindAttributeName = modelBinding.Conventions.databind.selector.replace(/^(.*\[)([^\]]*)(].*)/g, '$2');
+      var databindList = element.attr(dataBindAttributeName).split(";");
       _.each(databindList, function(attrbind){
         var databind = $.trim(attrbind).split(" ");
 

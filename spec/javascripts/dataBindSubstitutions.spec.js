@@ -112,3 +112,26 @@ describe("resetting the data bind substitutions", function(){
     expect(this.villainEl.html()).toBe("");
   });
 });
+
+describe("when the data-bind attribute is manually configured", function(){
+  beforeEach(function(){
+    Backbone.ModelBinding.Conventions.databind.selector = "*[data-bind-bb]";
+    this.model = new AModel({
+      doctor: "Seuss",
+      villain: "mort"
+    });
+    this.view = new AView({model: this.model});
+    this.view.render();
+    this.el = this.view.$("#doctor_data_bind_bb");
+    Backbone.ModelBinding.Conventions.databind.selector = "*[data-bind]";
+  });
+
+  it("should set the element's text to the model's property value immediately", function(){
+    expect(this.el.text()).toBe("Seuss");
+  });
+
+  it("should set the text of the element when the model's property changes", function(){
+    this.model.set({doctor: "Who"});
+    expect(this.el.text()).toBe("Who");
+  });
+});

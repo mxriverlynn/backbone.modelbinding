@@ -11,6 +11,7 @@ AView = Backbone.View.extend({
       <button id='clicker' data-bind='enabled isValid'>Click Me!</button>\
       <div id='villain' data-bind='html villain'><p>test</p></div>\
       <div id='doctor_no_elem' data-bind='doctor'>Seuss</div>\
+      <div id='doctor_data_bind_bb' data-bind-bb='doctor'>Seuss</div>\
       <div id='doctor' data-bind='text doctor'>Seuss</div>\
       <div id='pet' data-bind='someAttr pet' someAttr='Cat'></div>\
       <input type='text' id='super_hero_weakness' modelAttr='weakness'>\
