@@ -435,20 +435,72 @@ Backbone.ModelBinding = (function(Backbone, _, $){
       }
     };
 
-    splitBindingAttr = function(element)
+    var splitBindingAttr = function(element, view)
     {
+      var parseFormatter = function(attrbind){
+        var parseFunctionName = function(functionName)
+        {
+          var namespaces = functionName.split(".");
+          var func = namespaces.pop();
+
+          //first see if the function is on the view
+          var context = view;
+          _.each(namespaces, function(namespace){
+            if (context[namespace] !== undefined){
+              context = context[namespace];
+            }
+          });
+          if (context[func] !== undefined && _.isFunction(context[func])){
+            return context[func];
+          } 
+
+          //then see if the function is on the global window object
+          context = window;
+          _.each(namespaces, function(namespace){
+            if (context[namespace] !== undefined){
+              context = context[namespace];
+            }
+          });
+          if (context[func] !== undefined && _.isFunction(context[func])){
+            return context[func];
+          } 
+
+          var errorMessage = "Formatter function (" + functionName + ") is not defined on the view or global window object";
+          throw errorMessage;
+        }
+
+        var formatter = function(val) { return val; };
+        var formatterMatch = attrbind.match(/fn:[^ ]+/);
+        if (formatterMatch){
+          var functionName = formatterMatch[0].replace("fn:", "");
+          formatter = parseFunctionName(functionName);
+        }
+        return formatter;
+      };
+
+      var parseTextValues = function(attrbind){
+        return $.trim(attrbind.replace(/[^ ]*:[^ ]+/, "")).split(" ");
+      };
+
+      var parseElementAttr = function(attrbind){
+        var textValues = parseTextValues(attrbind);
+        // make the default special case "text" if none specified
+        return (textValues.length === 1) ?  "text" : textValues[0];
+      };
+
+      var parseModelAttr = function(attrbind){
+        var textValues = parseTextValues(attrbind);
+        return textValues.pop();
+      };
+
       var dataBindConfigList = [];
       var dataBindAttributeName = modelBinding.Conventions.databind.selector.replace(/^(.*\[)([^\]]*)(].*)/g, '$2');
       var databindList = element.attr(dataBindAttributeName).split(";");
       _.each(databindList, function(attrbind){
-        var databind = $.trim(attrbind).split(" ");
-
-        // make the default special case "text" if none specified
-        if( databind.length == 1 ) databind.unshift("text");
-
         dataBindConfigList.push({
-          elementAttr: databind[0],
-          modelAttr: databind[1]
+          elementAttr: parseElementAttr(attrbind),
+          modelAttr: parseModelAttr(attrbind),
+          formatter: parseFormatter(attrbind)
         });
       });
       return dataBindConfigList;
@@ -461,17 +513,19 @@ Backbone.ModelBinding = (function(Backbone, _, $){
 
       view.$(selector).each(function(index){
         var element = view.$(this);
-        var databindList = splitBindingAttr(element);
+        var databindList = splitBindingAttr(element, view);
 
         _.each(databindList, function(databind){
           var modelChange = function(model, val){
+            val = databind.formatter(val, element, model, view);
             setOnElement(element, databind.elementAttr, val);
           };
 
           modelBinder.registerModelBinding(model, databind.modelAttr, modelChange);
 
-          // set default on data-bind element
-          setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
+          var initialValue = model.get(databind.modelAttr);
+          var formattedValue = databind.formatter(initialValue, element, model, view);
+          setOnElement(element, databind.elementAttr, formattedValue);
         });
 
       });
