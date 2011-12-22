@@ -577,6 +577,13 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 Backbone.ModelBinding supports the Asynchronous Module Definition standard, for
 use with RequireJS and other CommonJS implementations.  
 
+Backbone itself does not yet support AMD setup. However, there is a branch
+available at https://github.com/jrburke/backbone/tree/optamd3 that adds support.
+
+In order to use Backbone and Backbone.ModelBinding in an AMD setup, you need to
+be using the latest version of Underscore.js (v.1.2.3 or higher) and the `optamd3`
+branch of Backbone.js.
+
 (example coming soon)
 
 ## Release Notes
