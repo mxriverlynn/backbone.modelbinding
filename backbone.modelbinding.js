@@ -10,7 +10,9 @@
 // Backbone.ModelBinding
 // ----------------------------
 
-Backbone.ModelBinding = (function(Backbone, _, $){
+;(function(root){
+
+var modelbinding = (function(Backbone, _, $) {
   var modelBinding = {
     version: "0.4.2",
 
@@ -41,7 +43,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           handler.bind.call(this, conventionSelector, view, view.model, this.config);
         }
       }
-    }
+    };
 
     this.unbind = function(){
       // unbind the html element bindings
@@ -53,21 +55,21 @@ Backbone.ModelBinding = (function(Backbone, _, $){
       _.each(this.modelBindings, function(binding){
         binding.model.unbind(binding.eventName, binding.callback);
       });
-    }
+    };
 
     this.registerModelBinding = function(model, attribute_name, callback){
       // bind the model changes to the form elements
       var eventName = "change:" + attribute_name;
       model.bind(eventName, callback);
       this.modelBindings.push({model: model, eventName: eventName, callback: callback});
-    }
+    };
 
     this.registerElementBinding = function(element, callback){
       // bind the form changes to the model
       element.bind("change", callback);
       this.elementBindings.push({element: element, eventName: "change", callback: callback});
-    }
-  }
+    };
+  };
 
   // ----------------------------
   // Model Binding Configuration
@@ -502,4 +504,22 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   };
 
   return modelBinding;
-})(Backbone, _, jQuery);
+});
+
+// Backbone.Modelbinding AMD wrapper with namespace fallback
+if (typeof define === 'function' && define.amd) {
+    // AMD support
+    define([
+      'backbone',    // use Backbone 0.5.3-optamd3 branch (https://github.com/jrburke/backbone/tree/optamd3)
+      'underscore',  // AMD supported
+      'jquery'       // AMD supported
+      ], function (Backbone, _, jQuery) {
+        return modelbinding(Backbone, _, jQuery);
+      });
+} else {
+    // No AMD, use Backbone namespace
+    root.Backbone = Backbone || {};
+    root.Backbone.ModelBinding = modelbinding(Backbone, _, jQuery);
+}
+
+})(this);
