@@ -1,4 +1,4 @@
-// Backbone.ModelBinding v0.4.1
+// Backbone.ModelBinding v0.4.2
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT Liscene
@@ -12,7 +12,7 @@
 
 Backbone.ModelBinding = (function(Backbone, _, $){
   var modelBinding = {
-    version: "0.4.1",
+    version: "0.4.2",
 
     bind: function(view, options){
       view.modelBinder = new ModelBinder(view, options);
