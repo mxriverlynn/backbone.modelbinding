@@ -2,7 +2,7 @@
 
 Convention-based, awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone),
 inspired by [Brad Phelan](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/),
-[Knockout.js](http://knockoutjs.com/) ' data-binding capabilities, 
+[Knockout.js](http://knockoutjs.com/) data-binding capabilities, 
 and [Brandon Satrom](http://userinexperience.com/?p=633)'s work with Knockout.
 
 This plugin provides a simple, convention based mechanism to create bi-directional
@@ -11,7 +11,7 @@ binding between your HTML form input elements and your Backbone models.
 Instead of writing the same boiler plate code to read from your form inputs and
 populate the model attributes, for every input on your form, you can make a 
 single call to `Backbone.ModelBinding.bind(myView)` and have all of your inputs
-automatically wired up. Any change you make to a forn input will populate a
+automatically wired up. Any change you make to a form input will populate a
 corresponding model attribute for you. The binding is bi-directional, as well.
 This means that changes to your underlying model will be propagated to your
 form inputs without having to manually bind to your model's `change` events.
@@ -36,7 +36,7 @@ plugin.
 * jQuery v1.6.2 or higher
 
 This is a plugin for Backbone.js and is built and tested against Backbone v0.5.1. It also uses jQuery
-to perform most of the bindng and manipulations, and is built and tested against v1.6.1. However, I am
+to perform most of the binding and manipulations, and is built and tested against v1.6.1. However, I am
 currently using this plugin in a production application with Backbone v0.3.3 and jQuery v1.5.1. 
 
 At this point, I make no guarantees of it working with any version of Backbone or jQuery, 
@@ -114,7 +114,7 @@ Backbone.ModelBinding.bind(formView);
 ### Model Unbinding
 
 When your view has completed its work and is ready to be removed from the DOM, you not only
-need to unbnd your view's events (handled through the view's `remove` method, typically), you
+need to unbind your view's events (handled through the view's `remove` method, typically), you
 also need to unbind the model events that are bound in the view. 
 
 Backbone.ModelBinding can unbind its own events through a simple call to 
@@ -142,7 +142,7 @@ FormView = Backbone.View.extend({
 
 Automatic bi-directional binding between your form input and your model. 
 
-The convention based binding requires no additional configuration or code in your
+The convention-based binding requires no additional configuration or code in your
 view, other than calling the `Backbone.ModelBinding.bind(this);` as noted above.
 With the conventions binding, your `<input>` fields will be bound to the views model
 by the id of the input. 
@@ -186,7 +186,7 @@ of an HTML element based on your configurations. This is particularly useful whe
 model that is being edited is also being displayed elsewhere on the screen.
 
 To bind an element to a model's properties, add a `data-bind` attribute to the element
-and specify what should be updated with which model property using a `elementAttr modelAttr`
+and specify what should be updated with which model property using an `elementAttr modelAttr`
 format. For example `<span data-bind="text name">` will update the span's text with
 the model's name property, when the model's name changes.
 
