@@ -241,6 +241,22 @@ someView = new SomeView({model: someModel});
 In this example, both the text and the css class will be updated when you change
 the name input. You can data-bind as many attributes as you need, in this manner.
 
+### Configurating the data-bind selector
+
+By default, the data-bind capabilities looks for a `data-bind` attribute on the
+HTML elements being bound. This is configurable, though:
+
+````
+Backbone.ModelBinding.Conventions.databind.selector = "[my-binder]";
+````
+
+This example will look for elements with an attribute of `my-binder` instead of
+`data-bind`.
+
+````
+<div my-binder="text someAttr"></div>
+````
+
 ### Special Cases For data-bind
 
 There are several special cases for the data-bind attribute. These allow a little more
@@ -557,6 +573,11 @@ For fully functional, bi-directional binding convention examples, check out the 
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
 ## Release Notes
+
+#### v0.4.2
+
+* Configure the selector used for element data-binding (#36).
+* 
 
 ### v0.4.1
 
