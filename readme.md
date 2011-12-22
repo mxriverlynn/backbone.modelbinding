@@ -577,7 +577,8 @@ to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 #### v0.4.2
 
 * Configure the selector used for element data-binding (#36).
-* 
+* Fixed a small bug in radio group bindings, related to special characters (#42)
+* Fixed a few more global var leaks (#40 & #41)
 
 ### v0.4.1
 
