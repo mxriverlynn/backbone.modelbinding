@@ -588,7 +588,7 @@ branch of Backbone.js.
 
 ## Release Notes
 
-#### v0.4.2
+### v0.4.2
 
 * AMD (asynchronous module definition) support for RequireJS and other CommonJS implementations
 * Configure the selector used for element data-binding (#36).
