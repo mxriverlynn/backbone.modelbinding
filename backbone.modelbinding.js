@@ -13,7 +13,7 @@
 ;(function(root){
 
 var modelbinding = (function(Backbone, _, $) {
-  modelBinding = {
+  var modelBinding = {
     version: "0.4.1",
 
     bind: function(view, options){
