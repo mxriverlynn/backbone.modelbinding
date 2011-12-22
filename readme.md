@@ -572,10 +572,18 @@ The list of existing conventions includes:
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
+## AMD Support
+
+Backbone.ModelBinding supports the Asynchronous Module Definition standard, for
+use with RequireJS and other CommonJS implementations.  
+
+(example coming soon)
+
 ## Release Notes
 
 #### v0.4.2
 
+* AMD (asynchronous module definition) support for RequireJS and other CommonJS implementations
 * Configure the selector used for element data-binding (#36).
 * Fixed a small bug in radio group bindings, related to special characters (#42)
 * Fixed a few more global var leaks (#40 & #41)
