@@ -1,7 +1,7 @@
 AModel = Backbone.Model.extend({});
 
 AView = Backbone.View.extend({
-  render: function(){
+  render: function(callback){
     var html = $("\
       <img id='avatar' data-bind='src url; class name'>\
       <input id='noType'>\
@@ -62,6 +62,11 @@ AView = Backbone.View.extend({
       <input type='search' id='search'>\
       ");
     this.$(this.el).append(html);
+
+    if (typeof(callback) !== 'undefined') {
+        callback.call(this);
+    }
+
     Backbone.ModelBinding.bind(this);
   }
 });
