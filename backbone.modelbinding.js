@@ -194,6 +194,7 @@ var modelbinding = (function(Backbone, _, $) {
         var attr_value = model.get(attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
+          element.trigger('change');
         } else {
           var elVal = element.val();
           if (elVal){
@@ -242,6 +243,7 @@ var modelbinding = (function(Backbone, _, $) {
         var attr_value = model.get(attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
+          element.trigger('change');
         } 
 
         // set the model to the form's value if there is no model value
@@ -304,7 +306,9 @@ var modelbinding = (function(Backbone, _, $) {
           if (typeof attr_value !== "undefined" && attr_value !== null) {
             // set the default value on the form, from the model
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value='" + attr_value + "']";
-            view.$(value_selector).attr("checked", "checked");
+            var element = view.$(value_selector);
+            element.attr("checked", "checked");
+            element.trigger('change');
           } else {
             // set the model to the currently selected radio button
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]:checked";
@@ -366,6 +370,7 @@ var modelbinding = (function(Backbone, _, $) {
           else{
             element.removeAttr("checked");
           }
+          element.trigger('change');
         } else {
           // bind the form's value to the model
           var checked = element.is(":checked")? true : false;
