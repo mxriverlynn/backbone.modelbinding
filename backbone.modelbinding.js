@@ -69,6 +69,35 @@ var modelbinding = (function(Backbone, _, $) {
       element.bind("change", callback);
       this.elementBindings.push({element: element, eventName: "change", callback: callback});
     };
+
+    this.getAttributes = function(attributes, attr_name, value) {
+      var tree = attributes;
+      var matches = attr_name.match(/[^\[\]]+/g);
+
+      (function(t) {
+        for (var i = 0, length = matches.length - 1; i < length; i++) {
+          t = t[matches[i]] = t[matches[i]] || {};
+        }
+        t[matches[matches.length - 1]] = value;
+      })(tree);
+
+      return tree;
+    };
+
+    this.getModelValue = function(attributes, attr_name) {
+      var matches = attr_name.match(/[^\[\]]+/g);
+      var tree = attributes;
+
+      for(var i = 0, length = matches.length; i < length; i++) {
+        tree = tree[matches[i]];
+        if (typeof(tree) === 'undefined') {
+          break;
+        }
+      }
+
+      return tree;
+    };
+
   };
 
   // ----------------------------
@@ -77,7 +106,7 @@ var modelbinding = (function(Backbone, _, $) {
   modelBinding.Configuration = function(options){
     this.bindingAttrConfig = {};
 
-    _.extend(this.bindingAttrConfig, 
+    _.extend(this.bindingAttrConfig,
       modelBinding.Configuration.bindindAttrConfig,
       options
     );
@@ -92,30 +121,33 @@ var modelbinding = (function(Backbone, _, $) {
       }
     }
 
-    this.getBindingAttr = function(type){ 
-      return this.bindingAttrConfig[type]; 
+    this.getBindingAttr = function(type){
+      return this.bindingAttrConfig[type];
     };
 
     this.getBindingValue = function(element, type){
       var bindingAttr = this.getBindingAttr(type);
-      return element.attr(bindingAttr);
+      var attr_name = element.attr(bindingAttr);
+      if (typeof(attr_name) === 'undefined') {
+        attr_name = element.attr(modelBinding.Configuration.originalConfig[type]);
+      }
+      return attr_name;
     };
-
   };
 
   modelBinding.Configuration.bindindAttrConfig = {
-    text: "id",
-    textarea: "id",
-    password: "id",
+    text: "name",
+    textarea: "name",
+    password: "name",
     radio: "name",
-    checkbox: "id",
-    select: "id",
-    number: "id",
-    range: "id",
-    tel: "id",
-    search: "id",
-    url: "id",
-    email: "id"
+    checkbox: "name",
+    select: "name",
+    number: "name",
+    range: "name",
+    tel: "name",
+    search: "name",
+    url: "name",
+    email: "name"
   };
 
   modelBinding.Configuration.store = function(){
@@ -178,20 +210,18 @@ var modelbinding = (function(Backbone, _, $) {
         var modelChange = function(changed_model, val){ element.val(val); };
 
         var setModelValue = function(attr_name, value){
-          var data = {};
-          data[attr_name] = value;
-          model.set(data);
+          var tree = modelBinder.getAttributes(model.attributes, attr_name, value);
+          model.set(tree);
         };
 
         var elementChange = function(ev){
+          var attribute_name = config.getBindingValue(element, elementType);
           setModelValue(attribute_name, view.$(ev.target).val());
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
 
-        // set the default value on the form, from the model
-        var attr_value = model.get(attribute_name);
+        var attr_value = modelBinder.getModelValue(model.attributes, attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
           element.trigger('change');
@@ -201,7 +231,10 @@ var modelbinding = (function(Backbone, _, $) {
             setModelValue(attribute_name, elVal);
           }
         }
+
+        modelBinder.registerElementBinding(element, elementChange);
       });
+
     };
 
     return methods;
@@ -222,36 +255,34 @@ var modelbinding = (function(Backbone, _, $) {
 
         var modelChange = function(changed_model, val){ element.val(val); };
 
-        var setModelValue = function(attr, val, text){
-          var data = {};
-          data[attr] = val;
-          data[attr + "_text"] = text;
+        var setModelValue = function(attr, val){
+          var data = modelBinder.getAttributes(model.attributes, attr, val);
           model.set(data);
         };
 
         var elementChange = function(ev){
-          var targetEl = view.$(ev.target);
-          var value = targetEl.val();
-          var text = targetEl.find(":selected").text();
-          setModelValue(attribute_name, value, text);
+          var element = view.$(ev.target);
+          var attribute_name = config.getBindingValue(element, 'select');
+          var value = element.val();
+          setModelValue(attribute_name, value);
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
 
         // set the default value on the form, from the model
-        var attr_value = model.get(attribute_name);
+        var attr_value = modelBinder.getModelValue(model.attributes, attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
           element.trigger('change');
-        } 
+        }
 
         // set the model to the form's value if there is no model value
         if (element.val() != attr_value) {
           var value = element.val();
-          var text = element.find(":selected").text();
-          setModelValue(attribute_name, value, text);
+          setModelValue(attribute_name, value);
         }
+
+        modelBinder.registerElementBinding(element, elementChange);
       });
     };
 
@@ -283,26 +314,20 @@ var modelbinding = (function(Backbone, _, $) {
           modelBinder.registerModelBinding(model, group_name, modelChange);
 
           var setModelValue = function(attr, val){
-            var data = {};
-            data[attr] = val;
+            var data = modelBinder.getAttributes(model.attributes, attr, val);
             model.set(data);
           };
 
           // bind the form changes to the model
           var elementChange = function(ev){
             var element = view.$(ev.currentTarget);
+            var attribute_name = config.getBindingValue(element, 'radio');
             if (element.is(":checked")){
-              setModelValue(group_name, element.val());
+              setModelValue(attribute_name, element.val());
             }
           };
-
-          var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
-          view.$(group_selector).each(function(){
-            var groupEl = $(this);
-            modelBinder.registerElementBinding(groupEl, elementChange);
-          });
-
-          var attr_value = model.get(group_name);
+ 
+          var attr_value = modelBinder.getModelValue(model.attributes, group_name);
           if (typeof attr_value !== "undefined" && attr_value !== null) {
             // set the default value on the form, from the model
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value='" + attr_value + "']";
@@ -315,6 +340,12 @@ var modelbinding = (function(Backbone, _, $) {
             var value = view.$(value_selector).val();
             setModelValue(group_name, value);
           }
+
+          var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
+          view.$(group_selector).each(function(){
+            var groupEl = $(this);
+            modelBinder.registerElementBinding(groupEl, elementChange);
+          });
         }
       });
     };
@@ -346,24 +377,23 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         var setModelValue = function(attr_name, value){
-          var data = {};
-          data[attr_name] = value;
+          var data = modelBinder.getAttributes(model.attributes, attr_name, value);
           model.set(data);
         };
 
         var elementChange = function(ev){
-          var changedElement = view.$(ev.target);
-          var checked = changedElement.is(":checked")? true : false;
+          var element = view.$(ev.target);
+          var attribute_name = config.getBindingValue(element, 'checkbox');
+          var checked = element.is(":checked")? true : false;
           setModelValue(attribute_name, checked);
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
 
         var attr_exists = model.attributes.hasOwnProperty(attribute_name);
         if (attr_exists) {
           // set the default value on the form, from the model
-          var attr_value = model.get(attribute_name);
+          var attr_value = modelBinder.getModelValue(model.attributes, attribute_name);
           if (typeof attr_value !== "undefined" && attr_value !== null && attr_value != false) {
             element.attr("checked", "checked");
           }
@@ -376,6 +406,8 @@ var modelbinding = (function(Backbone, _, $) {
           var checked = element.is(":checked")? true : false;
           setModelValue(attribute_name, checked);
         }
+        
+        modelBinder.registerElementBinding(element, elementChange);
       });
     };
 

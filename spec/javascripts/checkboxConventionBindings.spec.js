@@ -14,18 +14,20 @@ describe("checkbox convention bindings", function(){
       var el = this.view.$("#drivers_license");
       el.removeAttr("checked");
       el.trigger('change');
+      console.log(el);
+      console.log(this.model.get('drivers_license'));
       expect(this.model.get('drivers_license')).toBeFalsy();
     });
 
     it("bind model field changes to the form input", function(){
       var el = this.view.$("#drivers_license");
 
-      // uncheck it
+      //uncheck it
       this.model.set({drivers_license: false});
       var selected = el.attr("checked");
       expect(selected).toBeFalsy();
 
-      // then check it
+      //then check it
       this.model.set({drivers_license: true});
       var selected = el.attr("checked");
       expect(selected).toBeTruthy();

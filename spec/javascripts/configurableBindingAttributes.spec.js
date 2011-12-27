@@ -75,14 +75,6 @@ describe("configurableBindingAttributes", function(){
       var el = this.view.$(".education");
       expect(el.val()).toEqual("graduate");
     });
-
-    it("applies the text of the selection to the model", function(){
-      var el = this.view.$(".education");
-      el.val("grade_school");
-      el.trigger('change');
-
-      expect(this.model.get('education_text')).toEqual("i dun learned at grade skool");
-    });
   });
 
   describe("checkbox element binding using configurable attribute", function(){

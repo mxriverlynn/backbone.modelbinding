@@ -3,7 +3,6 @@ describe("custom conventions", function(){
     this.model = new AModel({});
     this.view = new AView({model: this.model});
     this.oldHandler = Backbone.ModelBinding.Conventions.text.handler;
-
   });
 
   afterEach(function(){

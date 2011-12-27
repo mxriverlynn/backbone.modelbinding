@@ -39,14 +39,6 @@ describe("select element convention binding", function(){
     expect(el.val()).toEqual("0");
   });
 
-  it("applies the text of the selection to the model", function(){
-    var el = this.view.$("#education");
-    el.val("grade_school");
-    el.trigger('change');
-
-    expect(this.model.get('education_text')).toEqual("i dun learned at grade skool");
-  });
-
   it("updates the model to the selected value when the model is set to a value that doesn't exist, on render", function(){
     var el = this.view.$("#operating_system");
     var elVal = el.val();
