@@ -572,19 +572,90 @@ The list of existing conventions includes:
 For fully functional, bi-directional binding convention examples, check out the source code
 to Backbone.ModelBinding in the `backbone.modelbinding.js` file.
 
-## AMD Support
+## Using Backbone.Modelbinding as an AMD module (require.js)
 
-Backbone.ModelBinding supports the Asynchronous Module Definition standard, for
-use with RequireJS and other CommonJS implementations.  
+Backbone.Modelbinding detects an AMD loader like require.js and registrers as a module named 'modelbinding' if so.
 
-Backbone itself does not yet support AMD setup. However, there is a branch
-available at https://github.com/jrburke/backbone/tree/optamd3 that adds support.
+The prerequisites of Modelbinding must be known as AMD modules which is supported in following versions:
 
-In order to use Backbone and Backbone.ModelBinding in an AMD setup, you need to
-be using the latest version of Underscore.js (v.1.2.3 or higher) and the `optamd3`
-branch of Backbone.js.
+* JQuery 1.7
+* Underscore 1.2.3
+* Backbone, use jrburke's 0.5.3-optamd3 branch (https://github.com/jrburke/backbone/tree/optamd3) until supported by Backbone natively
 
-(example coming soon)
+### Setup
+
+Module names must be 'jquery', 'underscore', and 'backbone' which is done easily by naming files as jquery.js, underscore.js and backbone.js placed
+in the same folder as require.js. Or by settings up require.js alias configure like
+
+````
+require.config({
+  paths: {
+  // AMD modules
+    jquery:       'libs/jquery/1.7.1/jquery',
+    underscore:   'libs/underscore/1.2.3/underscore',
+    backbone:     'libs/backbone/0.5.3-optamd3/backbone',
+    modelbinding: 'libs/backbone/modelbinding/0.4.1-amd/backbone.modelbinding'
+  }
+});
+````
+### Short Example
+
+Load require.js as normal:
+
+````
+<script type="text/javascript" src="js/require.js"></script>
+````
+
+Hereafter require.js will take care of loading AMD module dependencies and you can use Backbone and Modelbinding
+as you are used to:
+
+````
+<script type="text/javascript">
+  require ([
+    'jquery','underscore','backbone','modelbinding'
+  ], function ($, _, Backbone, Modelbinding ) {
+    ...
+    SomeView = Backbone.View.extend({
+      render: function(){
+        // ... render your form here
+        $(this.el).html("... some html and content goes here ... ");
+
+        // execute the model bindings
+        ModelBinding.bind(this);
+      }
+    });
+    ...
+  });
+</script>
+````
+
+### Migrating to AMD
+
+If you are converting existing code referencing the Backbone.Modelbinding namespace it can still be supported 
+by assigning the module to the namespace, optionally using require.js itself as an module. 
+When above example would be:
+
+````
+<script type="text/javascript">
+  require ([
+    'require','jquery','underscore','backbone'
+  ], function (require, $, _, Backbone ) {
+    // use require.js to load modelbinding and assign to Backbone namespace:
+    Backbone.Modelbinding = require('modelbinding');
+    ...
+    SomeView = Backbone.View.extend({
+      render: function(){
+        // ... render your form here
+        $(this.el).html("... some html and content goes here ... ");
+
+        // execute the model bindings
+        Backbone.ModelBinding.bind(this);
+      }
+    });
+    ...
+  });
+</script>
+````
 
 ## Release Notes
 
