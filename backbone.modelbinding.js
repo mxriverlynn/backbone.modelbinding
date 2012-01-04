@@ -413,7 +413,7 @@ var modelbinding = (function(Backbone, _, $) {
       return returnValue;
     };
 
-    setOnElement = function(element, attr, val){
+    var setOnElement = function(element, attr, val){
       var valBefore = val;
       val = modelBinding.Configuration.getDataBindSubst(attr, val);
       switch(attr){
@@ -437,7 +437,7 @@ var modelbinding = (function(Backbone, _, $) {
       }
     };
 
-    splitBindingAttr = function(element)
+    var splitBindingAttr = function(element)
     {
       var dataBindConfigList = [];
       var dataBindAttributeName = modelBinding.Conventions.databind.selector.replace(/^(.*\[)([^\]]*)(].*)/g, '$2');
