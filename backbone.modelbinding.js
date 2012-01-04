@@ -57,9 +57,16 @@ var modelbinding = (function(Backbone, _, $) {
       });
     };
 
-    this.registerModelBinding = function(model, attribute_name, callback){
+    this.registerModelBinding = function(model, attrName, callback){
       // bind the model changes to the form elements
-      var eventName = "change:" + attribute_name;
+      var eventName = "change:" + attrName;
+      model.bind(eventName, callback);
+      this.modelBindings.push({model: model, eventName: eventName, callback: callback});
+    };
+
+    this.registerDataBinding = function(model, eventName, callback){
+      // bind the model changes to the elements
+      
       model.bind(eventName, callback);
       this.modelBindings.push({model: model, eventName: eventName, callback: callback});
     };
@@ -456,6 +463,27 @@ var modelbinding = (function(Backbone, _, $) {
       return dataBindConfigList;
     };
 
+    var getEventConfiguration = function(element, databind){
+      var config = {};
+      var eventName = databind.modelAttr;
+      var index = eventName.indexOf("event:");
+
+      if (index == 0) {
+        // "event:foo" binding
+        config.name = eventName.substr(6);
+        config.callback = function(val){
+          setOnElement(element, databind.elementAttr, val);
+        };
+      } else {
+        // standard model attribute binding
+        config.name = "change:" + eventName;
+        config.callback = function(model, val){
+          setOnElement(element, databind.elementAttr, val);
+        };
+      }
+
+      return config;
+    }
     var methods = {};
 
     methods.bind = function(selector, view, model, config){
@@ -466,12 +494,8 @@ var modelbinding = (function(Backbone, _, $) {
         var databindList = splitBindingAttr(element);
 
         _.each(databindList, function(databind){
-          var modelChange = function(model, val){
-            setOnElement(element, databind.elementAttr, val);
-          };
-
-          modelBinder.registerModelBinding(model, databind.modelAttr, modelChange);
-
+          var eventConfig = getEventConfiguration(element, databind);
+          modelBinder.registerDataBinding(model, eventConfig.name, eventConfig.callback);
           // set default on data-bind element
           setOnElement(element, databind.elementAttr, model.get(databind.modelAttr));
         });
