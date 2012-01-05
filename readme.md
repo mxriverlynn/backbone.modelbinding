@@ -362,6 +362,24 @@ When the model's property is set to false, the HTML element's `display` css will
 to `block`. When the model's property is set to true, the HTML element's `display` css
 will be set to `none`.
 
+### Data-Bind To Any Model Event
+
+In addition to binding model attributes, you can use the data-bind functionality to
+bind to any arbitrary event that the model fires. This is done with the syntax:
+
+```html
+<div data-bind="text event:foo"></div>
+```
+
+where `foo` is the event that is triggered from the model. The first parameter
+of the event will be used as the data for the element.
+
+```js
+model.trigger("foo", "bar");
+```
+
+This will cause the above data-binding to produce `<div>bar</div>`.
+
 ### Data-Bind Substitutions
 
 If a model's property is `unset`, the data-bind may not update correctly when using `text` or `html`
@@ -658,6 +676,11 @@ When above example would be:
 ````
 
 ## Release Notes
+
+### v0.4.3
+
+* Added ability for data-bind to bind to arbitrary events (#51)
+* Fixed a few more global function leaks
 
 ### v0.4.2
 
