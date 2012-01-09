@@ -1,4 +1,4 @@
-// Backbone.ModelBinding v0.4.1
+// Backbone.ModelBinding v0.4.3
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT Liscene
@@ -10,9 +10,11 @@
 // Backbone.ModelBinding
 // ----------------------------
 
-Backbone.ModelBinding = (function(Backbone, _, $){
+;(function(root){
+
+var modelbinding = (function(Backbone, _, $) {
   var modelBinding = {
-    version: "0.4.1",
+    version: "0.4.3",
 
     bind: function(view, options){
       view.modelBinder = new ModelBinder(view, options);
@@ -41,7 +43,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
           handler.bind.call(this, conventionSelector, view, view.model, this.config);
         }
       }
-    }
+    };
 
     this.unbind = function(){
       // unbind the html element bindings
@@ -53,21 +55,28 @@ Backbone.ModelBinding = (function(Backbone, _, $){
       _.each(this.modelBindings, function(binding){
         binding.model.unbind(binding.eventName, binding.callback);
       });
-    }
+    };
 
-    this.registerModelBinding = function(model, attribute_name, callback){
+    this.registerModelBinding = function(model, attrName, callback){
       // bind the model changes to the form elements
-      var eventName = "change:" + attribute_name;
+      var eventName = "change:" + attrName;
       model.bind(eventName, callback);
       this.modelBindings.push({model: model, eventName: eventName, callback: callback});
-    }
+    };
+
+    this.registerDataBinding = function(model, eventName, callback){
+      // bind the model changes to the elements
+      
+      model.bind(eventName, callback);
+      this.modelBindings.push({model: model, eventName: eventName, callback: callback});
+    };
 
     this.registerElementBinding = function(element, callback){
       // bind the form changes to the model
       element.bind("change", callback);
       this.elementBindings.push({element: element, eventName: "change", callback: callback});
-    }
-  }
+    };
+  };
 
   // ----------------------------
   // Model Binding Configuration
@@ -411,7 +420,7 @@ Backbone.ModelBinding = (function(Backbone, _, $){
       return returnValue;
     };
 
-    setOnElement = function(element, attr, val){
+    var setOnElement = function(element, attr, val){
       var valBefore = val;
       val = modelBinding.Configuration.getDataBindSubst(attr, val);
       switch(attr){
@@ -489,6 +498,10 @@ Backbone.ModelBinding = (function(Backbone, _, $){
       };
 
       var parseModelAttr = function(attrbind){
+        var eventMatch = attrbind.match(/event:[^ ]+/);
+        if (eventMatch){
+          return eventMatch[0];
+        }
         var textValues = parseTextValues(attrbind);
         return textValues.pop();
       };
@@ -499,13 +512,36 @@ Backbone.ModelBinding = (function(Backbone, _, $){
       _.each(databindList, function(attrbind){
         dataBindConfigList.push({
           elementAttr: parseElementAttr(attrbind),
-          modelAttr: parseModelAttr(attrbind),
+          modelAttr: parseModelAttr(attrbind), //todo: refactor 'modelAttr' to 'modelEvent'
           formatter: parseFormatter(attrbind)
         });
       });
       return dataBindConfigList;
     };
 
+    var getEventConfiguration = function(element, databind, model, view){
+      var config = {};
+      var eventName = databind.modelAttr;
+      var index = eventName.indexOf("event:");
+
+      if (index == 0) {
+        // "event:foo" binding
+        config.name = eventName.substr(6);
+        config.callback = function(val){
+          val = databind.formatter(val, element, model, view);
+          setOnElement(element, databind.elementAttr, val);
+        };
+      } else {
+        // standard model attribute binding
+        config.name = "change:" + eventName;
+        config.callback = function(model, val){
+          val = databind.formatter(val, element, model, view);
+          setOnElement(element, databind.elementAttr, val);
+        };
+      }
+
+      return config;
+    }
     var methods = {};
 
     methods.bind = function(selector, view, model, config){
@@ -516,18 +552,13 @@ Backbone.ModelBinding = (function(Backbone, _, $){
         var databindList = splitBindingAttr(element, view);
 
         _.each(databindList, function(databind){
-          var modelChange = function(model, val){
-            val = databind.formatter(val, element, model, view);
-            setOnElement(element, databind.elementAttr, val);
-          };
-
-          modelBinder.registerModelBinding(model, databind.modelAttr, modelChange);
-
+          var eventConfig = getEventConfiguration(element, databind, model, view);
+          modelBinder.registerDataBinding(model, eventConfig.name, eventConfig.callback);
+          // set default on data-bind element
           var initialValue = model.get(databind.modelAttr);
           var formattedValue = databind.formatter(initialValue, element, model, view);
           setOnElement(element, databind.elementAttr, formattedValue);
         });
-
       });
     };
 
@@ -556,4 +587,22 @@ Backbone.ModelBinding = (function(Backbone, _, $){
   };
 
   return modelBinding;
-})(Backbone, _, jQuery);
+});
+
+// Backbone.Modelbinding AMD wrapper with namespace fallback
+if (typeof define === 'function' && define.amd) {
+    // AMD support
+    define([
+      'backbone',    // use Backbone 0.5.3-optamd3 branch (https://github.com/jrburke/backbone/tree/optamd3)
+      'underscore',  // AMD supported
+      'jquery'       // AMD supported
+      ], function (Backbone, _, jQuery) {
+        return modelbinding(Backbone, _, jQuery);
+      });
+} else {
+    // No AMD, use Backbone namespace
+    root.Backbone = Backbone || {};
+    root.Backbone.ModelBinding = modelbinding(Backbone, _, jQuery);
+}
+
+})(this);

@@ -9,6 +9,18 @@ describe("data-bind conventions", function(){
     this.view = new AView({model: this.model});
   });
 
+  describe("when data-bind is configured for an event and the event is triggered", function(){
+    beforeEach(function(){
+      this.view.render();
+      this.el = this.view.$("#eventDiv");
+      this.model.trigger("foo", "bar");
+    });
+
+    it("should update the element with the event's value", function(){
+      expect(this.el.text()).toBe("bar");
+    });
+  });
+
   describe("when a data-bind is configured with no html element attribute specified", function(){
     beforeEach(function(){
       this.view.render();
