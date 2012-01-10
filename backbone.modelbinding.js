@@ -447,8 +447,7 @@ var modelbinding = (function(Backbone, _, $) {
     var splitBindingAttr = function(element, view)
     {
       var parseFormatter = function(attrbind){
-        var parseFunctionName = function(functionName)
-        {
+        var parseFunctionName = function(functionName){
           var namespaces = functionName.split(".");
           var func = namespaces.pop();
 
@@ -479,16 +478,20 @@ var modelbinding = (function(Backbone, _, $) {
         }
 
         var formatter = function(val) { return val; };
-        var formatterMatch = attrbind.match(/fn:[^ ]+/);
+        var formatterMatch = attrbind.match(/\|[^ \|]+/g);
         if (formatterMatch){
-          var functionName = formatterMatch[0].replace("fn:", "");
-          formatter = parseFunctionName(functionName);
+          formatter = function(val){
+            _.each(formatterMatch, function(match){
+              val = parseFunctionName(match.replace("|", ""))(val);
+            });
+            return val;
+          };
         }
         return formatter;
       };
 
       var parseTextValues = function(attrbind){
-        return $.trim(attrbind.replace(/[^ ]*:[^ ]+/, "")).split(" ");
+        return $.trim(attrbind.replace(/[^ ]*:[^ ]+/, "").replace(/\|[^ \|]+/g, "")).split(" ");
       };
 
       var parseElementAttr = function(attrbind){
