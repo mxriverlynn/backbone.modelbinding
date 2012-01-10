@@ -480,12 +480,14 @@ var modelbinding = (function(Backbone, _, $) {
         var formatter = function(val) { return val; };
         var formatterMatch = attrbind.match(/\|[^ \|]+/g);
         if (formatterMatch){
-          formatter = function(val){
-            _.each(formatterMatch, function(match){
-              val = parseFunctionName(match.replace("|", ""))(val);
-            });
-            return val;
-          };
+          _.each(formatterMatch, function(match){
+            var oldFormatter = formatter;
+            var currentFormatter = parseFunctionName(match.replace("|", ""));
+            formatter = function(val){
+              var formattedVal = oldFormatter(val);
+              return currentFormatter(formattedVal);
+            };
+          });
         }
         return formatter;
       };
