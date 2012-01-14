@@ -238,7 +238,12 @@ var modelbinding = (function(Backbone, _, $) {
         var elementChange = function(ev){
           var targetEl = view.$(ev.target);
           var value = targetEl.val();
-          var text = targetEl.find(":selected").text();
+          var selections = targetEl.find(":selected");
+          if (selections.size() > 1) {
+            var text = _.map(selections, function(sel){ return sel.text });
+          } else {
+            var text = selections.text();
+          }
           setModelValue(attribute_name, value, text);
         };
 

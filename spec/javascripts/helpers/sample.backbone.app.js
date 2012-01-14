@@ -42,6 +42,10 @@ AView = Backbone.View.extend({
         <option value='pre_selected' selected='selected'>pre selected</option> \
         <option value='not_selected'>not selected</option> \
       </select> \
+      <select id='multiple_select' multiple='true'> \
+        <option value='selection_1'>Selection 1</option> \
+        <option value='selection_2'>Selection 2</option> \
+      </select> \
       <input type='radio' id='graduated_yes' name='graduated' value='yes'>\
       <input type='radio' id='graduated_no' name='graduated' value='no'>\
       <input type='radio' id='graduated_maybe' name='graduated' value='maybe'>\
