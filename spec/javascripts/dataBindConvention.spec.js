@@ -12,7 +12,7 @@ describe("data-bind conventions", function(){
   describe("when data-bind is configured for an event and the event is triggered", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#eventDiv");
+      this.el = $(this.view.el).find("#eventDiv");
       this.model.trigger("foo", "bar");
     });
 
@@ -24,7 +24,7 @@ describe("data-bind conventions", function(){
   describe("when a data-bind is configured with no html element attribute specified", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#doctor_no_elem");
+      this.el = $(this.view.el).find("#doctor_no_elem");
     });
 
     it("should set the element's text to the model's property value immediately", function(){
@@ -40,7 +40,7 @@ describe("data-bind conventions", function(){
   describe("when a data-bind is configured to set text", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#doctor");
+      this.el = $(this.view.el).find("#doctor");
     });
 
     it("should set the element's text to the model's property value immediately", function(){
@@ -56,7 +56,7 @@ describe("data-bind conventions", function(){
   describe("when a data-bind is configured to set html", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#villain");
+      this.el = $(this.view.el).find("#villain");
     });
 
     it("should set the element's contents to the model's property value immediately", function(){
@@ -72,39 +72,43 @@ describe("data-bind conventions", function(){
   describe("when a data-bind is configured to set enabled", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#clicker");
+      this.el = $(this.view.el).find("#clicker");
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
-      expect(this.el.attr("disabled")).toBeTruthy();
+      var disabled = this.el.attr("disabled");
+      expect(disabled == true || disabled == 'true').toBeTruthy();
     });
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el.attr("disabled")).toBeFalsy();
+      var disabled = this.el.attr("disabled");
+      expect( disabled == false || disabled == 'false').toBeTruthy();
     });
   });
 
   describe("when a data-bind is configured to set disabled", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#unclicker");
+      this.el = $(this.view.el).find("#unclicker");
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
-      expect(this.el.attr("disabled")).toBeFalsy();
+      var disabled = this.el.attr("disabled");
+      expect( disabled == false || disabled == 'false').toBeTruthy();
     });
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el.attr("disabled")).toBeTruthy();
+      var disabled = this.el.attr("disabled");
+      expect(disabled == true || disabled == 'true').toBeTruthy();
     });
   });
 
   describe("when a data-bind is configured to set an arbitrary attribute", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#pet");
+      this.el = $(this.view.el).find("#pet");
     });
 
     it("should set the element's attribute to the model's property value immediately", function(){
@@ -120,7 +124,7 @@ describe("data-bind conventions", function(){
   describe("when a data-bind is configured to set displayed", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#showHideThing");
+      this.el = $(this.view.el).find("#showHideThing");
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
@@ -129,14 +133,14 @@ describe("data-bind conventions", function(){
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el).toBeHidden();
+      expect(this.el.css('display')).toBe('node');
     });
   });
   
   describe("when a data-bind is configured to set visible", function(){
     beforeEach(function(){
       this.view.render();
-      this.el = this.view.$("#showHideAnotherThing");
+      this.el = $(this.view.el).find("#showHideAnotherThing");
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
@@ -145,7 +149,7 @@ describe("data-bind conventions", function(){
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el).toBeHidden();
+      expect(this.el.css('display').toBe('none');
     });
   });
 });

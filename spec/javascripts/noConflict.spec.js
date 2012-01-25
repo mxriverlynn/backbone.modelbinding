@@ -16,7 +16,7 @@ describe("Backbone.noConflict", function(){
           <input type='checkbox' id='check' value='yes'>\
           <button id='data' data-bind='disabled isValid'>Click Me!</button>\
         ");
-        this.$(this.el).append(html);
+        $(this.el).append(html);
       }
     });
       

@@ -176,8 +176,8 @@ var modelbinding = (function(Backbone, _, $) {
 
     methods.bind = function(selector, view, model, config){
       var modelBinder = this;
-      view.$(selector).each(function(index){
-        var element = view.$(this);
+      $(view.el).find(selector).each(function(index){
+        var element = $(this);
         var elementType = _getElementType(element);
         var attribute_name = config.getBindingValue(element, elementType);
 
@@ -192,7 +192,7 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         var elementChange = function(ev){
-          setModelValue(attribute_name, view.$(ev.target).val());
+          setModelValue(attribute_name, $(ev.target).val());
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
@@ -223,7 +223,7 @@ var modelbinding = (function(Backbone, _, $) {
     methods.bind = function(selector, view, model, config){
       var modelBinder = this;
       var self = this;
-      view.$(selector).each(function(index){
+      $(view.el).find(selector).each(function(index){
         var element = $(this);
         var attribute_name = config.getBindingValue(element, 'select');
 
@@ -277,8 +277,8 @@ var modelbinding = (function(Backbone, _, $) {
       var modelBinder = this;
 
       var foundElements = [];
-      view.$(selector).each(function(index){
-        var element = view.$(this);
+      $(view.el).find(selector).each(function(index){
+        var element = $(this);
 
         var group_name = config.getBindingValue(element, 'radio');
         if (!foundElements[group_name]) {
@@ -287,7 +287,7 @@ var modelbinding = (function(Backbone, _, $) {
 
           var modelChange = function(model, val){
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value='" + val + "']";
-            view.$(value_selector).attr("checked", "checked");
+            $(view.el).find(value_selector).attr("checked", "checked");
           };
           modelBinder.registerModelBinding(model, group_name, modelChange);
 
@@ -299,14 +299,14 @@ var modelbinding = (function(Backbone, _, $) {
 
           // bind the form changes to the model
           var elementChange = function(ev){
-            var element = view.$(ev.currentTarget);
+            var element = $(ev.currentTarget);
             if (element.is(":checked")){
               setModelValue(group_name, element.val());
             }
           };
 
           var group_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]";
-          view.$(group_selector).each(function(){
+          $(view.el).find(group_selector).each(function(){
             var groupEl = $(this);
             modelBinder.registerElementBinding(groupEl, elementChange);
           });
@@ -315,11 +315,11 @@ var modelbinding = (function(Backbone, _, $) {
           if (typeof attr_value !== "undefined" && attr_value !== null) {
             // set the default value on the form, from the model
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "][value='" + attr_value + "']";
-            view.$(value_selector).attr("checked", "checked");
+            $(view.el).find(value_selector).attr("checked", "checked");
           } else {
             // set the model to the currently selected radio button
             var value_selector = "input[type=radio][" + bindingAttr + "=" + group_name + "]:checked";
-            var value = view.$(value_selector).val();
+            var value = $(view.el).find(value_selector).val();
             setModelValue(group_name, value);
           }
         }
@@ -338,8 +338,8 @@ var modelbinding = (function(Backbone, _, $) {
     methods.bind = function(selector, view, model, config){
       var modelBinder = this;
 
-      view.$(selector).each(function(index){
-        var element = view.$(this);
+      $(view.el).find(selector).each(function(index){
+        var element = $(this);
         var bindingAttr = config.getBindingAttr('checkbox');
         var attribute_name = config.getBindingValue(element, 'checkbox');
 
@@ -359,7 +359,7 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         var elementChange = function(ev){
-          var changedElement = view.$(ev.target);
+          var changedElement = $(ev.target);
           var checked = changedElement.is(":checked")? true : false;
           setModelValue(attribute_name, checked);
         };
@@ -453,8 +453,13 @@ var modelbinding = (function(Backbone, _, $) {
       var dataBindConfigList = [];
       var dataBindAttributeName = modelBinding.Conventions.databind.selector.replace(/^(.*\[)([^\]]*)(].*)/g, '$2');
       var databindList = element.attr(dataBindAttributeName).split(";");
-      _.each(databindList, function(attrbind){
-        var databind = $.trim(attrbind).split(" ");
+      _.each(databindList, function(attrbind) {
+        var databind;
+        if ( window.Zepto != undefined ) {
+          databind = $('<div></div>').text(attrbind).text().trim(attrbind).split(" ");
+        } else {
+          databind = $.trim(attrbind).split(" ");
+        }
 
         // make the default special case "text" if none specified
         if( databind.length == 1 ) databind.unshift("text");
@@ -493,8 +498,8 @@ var modelbinding = (function(Backbone, _, $) {
     methods.bind = function(selector, view, model, config){
       var modelBinder = this;
 
-      view.$(selector).each(function(index){
-        var element = view.$(this);
+      $(view.el).find(selector).each(function(index){
+        var element = $(this);
         var databindList = splitBindingAttr(element);
 
         _.each(databindList, function(databind){

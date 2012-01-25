@@ -11,19 +11,23 @@ describe("checkbox convention bindings", function(){
     });
 
     it("bind view changes to the model's field", function(){
-      var el = this.view.$("#drivers_license");
+      var el = $(this.view.el).find("#drivers_license");
       el.removeAttr("checked");
       el.trigger('change');
       expect(this.model.get('drivers_license')).toBeFalsy();
     });
 
-    it("bind model field changes to the form input", function(){
-      var el = this.view.$("#drivers_license");
+    it("bind model field changes to the form input when checked", function(){
+      var el = $(this.view.el).find("#drivers_license");
 
       // uncheck it
       this.model.set({drivers_license: false});
       var selected = el.attr("checked");
       expect(selected).toBeFalsy();
+    });
+
+    it("bind model field changes to the form input when checked", function(){
+      var el = $(this.view.el).find("#drivers_license");
 
       // then check it
       this.model.set({drivers_license: true});
@@ -32,14 +36,14 @@ describe("checkbox convention bindings", function(){
     });
 
     it("checks the box for a truthy value, on render", function(){
-      var el = this.view.$("#drivers_license");
+      var el = $(this.view.el).find("#drivers_license");
       var selected = el.attr("checked");
 
       expect(selected).toBeTruthy();
     });
 
     it("unchecks the box for a falsy value, on render", function(){
-      var el = this.view.$("#motorcycle_license");
+      var el = $(this.view.el).find("#motorcycle_license");
       var selected = el.attr("checked");
 
       expect(selected).toBeFalsy();
@@ -53,7 +57,7 @@ describe("checkbox convention bindings", function(){
       });
       this.view = new AView({model: this.model});
       this.view.render();
-      this.el = this.view.$("#binary_checkbox");
+      this.el = $(this.view.el).find("#binary_checkbox");
     });
 
     it("checks the box for a 1 (one) value, on render", function(){
@@ -76,7 +80,7 @@ describe("checkbox convention bindings", function(){
       });
       this.view = new AView({model: this.model});
       this.view.render();
-      this.el = this.view.$("#binary_checkbox");
+      this.el = $(this.view.el).find("#binary_checkbox");
     });
 
     it("unchecks the box for a 0 (zero) value, on render", function(){

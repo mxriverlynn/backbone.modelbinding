@@ -6,7 +6,7 @@ describe("data-bind multiple attributes", function(){
     });
     this.view = new AView({model: this.model});
     this.view.render();
-    this.el = this.view.$("#avatar");
+    this.el = $(this.view.el).find("#avatar");
   });
 
   describe ("when initializing", function(){

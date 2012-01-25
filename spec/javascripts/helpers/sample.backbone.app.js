@@ -3,11 +3,11 @@ AModel = Backbone.Model.extend({});
 AView = Backbone.View.extend({
   render: function(){
     var html = $("\
-      <div id='eventDiv' data-bind='text event:foo' />\
+      <div id='eventDiv' data-bind='text event:foo' /></div>\
       <img id='avatar' data-bind='src url; class name'>\
       <input id='noType'>\
-      <div id='showHideThing' data-bind='displayed isValid' />\
-      <div id='showHideAnotherThing' data-bind='hidden isValid' />\
+      <div id='showHideThing' data-bind='displayed isValid' ></div>\
+      <div id='showHideAnotherThing' data-bind='hidden isValid' ></div>\
       <button id='unclicker' data-bind='disabled isValid'>Click Me!</button>\
       <button id='clicker' data-bind='enabled isValid'>Click Me!</button>\
       <div id='villain' data-bind='html villain'><p>test</p></div>\
@@ -62,7 +62,7 @@ AView = Backbone.View.extend({
       <input type='tel' id='tel'>\
       <input type='search' id='search'>\
       ");
-    this.$(this.el).append(html);
+    $(this.el).html(html);
     Backbone.ModelBinding.bind(this);
   }
 });
@@ -84,7 +84,7 @@ AllBindingAttributesView = Backbone.View.extend({
       <input type='checkbox' id='v_drivers_license' class='drivers_license' value='yes'>\
       <textarea id='v_bio' class='bio'></textarea>\
     ");
-    this.$(this.el).append(html);
+    $(this.el).append(html);
 
     Backbone.ModelBinding.bind(this, {all: "class"});
   }
@@ -107,7 +107,7 @@ GlobalAllBindingAttributesView = Backbone.View.extend({
       <input type='checkbox' id='v_drivers_license' class='drivers_license' value='yes'>\
       <textarea id='v_bio' class='bio'></textarea>\
     ");
-    this.$(this.el).append(html);
+    $(this.el).append(html);
 
     Backbone.ModelBinding.bind(this);
   }
@@ -130,7 +130,7 @@ AnotherView = Backbone.View.extend({
       <input type='checkbox' class='drivers_license' value='yes'>\
     ");
 
-    this.$(this.el).append(html);
+    $(this.el).append(html);
 
     Backbone.ModelBinding.bind(this, {
       text: 'class',

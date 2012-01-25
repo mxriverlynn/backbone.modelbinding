@@ -14,7 +14,7 @@ describe("HTML5 input convention bindings", function(){
 
   describe("number element binding", function(){
     it("bind view changes to the model's field, by convention of id", function(){
-      var el = this.view.$("#number");
+      var el = $(this.view.el).find("#number");
       el.val("09876");
       el.trigger('change');
 
