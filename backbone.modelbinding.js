@@ -176,13 +176,14 @@ var modelbinding = (function(Backbone, _, $) {
 
     methods.bind = function(selector, view, model, config){
       var modelBinder = this;
-
       view.$(selector).each(function(index){
         var element = view.$(this);
         var elementType = _getElementType(element);
         var attribute_name = config.getBindingValue(element, elementType);
 
-        var modelChange = function(changed_model, val){ element.val(val); };
+        var modelChange = function(changed_model, val){
+          element.val(val);
+        };
 
         var setModelValue = function(attr_name, value){
           var data = {};
@@ -221,12 +222,14 @@ var modelbinding = (function(Backbone, _, $) {
 
     methods.bind = function(selector, view, model, config){
       var modelBinder = this;
-
+      var self = this;
       view.$(selector).each(function(index){
-        var element = view.$(this);
+        var element = $(this);
         var attribute_name = config.getBindingValue(element, 'select');
 
-        var modelChange = function(changed_model, val){ element.val(val); };
+        var modelChange = function(changed_model, val){
+          element.val(val);
+        };
 
         var setModelValue = function(attr, val, text){
           var data = {};
@@ -236,9 +239,10 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         var elementChange = function(ev){
-          var targetEl = view.$(ev.target);
+
+          var targetEl = $(ev.target);
           var value = targetEl.val();
-          var text = targetEl.find(":selected").text();
+          var text = targetEl.find("option[value=\"" + value +"\"]").text();
           setModelValue(attribute_name, value, text);
         };
 
@@ -254,7 +258,7 @@ var modelbinding = (function(Backbone, _, $) {
         // set the model to the form's value if there is no model value
         if (element.val() != attr_value) {
           var value = element.val();
-          var text = element.find(":selected").text();
+          var text = element.find("option[selected]").text();
           setModelValue(attribute_name, value, text);
         }
       });
@@ -511,11 +515,11 @@ var modelbinding = (function(Backbone, _, $) {
   // Binding Conventions
   // ----------------------------
   modelBinding.Conventions = {
-    text: {selector: "input:text", handler: StandardBinding},
+    text: {selector: window.Zepto == undefined ? "input:text" : "input[type='text']", handler: StandardBinding},
     textarea: {selector: "textarea", handler: StandardBinding},
-    password: {selector: "input:password", handler: StandardBinding},
-    radio: {selector: "input:radio", handler: RadioGroupBinding},
-    checkbox: {selector: "input:checkbox", handler: CheckboxBinding},
+    password: {selector: "input[type='password']", handler: StandardBinding},
+    radio: {selector: "input[type='radio']", handler: RadioGroupBinding},
+    checkbox: {selector: "input[type='checkbox']", handler: CheckboxBinding},
     select: {selector: "select", handler: SelectBoxBinding},
     databind: { selector: "*[data-bind]", handler: DataBindBinding},
     // HTML5 input
