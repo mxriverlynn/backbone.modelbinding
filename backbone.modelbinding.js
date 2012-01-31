@@ -5,11 +5,10 @@
 //
 // Documentation and Full Licence Availabe at:
 // http://github.com/derickbailey/backbone.modelbinding
-
+//
 // ----------------------------
 // Backbone.ModelBinding
 // ----------------------------
-
 ;(function(root){
 
 var modelbinding = (function(Backbone, _, $) {
