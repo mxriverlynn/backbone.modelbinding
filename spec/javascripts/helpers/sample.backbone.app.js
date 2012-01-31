@@ -62,7 +62,7 @@ AView = Backbone.View.extend({
       <input type='tel' id='tel'>\
       <input type='search' id='search'>\
       ");
-    this.$(this.el).append(html);
+    this.$el.append(html);
     Backbone.ModelBinding.bind(this);
   }
 });
@@ -84,7 +84,7 @@ AllBindingAttributesView = Backbone.View.extend({
       <input type='checkbox' id='v_drivers_license' class='drivers_license' value='yes'>\
       <textarea id='v_bio' class='bio'></textarea>\
     ");
-    this.$(this.el).append(html);
+    this.$el.append(html);
 
     Backbone.ModelBinding.bind(this, {all: "class"});
   }
@@ -107,7 +107,7 @@ GlobalAllBindingAttributesView = Backbone.View.extend({
       <input type='checkbox' id='v_drivers_license' class='drivers_license' value='yes'>\
       <textarea id='v_bio' class='bio'></textarea>\
     ");
-    this.$(this.el).append(html);
+    this.$el.append(html);
 
     Backbone.ModelBinding.bind(this);
   }
@@ -130,7 +130,7 @@ AnotherView = Backbone.View.extend({
       <input type='checkbox' class='drivers_license' value='yes'>\
     ");
 
-    this.$(this.el).append(html);
+    this.$el.append(html);
 
     Backbone.ModelBinding.bind(this, {
       text: 'class',
