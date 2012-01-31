@@ -675,7 +675,9 @@ When above example would be:
 
 ### v0.5.0
 
-* **BREAKING:** Backbone v0.5.3 is no longer supported. If you need support for this, use ModelBinding v0.4.3
+* **BREAKING:** Backbone v0.5.3 is no longer officially supported. 
+  * It should work fine right now (Backbone v0.9.0 is mostly backward compatible), but I won't be testing against v0.5.x anymore. 
+  * If you need support for v0.5.3, use ModelBinding v0.4.3
 * Updated Backbone to v0.9.0
 * Updated Underscore to v1.3.1
 * Updated jQuery to v1.7.1
