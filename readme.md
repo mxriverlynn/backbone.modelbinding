@@ -32,16 +32,12 @@ plugin.
 
 ### Prerequisites
 
-* Backbone.js v0.5.1 or higher
-* jQuery v1.6.2 or higher
+* Backbone.js v0.9.0
+* Underscore.js v1.3.1
+* jQuery v1.7.1
 
-This is a plugin for Backbone.js and is built and tested against Backbone v0.5.1. It also uses jQuery
-to perform most of the binding and manipulations, and is built and tested against v1.6.1. However, I am
-currently using this plugin in a production application with Backbone v0.3.3 and jQuery v1.5.1. 
-
-At this point, I make no guarantees of it working with any version of Backbone or jQuery, 
-other than what it has been built and tested against. It works for me, so it may work for you
-with versions other than what is stated
+This is a plugin for Backbone.js and is built and tested against these versions of these
+libraries. At this point, I make no guarantees of it working with any version of Backbone or jQuery.
 
 ### Get The ModelBinding Plugin
 
@@ -676,6 +672,13 @@ When above example would be:
 ````
 
 ## Release Notes
+
+### v0.5.0
+
+* **BREAKING:** Backbone v0.5.3 is no longer supported. If you need support for this, use ModelBinding v0.4.3
+* Updated Backbone to v0.9.0
+* Updated Underscore to v1.3.1
+* Updated jQuery to v1.7.1
 
 ### v0.4.3
 
