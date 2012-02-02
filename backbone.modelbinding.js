@@ -181,29 +181,31 @@ var modelbinding = (function(Backbone, _, $) {
         var elementType = _getElementType(element);
         var attribute_name = config.getBindingValue(element, elementType);
 
-        var modelChange = function(changed_model, val){ element.val(val); };
+        if (attribute_name) {
+          var modelChange = function(changed_model, val){ element.val(val); };
 
-        var setModelValue = function(attr_name, value){
-          var data = {};
-          data[attr_name] = value;
-          model.set(data);
-        };
+          var setModelValue = function(attr_name, value){
+            var data = {};
+            data[attr_name] = value;
+            model.set(data);
+          };
 
-        var elementChange = function(ev){
-          setModelValue(attribute_name, view.$(ev.target).val());
-        };
+          var elementChange = function(ev){
+            setModelValue(attribute_name, view.$(ev.target).val());
+          };
 
-        modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
+          modelBinder.registerModelBinding(model, attribute_name, modelChange);
+          modelBinder.registerElementBinding(element, elementChange);
 
-        // set the default value on the form, from the model
-        var attr_value = model.get(attribute_name);
-        if (typeof attr_value !== "undefined" && attr_value !== null) {
-          element.val(attr_value);
-        } else {
-          var elVal = element.val();
-          if (elVal){
-            setModelValue(attribute_name, elVal);
+          // set the default value on the form, from the model
+          var attr_value = model.get(attribute_name);
+          if (typeof attr_value !== "undefined" && attr_value !== null) {
+            element.val(attr_value);
+          } else {
+            var elVal = element.val();
+            if (elVal){
+              setModelValue(attribute_name, elVal);
+            }
           }
         }
       });
