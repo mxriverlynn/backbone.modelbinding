@@ -33,15 +33,17 @@ plugin.
 ### Prerequisites
 
 * Backbone.js v0.5.1 or higher
-* jQuery v1.6.2 or higher
+* jQuery v1.6.2 or higher; or Zepto v0.8 or higher
 
 This is a plugin for Backbone.js and is built and tested against Backbone v0.5.1. It also uses jQuery
 to perform most of the binding and manipulations, and is built and tested against v1.6.1. However, I am
 currently using this plugin in a production application with Backbone v0.3.3 and jQuery v1.5.1. 
 
-At this point, I make no guarantees of it working with any version of Backbone or jQuery, 
+At this point, I make no guarantees of it working with any version of Backbone, jQuery or Zepto, 
 other than what it has been built and tested against. It works for me, so it may work for you
 with versions other than what is stated
+
+Zepto does not support typeless binding of inputs due to limit selector support.
 
 ### Get The ModelBinding Plugin
 
