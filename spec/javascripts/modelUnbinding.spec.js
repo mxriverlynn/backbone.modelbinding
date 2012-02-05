@@ -65,8 +65,11 @@ describe("model unbinding", function(){
       this.model.set({isValid: false});
       var el = $(this.view.el).find("#clicker");
       var disabled = el.attr("disabled");
-
-      expect(disabled).toBeFalsy();
+      if ( window.Zepto ) {
+        expect(el.attr("disabled")).toBe('false');
+      } else {
+        expect(el.attr("disabled")).toBeFalsy();
+      }
     });
   });
   

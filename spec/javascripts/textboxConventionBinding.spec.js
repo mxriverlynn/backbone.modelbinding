@@ -41,26 +41,28 @@ describe("textbox convention bindings", function(){
     });
   });
 
-  describe("input with no type specified, binding", function(){
-    beforeEach(function(){
-      this.view.render();
-      this.el = this.view.$("#noType");
-    });
+  if ( window.Zepto == undefined) {
+    describe("input with no type specified, binding", function(){
+      beforeEach(function(){
+        this.view.render();
+        this.el = this.view.$("#noType");
+      });
 
-    it("bind view changes to the model's field, by convention of id", function(){
-      this.el.val("something changed");
-      this.el.trigger('change');
+      it("bind view changes to the model's field, by convention of id", function(){
+        this.el.val("something changed");
+        this.el.trigger('change');
 
-      expect(this.model.get('noType')).toEqual("something changed");
-    });
+        expect(this.model.get('noType')).toEqual("something changed");
+      });
 
-    it("bind model field changes to the form input, by convention of id", function(){
-      this.model.set({noType: "Ian Bailey"});
-      expect(this.el.val()).toEqual("Ian Bailey");
-    });
+      it("bind model field changes to the form input, by convention of id", function(){
+        this.model.set({noType: "Ian Bailey"});
+        expect(this.el.val()).toEqual("Ian Bailey");
+      });
 
-    it("binds the model's value to the form field on render", function(){
-      expect(this.el.val()).toEqual("there is no type");
+      it("binds the model's value to the form field on render", function(){
+        expect(this.el.val()).toEqual("there is no type");
+      });
     });
-  });
+  }
 });

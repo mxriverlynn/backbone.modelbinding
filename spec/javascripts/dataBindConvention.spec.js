@@ -76,14 +76,16 @@ describe("data-bind conventions", function(){
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
-      var disabled = this.el.attr("disabled");
-      expect(disabled == true || disabled == 'true').toBeTruthy();
+      expect(this.el.attr("disabled")).toBeTruthy();
     });
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      var disabled = this.el.attr("disabled");
-      expect( disabled == false || disabled == 'false').toBeTruthy();
+      if ( window.Zepto ) {
+        expect(this.el.attr("disabled")).toBe('false');
+      } else {
+        expect(this.el.attr("disabled")).toBeFalsy();
+      }
     });
   });
 
@@ -94,14 +96,16 @@ describe("data-bind conventions", function(){
     });
 
     it("should set the element's disabled value to the model's value, immediately", function(){
-      var disabled = this.el.attr("disabled");
-      expect( disabled == false || disabled == 'false').toBeTruthy();
+      if ( window.Zepto ) {
+        expect(this.el.attr("disabled")).toBe('false');
+      } else {
+        expect(this.el.attr("disabled")).toBeFalsy();
+      }
     });
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      var disabled = this.el.attr("disabled");
-      expect(disabled == true || disabled == 'true').toBeTruthy();
+      expect(this.el.attr("disabled")).toBeTruthy(); 
     });
   });
 
@@ -133,7 +137,11 @@ describe("data-bind conventions", function(){
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el.css('display')).toBe('node');
+      if ( window.Zepto ) {
+
+      } else {
+        expect(this.el).toBeHidden();
+      }
     });
   });
   
@@ -149,7 +157,7 @@ describe("data-bind conventions", function(){
 
     it("should set the element's disabled value when the model's value is changed", function(){
       this.model.set({isValid: true});
-      expect(this.el.css('display').toBe('none');
+      expect(this.el.css('display')).toBe('none');
     });
   });
 });
