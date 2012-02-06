@@ -98,15 +98,15 @@ var modelbinding = (function(Backbone, _, $) {
       }
     }
 
-    this.getBindingAttr = function(type){ 
-      return this.bindingAttrConfig[type]; 
-    };
+  };
 
-    this.getBindingValue = function(element, type){
-      var bindingAttr = this.getBindingAttr(type);
-      return element.attr(bindingAttr);
-    };
+  modelBinding.Configuration.prototype.getBindingAttr = function(type){
+    return this.bindingAttrConfig[type];
+  };
 
+  modelBinding.Configuration.prototype.getBindingValue = function(element, type){
+    var bindingAttr = this.getBindingAttr(type);
+    return element.attr(bindingAttr);
   };
 
   modelBinding.Configuration.bindindAttrConfig = {
