@@ -138,7 +138,172 @@ AnotherView = Backbone.View.extend({
       password: 'class',
       radio: 'class',
       select: 'class',
-      checkbox: 'class',
+      checkbox: 'class'
     });
   }
 });
+
+NestedInnerView = Backbone.View.extend({
+  id: 'innerDiv',
+
+  render: function(){
+    var html = $("\
+      <input type='text' id='innerText'>\
+      <input type='text' id='sharedText'>\
+      <select id='innerSelect'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <select id='sharedSelect'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <input type='radio' id='graduated_yes' name='innerRadio' value='yes'>\
+      <input type='radio' id='graduated_no' name='innerRadio' value='no'>\
+      <input type='radio' id='graduated_maybe' name='innerRadio' value='maybe'>\
+      <input type='radio' id='graduated_yes' name='sharedRadio' value='yes'>\
+      <input type='radio' id='graduated_no' name='sharedRadio' value='no'>\
+      <input type='radio' id='graduated_maybe' name='sharedRadio' value='maybe'>\
+      <input type='checkbox' id='innerCheckbox' value='yes'>\
+      <input type='checkbox' id='sharedCheckbox' value='yes'>\
+    ");
+    this.$el.append(html);
+  }
+});
+
+NestedOuterView = Backbone.View.extend({
+  initialize: function(){
+    this.innerView = new NestedInnerView({model: this.model.get('innerModel')});
+  },
+
+  render: function(){
+    var html = $("\
+      <div id='outerDiv'>\
+        <input type='text' id='outerText'>\
+        <input type='text' id='sharedText'>\
+        <select id='outerSelect'> \
+          <option value='none'>none</option> \
+          <option value='grade_school'>i dun learned at grade skool</option> \
+          <option value='high school'>high school</option> \
+          <option value='college'>college</option> \
+          <option value='graduate'>graduate</option> \
+        </select> \
+        <select id='sharedSelect'> \
+          <option value='none'>none</option> \
+          <option value='grade_school'>i dun learned at grade skool</option> \
+          <option value='high school'>high school</option> \
+          <option value='college'>college</option> \
+          <option value='graduate'>graduate</option> \
+        </select> \
+        <input type='radio' id='graduated_yes' name='outerRadio' value='yes'>\
+        <input type='radio' id='graduated_no' name='outerRadio' value='no'>\
+        <input type='radio' id='graduated_maybe' name='outerRadio' value='maybe'>\
+        <input type='radio' id='graduated_yes' name='sharedRadio' value='yes'>\
+        <input type='radio' id='graduated_no' name='sharedRadio' value='no'>\
+        <input type='radio' id='graduated_maybe' name='sharedRadio' value='maybe'>\
+        <input type='checkbox' id='outerCheckbox' value='yes'>\
+        <input type='checkbox' id='sharedCheckbox' value='yes'>\
+      </div>\
+    ");
+
+    this.$el.append(html);
+    this.innerView.render();
+    this.$('#outerDiv').append(this.innerView.$el);
+
+    var outerViewBindingAttributeConfig = {shouldBindToEl: function(el){return el.parent().attr('id') === 'outerDiv';}};
+    var innerViewBindingAttributeConfig = {shouldBindToEl: function(el){return el.parent().attr('id') === 'innerDiv';}};
+
+    Backbone.ModelBinding.bind(this, outerViewBindingAttributeConfig);
+    Backbone.ModelBinding.bind(this.innerView, innerViewBindingAttributeConfig);
+  }
+});
+
+NestedInnerViewWithNameAttributes = Backbone.View.extend({
+  id: 'innerDiv',
+
+  render: function(){
+    var html = $("\
+      <input type='text' name='innerText'>\
+      <input type='text' name='sharedText'>\
+      <select name='innerSelect'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <select name='sharedSelect'> \
+        <option value='none'>none</option> \
+        <option value='grade_school'>i dun learned at grade skool</option> \
+        <option value='high school'>high school</option> \
+        <option value='college'>college</option> \
+        <option value='graduate'>graduate</option> \
+      </select> \
+      <input type='radio' id='graduated_yes' name='innerRadio' value='yes'>\
+      <input type='radio' id='graduated_no' name='innerRadio' value='no'>\
+      <input type='radio' id='graduated_maybe' name='innerRadio' value='maybe'>\
+      <input type='radio' id='graduated_yes' name='sharedRadio' value='yes'>\
+      <input type='radio' id='graduated_no' name='sharedRadio' value='no'>\
+      <input type='radio' id='graduated_maybe' name='sharedRadio' value='maybe'>\
+      <input type='checkbox' name='innerCheckbox' value='yes'>\
+      <input type='checkbox' name='sharedCheckbox' value='yes'>\
+    ");
+    this.$el.append(html);
+  }
+});
+
+NestedOuterViewWithNameAttributes = Backbone.View.extend({
+  initialize: function(){
+    this.innerView = new NestedInnerViewWithNameAttributes({model: this.model.get('innerModel')});
+  },
+
+  render: function(){
+    var html = $("\
+      <div id='outerDiv'>\
+        <input type='text' name='outerText'>\
+        <input type='text' name='sharedText'>\
+        <select name='outerSelect'> \
+          <option value='none'>none</option> \
+          <option value='grade_school'>i dun learned at grade skool</option> \
+          <option value='high school'>high school</option> \
+          <option value='college'>college</option> \
+          <option value='graduate'>graduate</option> \
+        </select> \
+        <select name='sharedSelect'> \
+          <option value='none'>none</option> \
+          <option value='grade_school'>i dun learned at grade skool</option> \
+          <option value='high school'>high school</option> \
+          <option value='college'>college</option> \
+          <option value='graduate'>graduate</option> \
+        </select> \
+        <input type='radio' id='graduated_yes' name='outerRadio' value='yes'>\
+        <input type='radio' id='graduated_no' name='outerRadio' value='no'>\
+        <input type='radio' id='graduated_maybe' name='outerRadio' value='maybe'>\
+        <input type='radio' id='graduated_yes' name='sharedRadio' value='yes'>\
+        <input type='radio' id='graduated_no' name='sharedRadio' value='no'>\
+        <input type='radio' id='graduated_maybe' name='sharedRadio' value='maybe'>\
+        <input type='checkbox' name='outerCheckbox' value='yes'>\
+        <input type='checkbox' name='sharedCheckbox' value='yes'>\
+      </div>\
+    ");
+
+    this.$el.append(html);
+    this.innerView.render();
+    this.$('#outerDiv').append(this.innerView.$el);
+
+    var outerViewBindingAttributeConfig = {all: "name",
+                                            shouldBindToEl: function(el){return el.parent().attr('id') === 'outerDiv';}};
+    var innerViewBindingAttributeConfig = {all: "name",
+                                            shouldBindToEl: function(el){return el.parent().attr('id') === 'innerDiv';}};
+
+    Backbone.ModelBinding.bind(this, outerViewBindingAttributeConfig);
+    Backbone.ModelBinding.bind(this.innerView, innerViewBindingAttributeConfig);
+  }
+});
+
