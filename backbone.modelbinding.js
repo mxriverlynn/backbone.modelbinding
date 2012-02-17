@@ -65,7 +65,7 @@ var modelbinding = (function(Backbone, _, $) {
 
     this.registerDataBinding = function(model, eventName, callback){
       // bind the model changes to the elements
-      
+
       model.bind(eventName, callback);
       this.modelBindings.push({model: model, eventName: eventName, callback: callback});
     };
@@ -83,7 +83,7 @@ var modelbinding = (function(Backbone, _, $) {
   modelBinding.Configuration = function(options){
     this.bindingAttrConfig = {};
 
-    _.extend(this.bindingAttrConfig, 
+    _.extend(this.bindingAttrConfig,
       modelBinding.Configuration.bindindAttrConfig,
       options
     );
@@ -98,8 +98,8 @@ var modelbinding = (function(Backbone, _, $) {
       }
     }
 
-    this.getBindingAttr = function(type){ 
-      return this.bindingAttrConfig[type]; 
+    this.getBindingAttr = function(type){
+      return this.bindingAttrConfig[type];
     };
 
     this.getBindingValue = function(element, type){
@@ -248,7 +248,7 @@ var modelbinding = (function(Backbone, _, $) {
         var attr_value = model.get(attribute_name);
         if (typeof attr_value !== "undefined" && attr_value !== null) {
           element.val(attr_value);
-        } 
+        }
 
         // set the model to the form's value if there is no model value
         if (element.val() != attr_value) {
@@ -294,9 +294,18 @@ var modelbinding = (function(Backbone, _, $) {
 
           // bind the form changes to the model
           var elementChange = function(ev){
-            var element = view.$(ev.currentTarget);
+            var element = view.$(ev.currentTarget),
+                val = element.val(),
+                modelVal;
             if (element.is(":checked")){
-              setModelValue(group_name, element.val());
+              if(val === 'true'){
+                modelVal = true;
+              } else if(val === 'false') {
+                modelVal = false;
+              } else {
+                modelVal = val;
+              }
+              setModelValue(group_name, modelVal);
             }
           };
 

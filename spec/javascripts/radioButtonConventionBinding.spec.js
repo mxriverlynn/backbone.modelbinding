@@ -15,6 +15,20 @@ describe("radio button convention binding", function(){
     expect(this.model.get('graduated')).toEqual("no");
   });
 
+  it("bind view changes to the model's field, by convention of id (boolean true)", function(){
+    var el = this.view.$("#us_citizen_true");
+    el.attr("checked", "checked");
+    el.trigger('change');
+    expect(this.model.get('us_citizen')).toBe(true);
+  });
+
+  it("bind view changes to the model's field, by convention of id (boolean false)", function(){
+    var el = this.view.$("#us_citizen_false");
+    el.attr("checked", "checked");
+    el.trigger('change');
+    expect(this.model.get('us_citizen')).toBe(false);
+  });
+
   it("bind model field changes to the form input, by convention of id", function(){
     this.model.set({graduated: "yes"});
     var el = this.view.$("#graduated_yes");
