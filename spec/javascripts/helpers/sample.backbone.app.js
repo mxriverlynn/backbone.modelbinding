@@ -52,6 +52,9 @@ AView = Backbone.View.extend({
       <input type='checkbox' id='drivers_license' value='yes'>\
       <input type='checkbox' id='motorcycle_license' value='yes' checked='checked'>\
       <input type='checkbox' id='binary_checkbox' value='yes'>\
+      <input type='checkbox' id='endorsements[]', value='class_a'>\
+      <input type='checkbox' id='endorsements[]', value='class_b'>\
+      <input type='checkbox' id='endorsements[]', value='class_c'>\
       <textarea id='bio'></textarea>\
       <p id='aParagraph'></p>\
       <input type='password' id='password'>\

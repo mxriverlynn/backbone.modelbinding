@@ -5,9 +5,24 @@ describe("checkbox convention bindings", function(){
       this.model = new AModel({
         drivers_license: true,
         motorcycle_license: false,
+        endorsements: ['class_a', 'class_b']
       });
       this.view = new AView({model: this.model});
       this.view.render();
+    });
+
+    it("bind array removal to the model's array field", function(){
+      var el = this.view.$("#endorsements\\[\\][value=class_c]");
+      el.attr("checked");
+      el.trigger('change');
+      expect(this.model.get('endorsements')).toContain('class_c');
+    });
+
+    it("bind array removal to the model's array field", function(){
+      var el = this.view.$("#endorsements\\[\\][value=class_a]");
+      el.removeAttr("checked");
+      el.trigger('change');
+      expect(this.model.get('endorsements')).not.toContain('class_a');
     });
 
     it("bind view changes to the model's field", function(){
