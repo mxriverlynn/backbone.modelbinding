@@ -28,7 +28,7 @@ var phoenix = (function(Backbone, _, $) {
   };
 
   phoenix.ModelBinder = function(view){
-    this.phoenixs = [];
+    this.bindings = [];
     this.elementBindings = [];
 
     this.bind = function(){
@@ -38,7 +38,7 @@ var phoenix = (function(Backbone, _, $) {
 
     this.unbind = function(){
       // unbind the model bindings
-      _.each(this.phoenixs, function(binding){
+      _.each(this.bindings, function(binding){
         binding.model.unbind(binding.eventName, binding.callback);
       });
     };
@@ -46,7 +46,7 @@ var phoenix = (function(Backbone, _, $) {
     this.registerDataBinding = function(model, eventName, callback){
       // bind the model changes to the elements
       model.bind(eventName, callback);
-      this.phoenixs.push({model: model, eventName: eventName, callback: callback});
+      this.bindings.push({model: model, eventName: eventName, callback: callback});
     };
   };
 
