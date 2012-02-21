@@ -31,6 +31,6 @@ describe("Backbone.noConflict", function(){
   });
   
   it("should use local copy of backbone when binding", function(){
-    this.localBackbone.ModelBinding.bind(this.view);
+    this.localBackbone.Phoenix.bind(this.view);
   });
 });

@@ -45,7 +45,7 @@ describe("default data-bind substitutions", function(){
 
 describe("configured data-bind substitutions", function(){
   beforeEach(function(){
-    Backbone.ModelBinding.Configuration.dataBindSubst({
+    Backbone.Phoenix.Configuration.dataBindSubst({
       text: "text subst",
       html: "&nbsp;"
     });
@@ -57,7 +57,7 @@ describe("configured data-bind substitutions", function(){
   });
 
   afterEach(function(){
-    Backbone.ModelBinding.Configuration.restoreDataBindSubstConfig();
+    Backbone.Phoenix.Configuration.restoreDataBindSubstConfig();
   });
 
   describe("when binding to text and unsetting the model's property", function(){
@@ -86,7 +86,7 @@ describe("configured data-bind substitutions", function(){
 
 describe("resetting the data bind substitutions", function(){
   beforeEach(function(){
-    Backbone.ModelBinding.Configuration.dataBindSubst({
+    Backbone.Phoenix.Configuration.dataBindSubst({
       text: "text subst",
       html: "html subst"
     });
@@ -97,7 +97,7 @@ describe("resetting the data bind substitutions", function(){
     this.view = new AView({model: this.model});
     this.view.render();
 
-    Backbone.ModelBinding.Configuration.restoreDataBindSubstConfig();
+    Backbone.Phoenix.Configuration.restoreDataBindSubstConfig();
   });
 
   it("should use the default for text substitutions", function(){
@@ -115,7 +115,7 @@ describe("resetting the data bind substitutions", function(){
 
 describe("when the data-bind attribute is manually configured", function(){
   beforeEach(function(){
-    Backbone.ModelBinding.Conventions.databind.selector = "*[data-bind-bb]";
+    Backbone.Phoenix.Configuration.dataBindAttr = "data-bind-bb";
     this.model = new AModel({
       doctor: "Seuss",
       villain: "mort"
@@ -123,7 +123,7 @@ describe("when the data-bind attribute is manually configured", function(){
     this.view = new AView({model: this.model});
     this.view.render();
     this.el = this.view.$("#doctor_data_bind_bb");
-    Backbone.ModelBinding.Conventions.databind.selector = "*[data-bind]";
+    Backbone.Phoenix.Configuration.dataBindAttr = "data-bind";
   });
 
   it("should set the element's text to the model's property value immediately", function(){

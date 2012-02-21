@@ -63,7 +63,7 @@ AView = Backbone.View.extend({
       <input type='search' id='search'>\
       ");
     this.$el.append(html);
-    Backbone.ModelBinding.bind(this);
+    Backbone.Phoenix.bind(this);
   }
 });
 
@@ -86,7 +86,7 @@ AllBindingAttributesView = Backbone.View.extend({
     ");
     this.$el.append(html);
 
-    Backbone.ModelBinding.bind(this, {all: "class"});
+    Backbone.Phoenix.bind(this, {all: "class"});
   }
 });
 
@@ -109,7 +109,7 @@ GlobalAllBindingAttributesView = Backbone.View.extend({
     ");
     this.$el.append(html);
 
-    Backbone.ModelBinding.bind(this);
+    Backbone.Phoenix.bind(this);
   }
 });
 
@@ -132,7 +132,7 @@ AnotherView = Backbone.View.extend({
 
     this.$el.append(html);
 
-    Backbone.ModelBinding.bind(this, {
+    Backbone.Phoenix.bind(this, {
       text: 'class',
       textarea: 'class',
       password: 'class',

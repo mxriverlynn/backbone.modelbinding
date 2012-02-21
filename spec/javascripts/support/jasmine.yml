@@ -14,7 +14,7 @@ src_files:
     - public/javascripts/underscore.js
     - public/javascripts/jquery.js
     - public/javascripts/backbone.js
-    - backbone.modelbinding.js
+    - backbone.phoenix.js
 
 # stylesheets
 #
