@@ -190,7 +190,7 @@ This is the inverse of `displayed`.
 
 ```html
 <div data-bind="hidden isValid" />
-```html
+```
 
 ```js
 someModel.set({isValid: true});
