@@ -90,30 +90,53 @@ var phoenix = (function(Backbone, _, $) {
   }
 
   // ----------------------------
-  // Data-Bind Binding Methods
+  // Data-Binding Handlers
   // ----------------------------
+
+  var bindingHandlers = {};
+
+  phoenix.addBindingHandler = function(name, handler){
+    bindingHandlers[name] = handler;
+  };
+
+  phoenix.getBindingHandler = function(name){
+    return bindingHandlers[name] || phoenix.defaultBindingHandler;
+  };
+
+  // data-bind="someAttr foo"
+  phoenix.defaultBindingHandler = function(element, val, attr){
+    element.attr(attr, val);
+  };
+
+  // data-bind="html foo"
+  phoenix.addBindingHandler("html", function(element, val){
+    element.html(val);
+  });
+
+  // data-bind="text foo"
+  phoenix.addBindingHandler("text", function(element, val){
+    element.text(val);
+  });
+
+  // data-bind="enabled foo"
+  phoenix.addBindingHandler("enabled", function(element, val){
+    element.attr("disabled", !val);
+  });
+
+  // data-bind="displayed foo"
+  phoenix.addBindingHandler("displayed", function(element, val){
+    element[val? "show" : "hide"]();
+  });
+
+  // data-bind="hidden foo"
+  phoenix.addBindingHandler("hidden", function(element, val){
+    element[val? "hide" : "show"]();
+  });
+
   var setOnElement = function(element, attr, val){
-    var valBefore = val;
-    val = phoenix.Configuration.getDataBindSubst(attr, val);
-    switch(attr){
-      case "html":
-        element.html(val);
-        break;
-      case "text":
-        element.text(val);
-        break;
-      case "enabled":
-        element.attr("disabled", !val);
-        break;
-      case "displayed":
-        element[val? "show" : "hide"]();
-        break;
-      case "hidden":
-        element[val? "hide" : "show"]();
-        break;
-      default:
-        element.attr(attr, val);
-    }
+    var substVal = phoenix.Configuration.getDataBindSubst(attr, val);
+    var handler = phoenix.getBindingHandler(attr)
+    handler(element, substVal, attr);
   };
 
   var splitBindingAttr = function(element)
@@ -121,6 +144,7 @@ var phoenix = (function(Backbone, _, $) {
     var dataBindConfigList = [];
     var dataBindAttributeName = phoenix.Configuration.dataBindAttr;
     var databindList = element.attr(dataBindAttributeName).split(";");
+
     _.each(databindList, function(attrbind){
       var databind = $.trim(attrbind).split(" ");
 
@@ -132,6 +156,7 @@ var phoenix = (function(Backbone, _, $) {
         modelAttr: databind[1]
       });
     });
+
     return dataBindConfigList;
   };
 
