@@ -61,19 +61,7 @@ var phoenix = (function(Backbone, _, $) {
     },
 
     dataBindSubst: function(config){
-      this.storeDataBindSubstConfig();
       _.extend(this.dataBindSubstConfig, config);
-    },
-
-    storeDataBindSubstConfig: function(){
-      phoenix.Configuration._dataBindSubstConfig = _.clone(this.dataBindSubstConfig);
-    },
-
-    restoreDataBindSubstConfig: function(){
-      if (phoenix.Configuration._dataBindSubstConfig){
-        this.dataBindSubstConfig = phoenix.Configuration._dataBindSubstConfig;
-        delete phoenix.Configuration._dataBindSubstConfig;
-      }
     },
 
     getDataBindSubst: function(elementType, value){
