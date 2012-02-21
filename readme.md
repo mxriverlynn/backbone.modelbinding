@@ -42,7 +42,7 @@ and then tab or click away from it (to fire the change event). When the model's 
 property is updated, the `data-bind` convention will pick up the change and set
 the text of the `span` to the model's name.
 
-### Data-Bind Multiple Attributes
+## Data-Bind Multiple Attributes
 
 Multiple attributes can be specified for a single element's `data-bind` by separating
 each with a `;` (semi-colon). For example:
@@ -71,7 +71,7 @@ someView = new SomeView({model: someModel});
 In this example, both the text and the css class will be updated when you change
 the name input. You can data-bind as many attributes as you need, in this manner.
 
-### Configurating the data-bind selector
+## Configurating the data-bind selector
 
 By default, the data-bind capabilities looks for a `data-bind` attribute on the
 HTML elements being bound. This is configurable, though:
@@ -87,7 +87,7 @@ This example will look for elements with an attribute of `my-binder` instead of
 <div my-binder="text someAttr"></div>
 ```
 
-### Special Cases For data-bind
+## Data-Bind Handlers
 
 There are several special cases for the data-bind attribute. These allow a little more
 functionality than just setting an attribute on an element. 
@@ -97,7 +97,7 @@ functionality than just setting an attribute on an element.
 * html - replace the html contents of the element
 * enabled - enable or disable the html element
 
-#### (default)
+### (default)
 
 If you only specify the model's property in the data-bind attribute, then the data-bind
 will bind the value of that model property to the `text` of the html element.
@@ -108,7 +108,7 @@ will bind the value of that model property to the `text` of the html element.
 
 See the document for data-bind text, below.
 
-#### text
+### text
 
 If you set the data-bind attribute to use `text`, it will replace the text contents of the
 html element instead of just setting an element attribute.
@@ -121,7 +121,7 @@ html element instead of just setting an element attribute.
 someModel.set({someProperty: "some value"});
 ```
 
-#### html
+### html
 
 If you set the data-bind attribute to use `html`, it will replace the entire
 inner html of the html element, instead of just setting an element attribute.
@@ -134,7 +134,7 @@ inner html of the html element, instead of just setting an element attribute.
 someModel.set({someProperty: "some value"});
 ```
 
-#### enabled
+### enabled
 
 This special case breaks the html element standard of using a `disabled` attribute, specifically
 to inverse the logic used for enabling / disabling an element, to keep the data-bind attribute
@@ -167,7 +167,7 @@ someModel.set({isValid: false});
 This will disable the button when the model is invalid and enable the button when the model is
 valid.
 
-#### displayed
+### displayed
 
 This allows you to specify that an element should be shown or hidden by setting the css
 of the element according to the value of the model properties specified.
@@ -184,7 +184,7 @@ When the model's property is set to false, the HTML element's `display` css will
 to `none`. When the model's property is set to true, the HTML element's `display` css
 will be set to `block`.
 
-#### hidden
+### hidden
 
 This is the inverse of `displayed`.
 
@@ -200,7 +200,48 @@ When the model's property is set to false, the HTML element's `display` css will
 to `block`. When the model's property is set to true, the HTML element's `display` css
 will be set to `none`.
 
-### Data-Bind To Any Model Event
+### Add Your Own Data-Bind Handler
+
+You can easily add your own data-bind handler by calling
+`Backbone.Phoenix.addBindingHandler(name, callback);`
+
+The first parameter is the binding function name, in this case "foo".
+
+The second parameter is the binding function itself. This callback
+function receives three parameters:
+
+* element: a jQuery selector object for the HTML element with the data-bind configuration
+* value: the value that is to be used for updating the HTML element
+* name: the binding function name ("foo" in the above example)
+
+For example, to handle this data-binding:
+
+```html
+<div data-bind="foo someAttr" />
+```
+
+Register this handler:
+
+```js
+// data-bind="foo bar"
+Backbone.Phoenix.addBindingHandler("foo", function(element, value, name){
+  // handle the element update, with the value, here
+});
+```
+
+### Override Binding Handlers
+
+All of the existing binding handlers are configured this way. This means
+you can override the existing handlers by specifying a name that is
+already in use.
+
+```js
+Backbone.Phoenix.addBindingHandler("text", function(element, value, name){
+  elemnt
+});
+```
+
+## Data-Bind To Any Model Event
 
 In addition to binding model attributes, you can use the data-bind functionality to
 bind to any arbitrary event that the model fires. This is done with the syntax:
@@ -218,7 +259,7 @@ model.trigger("foo", "bar");
 
 This will cause the above data-binding to produce `<div>bar</div>`.
 
-### Data-Bind Substitutions
+## Data-Bind Substitutions
 
 If a model's property is `unset`, the data-bind may not update correctly when using `text` or `html`
 as the bound attribute of the element.
@@ -258,6 +299,7 @@ div whose contents is a single space, instead of being empty.
 ### v0.6.0
 
 * **BREAKING**: Backbone.Phoenix is rising from the ashes of Backbone.ModelBinding
+* Added `addBindingHandler` and converted all handlers to this
 
 # Legal Mumbo Jumbo (MIT License)
 
