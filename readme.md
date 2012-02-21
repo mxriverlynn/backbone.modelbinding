@@ -16,12 +16,14 @@ and specify what should be updated with which model property using an `elementAt
 format. For example `<span data-bind="text name">` will update the span's text with
 the model's name property, when the model's name changes.
 
-````
+```html
 <form>
   <input type="text" id="name">
 </form>
 Name: <span data-bind="text name">
+```
 
+```js
 SomeView = Backbone.View.extend({
   // ... 
 
@@ -33,7 +35,7 @@ SomeView = Backbone.View.extend({
 
 someModel = new SomeModel();
 someView = new SomeView({model: someModel});
-````
+```
 
 In this example, the model's `name` will be updated when you type into the text box
 and then tab or click away from it (to fire the change event). When the model's `name`
@@ -45,12 +47,14 @@ the text of the `span` to the model's name.
 Multiple attributes can be specified for a single element's `data-bind` by separating
 each with a `;` (semi-colon). For example:
 
-````
+```html
 <form>
   <input type="text" id="name">
 </form>
 Name: <span data-bind="text name; class name">
+```
 
+```js
 SomeView = Backbone.View.extend({
   // ... 
 
@@ -62,7 +66,7 @@ SomeView = Backbone.View.extend({
 
 someModel = new SomeModel();
 someView = new SomeView({model: someModel});
-````
+```
 
 In this example, both the text and the css class will be updated when you change
 the name input. You can data-bind as many attributes as you need, in this manner.
@@ -72,16 +76,16 @@ the name input. You can data-bind as many attributes as you need, in this manner
 By default, the data-bind capabilities looks for a `data-bind` attribute on the
 HTML elements being bound. This is configurable, though:
 
-````
-Backbone.Phoenix.Conventions.databind.selector = "[my-binder]";
-````
+```js
+Backbone.Phoenix.Configuration.dataBindAttr = "my-binder";
+```
 
 This example will look for elements with an attribute of `my-binder` instead of
 `data-bind`.
 
-````
+```html
 <div my-binder="text someAttr"></div>
-````
+```
 
 ### Special Cases For data-bind
 
@@ -98,9 +102,9 @@ functionality than just setting an attribute on an element.
 If you only specify the model's property in the data-bind attribute, then the data-bind
 will bind the value of that model property to the `text` of the html element.
 
-````
+```html
 <div data-bind="name"/>
-````
+```
 
 See the document for data-bind text, below.
 
@@ -109,24 +113,26 @@ See the document for data-bind text, below.
 If you set the data-bind attribute to use `text`, it will replace the text contents of the
 html element instead of just setting an element attribute.
 
-````
+```html
 <div id="someDiv" data-bind="text someProperty"></div>
+```
 
-
+```js
 someModel.set({someProperty: "some value"});
-````
+```
 
 #### html
 
 If you set the data-bind attribute to use `html`, it will replace the entire
 inner html of the html element, instead of just setting an element attribute.
 
-````
+```html
 <div id="someDiv" data-bind="html someProperty"></div>
+```
 
-
+```js
 someModel.set({someProperty: "some value"});
-````
+```
 
 #### enabled
 
@@ -137,24 +143,26 @@ clean and easy to read.
 If you have a model with a property that indicates a negative state, such as `invalid`, then you
 can use a data-bind attribute of `disabled`:
 
-````
+```html
 <button id="someButton" data-bind="disabled invalid"></div>
+```
 
-
+```js
 someModel.set({invalid: true});
-````
+```
 
 However, some developers prefer to use positive state, such as `isValid`. In this case, setting
 the disabled attribute to the model's isValid property would result in the button being disabled
 when the model is valid and enabled when the model is not valid. To correct this, a special case
 has been added to enable and disable an element with `enabled`.
 
-````
+```html
 <button id="someButton" data-bind="enabled isValid"></div>
+```
 
-
+```js
 someModel.set({isValid: false});
-````
+```
 
 This will disable the button when the model is invalid and enable the button when the model is
 valid.
@@ -164,11 +172,13 @@ valid.
 This allows you to specify that an element should be shown or hidden by setting the css
 of the element according to the value of the model properties specified.
 
-````
+```html
 <div data-bind="displayed isValid" />
+```
 
+```js
 someModel.set({isValid: false});
-````
+```
 
 When the model's property is set to false, the HTML element's `display` css will be set
 to `none`. When the model's property is set to true, the HTML element's `display` css
@@ -178,11 +188,13 @@ will be set to `block`.
 
 This is the inverse of `displayed`.
 
-````
+```html
 <div data-bind="hidden isValid" />
+```html
 
+```js
 someModel.set({isValid: true});
-````
+```
 
 When the model's property is set to false, the HTML element's `display` css will be set
 to `block`. When the model's property is set to true, the HTML element's `display` css
@@ -211,28 +223,32 @@ This will cause the above data-binding to produce `<div>bar</div>`.
 If a model's property is `unset`, the data-bind may not update correctly when using `text` or `html`
 as the bound attribute of the element.
 
-````
+```html
 <div data-bind="text something"></div>
+```
 
+```js
 model.set({something: "whatever"});
 model.unset("something");
-````
+```
 
 The result will be a div with it's text set to "". this is handled through the data-bind's 
 substitutions for undefined values. The default substitution is to replace an undefined
 value with an empty string. However, this can be per attribute:
 
-````
+```html
 <div data-bind="text something"></div>
 <div data-bind="html something"></div>
+```
 
+```js
 Backbone.Phoenix.Configuration.dataBindSubst({
   text: "undefined. setting text to this",
   html: "&nbsp;"
 });
 model.set({something: "whatever"});
 model.unset("something");
-````
+```
 
 The result of this example will be a div that displays "undefined. setting the text to this" and a
 div whose contents is a single space, instead of being empty.
