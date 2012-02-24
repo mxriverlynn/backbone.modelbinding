@@ -147,11 +147,17 @@ var phoenix = (function(Backbone, _, $) {
     return dataBindConfigList;
   };
 
+  // Attribute Handlers
+  // ------------------
+  
   var attributeHandlers = {};
   
   phoenix.addAttributeHandler = function(prefix, handler){
     attributeHandlers[prefix] = handler;
   };
+
+  // Data-Bind Processing
+  // --------------------
 
   var getEventConfiguration = function(element, databind){
     var config = {};

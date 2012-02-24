@@ -241,6 +241,28 @@ Backbone.Phoenix.addBindingHandler("text", function(element, value, name){
 });
 ```
 
+## Attribute Handlers
+
+You can do some special handling of attributes by registering an attribute
+handler function.
+
+```html
+<div data-bind="text fn:foo|bar">
+```
+
+```js
+this.model.set({"bar": "some value"});
+```
+
+To handle this, a handler for the "fn" prefix can be registered like this:
+
+```js
+Backbone.Phoenix.addAttributeHandler("fn", function(config, value){
+  // config => foo
+  // value => "some value" (the value of the "bar" attribute)
+});
+```
+
 ## Data-Bind To Any Model Event
 
 In addition to binding model attributes, you can use the data-bind functionality to
@@ -300,6 +322,7 @@ div whose contents is a single space, instead of being empty.
 
 * **BREAKING**: Backbone.Phoenix is rising from the ashes of Backbone.ModelBinding
 * Added `addBindingHandler` and converted all handlers to this
+* Added `addAttributeHandler` to handle special attribute awesomeness
 
 # Legal Mumbo Jumbo (MIT License)
 
