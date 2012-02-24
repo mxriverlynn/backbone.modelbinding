@@ -8,13 +8,12 @@ describe("attribute handlers", function(){
   });
 
   describe("when registering an attribute handler", function(){
-    var handlerWascalled;
-
-    Backbone.Phoenix.addAttributeHandler("fn", function(config, value){
-      handlerWasCalled = true;
-    });
+    var handler;
 
     beforeEach(function(){
+      handler = jasmine.createSpy();
+      Backbone.Phoenix.addAttributeHandler("fn", handler);
+
       this.model = new Backbone.Model();
       this.view = new View({
         model: this.model
@@ -25,7 +24,7 @@ describe("attribute handlers", function(){
     });
 
     it("should call the registered handler", function(){
-      expect(handlerWasCalled).toBeTruthy();
+      expect(handler).toHaveBeenCalledWith('foo','foo bar');
     });
   });
 
