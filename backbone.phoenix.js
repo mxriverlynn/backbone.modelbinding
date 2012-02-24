@@ -127,8 +127,7 @@ var phoenix = (function(Backbone, _, $) {
     handler(element, substVal, attr);
   };
 
-  var splitBindingAttr = function(element)
-  {
+  var splitBindingAttr = function(element) {
     var dataBindConfigList = [];
     var dataBindAttributeName = phoenix.Configuration.dataBindAttr;
     var databindList = element.attr(dataBindAttributeName).split(";");
@@ -148,25 +147,42 @@ var phoenix = (function(Backbone, _, $) {
     return dataBindConfigList;
   };
 
+  var attributeHandlers = {};
+  
+  phoenix.addAttributeHandler = function(prefix, handler){
+    attributeHandlers[prefix] = handler;
+  };
+
   var getEventConfiguration = function(element, databind){
     var config = {};
-    var eventName = databind.modelAttr;
-    var index = eventName.indexOf("event:");
+    var eventName;
 
-    if (index == 0) {
-      // "event:foo" binding
-      config.name = eventName.substr(6);
-      config.callback = function(val){
-        setOnElement(element, databind.elementAttr, val);
-      };
-    } else {
-      // standard model attribute binding
-      config.name = "change:" + eventName;
+    var segments = databind.modelAttr.split(":");
+
+    if (segments.length == 1) {
+
+      eventName = "change:" + segments[0];
       config.callback = function(model, val){
         setOnElement(element, databind.elementAttr, val);
-      };
+      }
+
+    } else {
+
+      var prefix = segments[0];
+      var handler = attributeHandlers[prefix];
+      var handlerSegments = segments[1].split("|");
+      var handlerConfig = handlerSegments[0];
+      var attr = handlerSegments[1];
+
+      eventName = "change:" + attr;
+      config.callback = function(model, value){
+        var result = handler(handlerConfig, value);
+        setOnElement(element, databind.elementAttr, result);
+      }
+
     }
 
+    config.name = eventName;
     return config;
   }
 
