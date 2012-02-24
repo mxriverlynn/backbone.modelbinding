@@ -263,6 +263,13 @@ Backbone.Phoenix.addAttributeHandler("fn", function(config, value){
 });
 ```
 
+This requires a format of "prefix:config|attr" where:
+
+* prefix is any arbitrary prefix you want to handle
+* config is any configuration you want for your handler, passed in to your handler
+* attr is the model attribute that triggers the data-binding. The value of the attr
+is passed in to your handler function as the "value" parameter
+
 ## Data-Bind To Any Model Event
 
 In addition to binding model attributes, you can use the data-bind functionality to
