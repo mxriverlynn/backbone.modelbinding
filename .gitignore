@@ -2,3 +2,4 @@
 *.swo
 *.orig
 Gemfile.lock
+.jhw-cache
