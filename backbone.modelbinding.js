@@ -409,7 +409,7 @@ var modelbinding = (function(Backbone, _, $) {
 
     modelBinding.Configuration.getDataBindSubst = function(elementType, value){
       var returnValue = value;
-      if (value === undefined){
+      if (value === undefined || value === null){
         if (dataBindSubstConfig.hasOwnProperty(elementType)){
           returnValue = dataBindSubstConfig[elementType];
         } else {
