@@ -19,16 +19,16 @@ describe("default data-bind substitutions", function(){
     });
   });
 
-//  describe("when binding to a null value on a model property use the default substitution", function(){
-//    beforeEach(function(){
-//      this.model.set("doctor", null);
-//      this.el = this.view.$("#doctor");
-//    });
-//
-//    it("should use the 'default' substitution setting", function(){
-//      expect(this.el.text()).toBe("");
-//    });
-//  });
+  describe("when binding to a null value on a model property use the default substitution", function(){
+    beforeEach(function(){
+      this.model.set("doctor", null);
+      this.el = this.view.$("#doctor");
+    });
+
+    it("should use the 'default' substitution setting", function(){
+      expect(this.el.text()).toBe("");
+    });
+  });
 
   describe("when binding to text and unsetting the model's property", function(){
     beforeEach(function(){
