@@ -6,7 +6,8 @@ inspired by [Brad Phelan](http://xtargets.com/2011/06/11/binding-model-attribute
 and [Brandon Satrom](http://userinexperience.com/?p=633)'s work with Knockout.
 
 This plugin provides a simple, convention based mechanism to create bi-directional
-binding between your HTML form input elements and your Backbone models. 
+binding between your Backbone models and your HTML elements, including form inputs, 
+divs, spans, and so on. 
 
 Instead of writing the same boiler plate code to read from your form inputs and
 populate the model attributes, for every input on your form, you can make a 
