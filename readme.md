@@ -23,7 +23,7 @@ support for `data-bind` attributes, allowing your Backbone model `change` events
 to modify nearly any HTML element on your page. Whether it's updating the text
 of a `<div>`, or changing the css class of an `<img>` tag, the `data-bind` 
 support provides a very powerful and flexible means of creating a very rich
-user experience.
+user experience. **Note: data-bind style bindings are not bi-directional.**
 
 ## Getting Started
 
