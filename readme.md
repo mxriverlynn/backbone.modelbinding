@@ -1,4 +1,25 @@
-# About Backbone.ModelBinding
+# Backbone.ModelBinding Project Status: Abandoned
+
+I'm officially abandoning this project. After many months of 
+purposely ignoring the growing issues list, due to lack of time 
+and lack of me using this library anymore, I'm no longer going 
+to support it.
+
+If anyone in the community wishes to pick it up and take over,
+feel free - and good luck. The code base is a mess. It's bloated,
+it's slow, it's horrendously difficult to change, and the issues
+that have mounted up are nearly impossible to fix without adding
+to the giant mess. The only reasonable options for fixing this
+mess, in my opinion, are to take the basic ideas and write
+something far less clunky and cumbersome, from scratch.
+
+On this lines, there are other options available. For example,
+[Backbone.ModelBinder](https://github.com/theironcook/Backbone.ModelBinder).
+
+I recommend looking at that project, or any of the others that
+are actively maintained.
+
+## About Backbone.ModelBinding
 
 Convention-based, awesome model binding for [Backbone.js](http://documentcloud.github.com/backbone),
 inspired by [Brad Phelan](http://xtargets.com/2011/06/11/binding-model-attributes-to-form-elements-with-backbone-js/),
