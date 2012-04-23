@@ -424,10 +424,14 @@ var modelbinding = (function(Backbone, _, $) {
       val = modelBinding.Configuration.getDataBindSubst(attr, val);
       switch(attr){
         case "html":
-          element.html(val);
+          if (val) {
+              element.html(val);
+          }
           break;
         case "text":
-          element.text(val);
+          if (val) {
+              element.text(val);
+          }
           break;
         case "enabled":
           element.attr("disabled", !val);
