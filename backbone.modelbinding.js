@@ -424,12 +424,12 @@ var modelbinding = (function(Backbone, _, $) {
       val = modelBinding.Configuration.getDataBindSubst(attr, val);
       switch(attr){
         case "html":
-          if (val && (typeof val !== 'undefined') && (val !== null)) {
+          if ((typeof val !== 'undefined') && (val !== null)) {
               element.html(val);
           }
           break;
         case "text":
-          if (val && typeof val !== 'undefined' && val !== null) {
+          if ((typeof val !== 'undefined') && (val !== null)) {
               element.text(val);
           }
           break;
