@@ -15,6 +15,7 @@ something far less clunky and cumbersome, from scratch.
 
 On this lines, there are other options available. For example,
 [Backbone.ModelBinder](https://github.com/theironcook/Backbone.ModelBinder).
+[Rivets.js](http://rivetsjs.com/).
 
 I recommend looking at that project, or any of the others that
 are actively maintained.
