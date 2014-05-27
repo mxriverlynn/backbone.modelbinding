@@ -14,8 +14,8 @@ mess, in my opinion, are to take the basic ideas and write
 something far less clunky and cumbersome, from scratch.
 
 On this lines, there are other options available. For example,
-[Backbone.ModelBinder](https://github.com/theironcook/Backbone.ModelBinder)
-or [Rivets.js](http://rivetsjs.com/).
+[Backbone.ModelBinder](https://github.com/theironcook/Backbone.ModelBinder),
+[Rivets.js](http://rivetsjs.com/) or [Backbone.Stickit](http://nytimes.github.io/backbone.stickit/).
 
 I recommend looking at those projects, or any of the others that
 are actively maintained.
