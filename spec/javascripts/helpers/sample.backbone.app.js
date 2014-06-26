@@ -117,6 +117,7 @@ AnotherView = Backbone.View.extend({
   render: function(){
     var html = $("\
       <input type='text' class='super_power' modelAttr='weakness'>\
+      <input type='text' someAttr='alt_super_power'>\
       <select class='education'> \
         <option value='none'>none</option> \
         <option value='grade_school'>i dun learned at grade skool</option> \

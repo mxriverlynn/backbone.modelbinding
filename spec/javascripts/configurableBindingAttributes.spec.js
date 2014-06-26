@@ -30,6 +30,14 @@ describe("configurableBindingAttributes", function(){
       var el = this.view.$(".super_power");
       expect(el.val()).toEqual("mega pooping");
     });
+    
+    it("doesn't bind a field when the convention field isn't on the element", function(){
+      var el = this.view.$("[someAttr=alt_super_power]");
+      el.val("x ray vision");
+      el.trigger('change');
+
+      expect(this.model.get('undefined')).toEqual(undefined);
+    });
   });
   
   describe("radio element binding using configurable attribute", function(){
