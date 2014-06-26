@@ -181,6 +181,8 @@ var modelbinding = (function(Backbone, _, $) {
         var elementType = _getElementType(element);
         var attribute_name = config.getBindingValue(element, elementType);
 
+        if (attribute_name === void 0) return;
+
         var modelChange = function(changed_model, val){ element.val(val); };
 
         var setModelValue = function(attr_name, value){
