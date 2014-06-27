@@ -16,7 +16,7 @@ describe("checkbox convention bindings", function(){
       el.trigger('change');
       expect(this.model.get('drivers_license')).toBeFalsy();
     });
-
+    
     it("bind model field changes to the form input", function(){
       var el = this.view.$("#drivers_license");
 
@@ -90,6 +90,52 @@ describe("checkbox convention bindings", function(){
       expect(selected).toBeTruthy();
     });
   });
+
+  describe("when binding an array to a checkbox", function(){
+    beforeEach(function(){
+      this.model = new AModel({
+        endorsements: ['class_a', 'class_b']
+      });
+      this.view = new AView({model: this.model});
+      this.view.render();
+    });
+
+    it("bind addition to the model's field", function(){
+      var el = this.view.$("#endorsements\\[\\][value=class_c]");
+      el.attr("checked", true);
+      el.trigger('change');
+      expect(this.model.get('endorsements')).toContain('class_c');
+    });
+
+    it("bind removal to the model's field", function(){
+      expect(this.model.get('endorsements')).toContain('class_a');
+      var el = this.view.$("#endorsements\\[\\][value=class_a]");
+      el.removeAttr("checked");
+      el.trigger('change');
+      expect(this.model.get('endorsements')).not.toContain('class_a');
+    });
+
+    it("bind model field changes to the form input", function(){
+      var el = this.view.$("#endorsements\\[\\][value=class_a]");
+
+      // uncheck it
+      this.model.set({endorsements: ['class_b']});
+      var selected = el.attr("checked");
+      expect(selected).toBeFalsy();
+
+      // then check it
+      this.model.set({endorsements: ['class_a']});
+      var selected = el.attr("checked");
+      expect(selected).toBeTruthy();
+    });
+    
+     it("unchecks the box for a falsy value, on render", function(){
+      var el = this.view.$("#endorsements\\[\\][value=class_c]");
+      var selected = el.attr("checked");
+
+      expect(selected).toBeFalsy();
+    });
+  }); 
 
   describe("when there is no value in the model", function(){
     beforeEach(function(){
