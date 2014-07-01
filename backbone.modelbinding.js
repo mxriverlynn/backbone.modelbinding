@@ -121,7 +121,8 @@ var modelbinding = (function(Backbone, _, $) {
     tel: "id",
     search: "id",
     url: "id",
-    email: "id"
+    email: "id",
+    date: "id"
   };
 
   modelBinding.Configuration.store = function(){
@@ -154,6 +155,7 @@ var modelbinding = (function(Backbone, _, $) {
     config.search = attribute;
     config.url = attribute;
     config.email = attribute;
+    config.date = attribute;
   };
 
   // ----------------------------
@@ -523,7 +525,8 @@ var modelbinding = (function(Backbone, _, $) {
     tel: {selector: "input[type=tel]", handler: StandardBinding},
     search: {selector: "input[type=search]", handler: StandardBinding},
     url: {selector: "input[type=url]", handler: StandardBinding},
-    email: {selector: "input[type=email]", handler: StandardBinding}
+    email: {selector: "input[type=email]", handler: StandardBinding},
+    date: {selector: "input[type=date]", handler: StandardBinding}
   };
 
   return modelBinding;
