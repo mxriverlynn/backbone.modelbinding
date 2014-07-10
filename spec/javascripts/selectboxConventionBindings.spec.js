@@ -46,6 +46,14 @@ describe("select element convention binding", function(){
 
     expect(this.model.get('education_text')).toEqual("i dun learned at grade skool");
   });
+  
+  it("applies the text of multiple selections to the model", function(){
+    var el = this.view.$("#multiple_select");
+    el.val(["selection_1", "selection_2"]);
+    el.trigger('change');
+
+    expect(this.model.get('multiple_select_text')).toEqual(["Selection 1", "Selection 2"]);
+  });
 
   it("updates the model to the selected value when the model is set to a value that doesn't exist, on render", function(){
     var el = this.view.$("#operating_system");
