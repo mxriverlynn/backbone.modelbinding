@@ -98,15 +98,15 @@ var modelbinding = (function(Backbone, _, $) {
       }
     }
 
-    this.getBindingAttr = function(type){ 
-      return this.bindingAttrConfig[type]; 
-    };
+  };
 
-    this.getBindingValue = function(element, type){
-      var bindingAttr = this.getBindingAttr(type);
-      return element.attr(bindingAttr);
-    };
+  modelBinding.Configuration.prototype.getBindingAttr = function(type){
+    return this.bindingAttrConfig[type];
+  };
 
+  modelBinding.Configuration.prototype.getBindingValue = function(element, type){
+    var bindingAttr = this.getBindingAttr(type);
+    return element.attr(bindingAttr);
   };
 
   modelBinding.Configuration.bindindAttrConfig = {
@@ -424,10 +424,14 @@ var modelbinding = (function(Backbone, _, $) {
       val = modelBinding.Configuration.getDataBindSubst(attr, val);
       switch(attr){
         case "html":
-          element.html(val);
+          if ((typeof val !== 'undefined') && (val !== null)) {
+              element.html(val);
+          }
           break;
         case "text":
-          element.text(val);
+          if ((typeof val !== 'undefined') && (val !== null)) {
+              element.text(val);
+          }
           break;
         case "enabled":
           element.attr("disabled", !val);
