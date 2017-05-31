@@ -22,7 +22,7 @@ var modelbinding = (function(Backbone, _, $) {
 
     unbind: function(view){
       if (view.modelBinder){
-        view.modelBinder.unbind()
+        view.modelBinder.unbind();
       }
     }
   };
@@ -38,8 +38,9 @@ var modelbinding = (function(Backbone, _, $) {
         if (conventions.hasOwnProperty(conventionName)){
           var conventionElement = conventions[conventionName];
           var handler = conventionElement.handler;
+          var event = conventionElement.event;
           var conventionSelector = conventionElement.selector;
-          handler.bind.call(this, conventionSelector, view, view.model, this.config);
+          handler.bind.call(this, conventionSelector, event, view, view.model, this.config);
         }
       }
     };
@@ -70,10 +71,10 @@ var modelbinding = (function(Backbone, _, $) {
       this.modelBindings.push({model: model, eventName: eventName, callback: callback});
     };
 
-    this.registerElementBinding = function(element, callback){
+    this.registerElementBinding = function(element, event, callback){
       // bind the form changes to the model
-      element.bind("change", callback);
-      this.elementBindings.push({element: element, eventName: "change", callback: callback});
+      element.bind(event, callback);
+      this.elementBindings.push({element: element, eventName: event, callback: callback});
     };
   };
 
@@ -121,6 +122,7 @@ var modelbinding = (function(Backbone, _, $) {
     tel: "id",
     search: "id",
     url: "id",
+    telerik_dropdown: "id",
     email: "id"
   };
 
@@ -153,6 +155,7 @@ var modelbinding = (function(Backbone, _, $) {
     config.tel = attribute;
     config.search = attribute;
     config.url = attribute;
+    config.telerik_dropdown = attribute,
     config.email = attribute;
   };
 
@@ -173,7 +176,7 @@ var modelbinding = (function(Backbone, _, $) {
       return type;
     };
 
-    methods.bind = function(selector, view, model, config){
+    methods.bind = function(selector, event, view, model, config){
       var modelBinder = this;
 
       view.$(selector).each(function(index){
@@ -194,7 +197,7 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
+        modelBinder.registerElementBinding(element, event, elementChange);
 
         // set the default value on the form, from the model
         var attr_value = model.get(attribute_name);
@@ -213,12 +216,64 @@ var modelbinding = (function(Backbone, _, $) {
   })(Backbone);
 
   // ----------------------------
+  // Telerik DropDown Box Bi-Directional Binding Methods
+  // ----------------------------
+  var TelerikDropDownBoxBinding = (function(Backbone){
+    var methods = {};
+   
+    methods.bind = function(selector, event, view, model, config){
+      var modelBinder = this;
+
+      view.$(selector).each(function(index){
+        var bindingAttr = config.getBindingAttr('telerik_dropdown');
+        var attribute_name = $('input', view.$(selector)).attr('id');
+        var element = $('#' + attribute_name).data('tDropDownList');
+          
+        var modelChange = function(changed_model, val){ element.value(val); };
+
+        var setModelValue = function(attr, val, text){
+          var cmb = $('#' + attr).data('tDropDownList');
+          var data = {};
+          data[attr] = cmb.value();
+          data[attr + "_text"] = cmb.text();
+          model.set(data);
+        };
+
+        var elementChange = function(ev){
+          var targetEl = $(ev.target).data('tDropDownList');
+          var value = targetEl.value();
+          var text = targetEl.text();
+          setModelValue(attribute_name, value, text);
+        };
+
+        modelBinder.registerModelBinding(model, attribute_name, modelChange);
+        modelBinder.registerElementBinding(element.$element, event, elementChange);
+
+        // set the default value on the form, from the model
+        var attr_value = model.get(attribute_name);
+        if (typeof attr_value !== "undefined" && attr_value !== null) {
+          element.value(attr_value);
+        } 
+
+        // set the model to the form's value if there is no model value
+        if (element.value() != attr_value) {
+          var value = element.value();
+          var text = element.text();
+          setModelValue(attribute_name, value, text);
+        }
+      });
+    };
+
+    return methods;
+  })(Backbone);
+    
+  // ----------------------------
   // Select Box Bi-Directional Binding Methods
   // ----------------------------
   var SelectBoxBinding = (function(Backbone){
     var methods = {};
 
-    methods.bind = function(selector, view, model, config){
+    methods.bind = function(selector, event, view, model, config){
       var modelBinder = this;
 
       view.$(selector).each(function(index){
@@ -242,7 +297,7 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
+        modelBinder.registerElementBinding(element, event, elementChange);
 
         // set the default value on the form, from the model
         var attr_value = model.get(attribute_name);
@@ -268,7 +323,7 @@ var modelbinding = (function(Backbone, _, $) {
   var RadioGroupBinding = (function(Backbone){
     var methods = {};
 
-    methods.bind = function(selector, view, model, config){
+    methods.bind = function(selector, event, view, model, config){
       var modelBinder = this;
 
       var foundElements = [];
@@ -303,7 +358,7 @@ var modelbinding = (function(Backbone, _, $) {
           var group_selector = "input[type=radio][" + bindingAttr + "='" + group_name + "']";
           view.$(group_selector).each(function(){
             var groupEl = $(this);
-            modelBinder.registerElementBinding(groupEl, elementChange);
+            modelBinder.registerElementBinding(groupEl, event, elementChange);
           });
 
           var attr_value = model.get(group_name);
@@ -330,7 +385,7 @@ var modelbinding = (function(Backbone, _, $) {
   var CheckboxBinding = (function(Backbone){
     var methods = {};
 
-    methods.bind = function(selector, view, model, config){
+    methods.bind = function(selector, event, view, model, config){
       var modelBinder = this;
 
       view.$(selector).each(function(index){
@@ -360,7 +415,7 @@ var modelbinding = (function(Backbone, _, $) {
         };
 
         modelBinder.registerModelBinding(model, attribute_name, modelChange);
-        modelBinder.registerElementBinding(element, elementChange);
+        modelBinder.registerElementBinding(element, event, elementChange);
 
         var attr_exists = model.attributes.hasOwnProperty(attribute_name);
         if (attr_exists) {
@@ -462,30 +517,31 @@ var modelbinding = (function(Backbone, _, $) {
       return dataBindConfigList;
     };
 
-    var getEventConfiguration = function(element, databind){
-      var config = {};
-      var eventName = databind.modelAttr;
-      var index = eventName.indexOf("event:");
+      var getEventConfiguration = function(element, databind) {
+          var config = { };
+          var eventName = databind.modelAttr;
+          var index = eventName.indexOf("event:");
 
-      if (index == 0) {
-        // "event:foo" binding
-        config.name = eventName.substr(6);
-        config.callback = function(val){
-          setOnElement(element, databind.elementAttr, val);
-        };
-      } else {
-        // standard model attribute binding
-        config.name = "change:" + eventName;
-        config.callback = function(model, val){
-          setOnElement(element, databind.elementAttr, val);
-        };
-      }
+          if (index == 0) {
+              // "event:foo" binding
+              config.name = eventName.substr(6);
+              config.callback = function(val) {
+                  setOnElement(element, databind.elementAttr, val);
+              };
+          } else {
+              // standard model attribute binding
+              config.name = "change:" + eventName;
+              config.callback = function(model, val) {
+                  setOnElement(element, databind.elementAttr, val);
+              };
+          }
 
-      return config;
-    }
+          return config;
+      };
+      
     var methods = {};
 
-    methods.bind = function(selector, view, model, config){
+    methods.bind = function(selector, event, view, model, config){
       var modelBinder = this;
 
       view.$(selector).each(function(index){
@@ -510,20 +566,22 @@ var modelbinding = (function(Backbone, _, $) {
   // Binding Conventions
   // ----------------------------
   modelBinding.Conventions = {
-    text: {selector: "input:text", handler: StandardBinding},
-    textarea: {selector: "textarea", handler: StandardBinding},
-    password: {selector: "input:password", handler: StandardBinding},
-    radio: {selector: "input:radio", handler: RadioGroupBinding},
-    checkbox: {selector: "input:checkbox", handler: CheckboxBinding},
-    select: {selector: "select", handler: SelectBoxBinding},
-    databind: { selector: "*[data-bind]", handler: DataBindBinding},
+    text: {selector: "input:text", handler: StandardBinding, event: "change" },
+    textarea: {selector: "textarea", handler: StandardBinding, event: "change" },
+    password: {selector: "input:password", handler: StandardBinding, event: "change" },
+    radio: {selector: "input:radio", handler: RadioGroupBinding, event: "change" },
+    checkbox: {selector: "input:checkbox", handler: CheckboxBinding, event: "change" },
+    select: {selector: "select", handler: SelectBoxBinding, event: "change" },
+    databind: { selector: "*[data-bind]", handler: DataBindBinding, event: "change" },
     // HTML5 input
-    number: {selector: "input[type=number]", handler: StandardBinding},
-    range: {selector: "input[type=range]", handler: StandardBinding},
-    tel: {selector: "input[type=tel]", handler: StandardBinding},
-    search: {selector: "input[type=search]", handler: StandardBinding},
-    url: {selector: "input[type=url]", handler: StandardBinding},
-    email: {selector: "input[type=email]", handler: StandardBinding}
+    number: {selector: "input[type=number]", handler: StandardBinding, event: "change" },
+    range: {selector: "input[type=range]", handler: StandardBinding, event: "change" },
+    tel: {selector: "input[type=tel]", handler: StandardBinding, event: "change" },
+    search: {selector: "input[type=search]", handler: StandardBinding, event: "change" },
+    url: {selector: "input[type=url]", handler: StandardBinding, event: "change" },
+    email: {selector: "input[type=email]", handler: StandardBinding, event: "change" },
+    // Telerik
+    telerik_dropdown: {selector: ".t-dropdown", handler: TelerikDropDownBoxBinding, event: "valueChange" }
   };
 
   return modelBinding;
